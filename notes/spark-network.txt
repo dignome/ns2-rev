@@ -1,0 +1,23 @@
+# DATA FORMAT SUMMARY:
+# --------------------
+# 1. Packet Header (7 Bytes):
+#    [Magic: 4 bytes] (0xBA1BA24F) - Little Endian
+#    [SessionID: 2 bytes] - Identifies the client connection
+#    [Type & Padding: 1 byte] -> Bits 0-1 determine type:
+#        0 = Reliable, 1 = Unreliable, 2 = Ack
+#
+# 2. Ping Header (4 Bytes) - Present in ALL packets after the main header:
+#    [Seq: 1] [LastRecv: 1] [PPT: 1] [Loss: 1]
+#
+# 3. Type-Specific Headers:
+#    - Reliable (Type 0):   [AckSeq: 1] [AckBits: 4] [ReliableSeq: 1]
+#      * The ReliableSeq wraps at 255 (UInt8).
+#    - Unreliable (Type 1): [Sequence: 4]
+#      * The Unreliable Sequence is UInt32.
+#
+# 4. Payload Chunks (Loop until end of packet):
+#    - Start Chunk: [Flag: 1] [TotalMsgLen: 3] [FragLen: 2] [Payload...]
+#    - Continuation Chunk: [Flag: 1] [FragLen: 2] [Payload...]
+#
+#    - Data from multiple chunks can present in the same udp packet
+# ==================================================================================
