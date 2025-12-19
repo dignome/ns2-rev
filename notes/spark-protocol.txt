@@ -27,42 +27,33 @@ playerid is interpreted by lodword value
 
 3rd member is the playback channel - 0x1 for global/team chat and 0x2 or 0x3 for proximity/spatial chat.
 
-1. Standard Voice Packet (Channel 1)
-Used for all chat or team chat (non-positional).
-Byte Offset	 Field Name	   Type	  Size	Notes
-0            Player ID	    uint16	2	
-2	           Channel ID	   uint8	 1	   Value is 0x01
-3	           Data Length	  uint16	2	
-5	           Payload	Speex	...	Audio starts here
+| Byte Offset | Field Name  | Type   | Size | Notes             |
+| ----------- | ----------- | ------ | ---- | ----------------- |
+| 0           | Player ID   | uint16 | 2    |                   |
+| 2           | Channel ID  | uint8  | 1    | Value is `0x01`   |
+| 3           | Data Length | uint16 | 2    |                   |
+| 5           | Payload     | Speex  | …    | Audio starts here |
 
-Total Header Size: 5 Bytes
+| Byte Offset | Field Name  | Type   | Size | Notes             |
+| ----------- | ----------- | ------ | ---- | ----------------- |
+| 0           | Player ID   | uint16 | 2    |                   |
+| 2           | Channel ID  | uint8  | 1    | Value is `0x02`   |
+| 3           | Position X  | float  | 4    |                   |
+| 7           | Position Y  | float  | 4    |                   |
+| 11          | Position Z  | float  | 4    |                   |
+| 15          | Data Length | uint16 | 2    |                   |
+| 17          | Payload     | Speex  | …    | Audio starts here |
 
-
-2. Positional Voice Packet (Channel 2)
-Byte Offset	 Field Name	   Type	  Size	Notes
-0            Player ID	    uint16	2	
-2	           Channel ID	   uint8	 1	   Value is 0x02
-3	           Position X	   float	 4	
-7	           Position Y	   float	 4	
-11	          Position Z	   float	 4	 
-15	          Data Length	  uint16	2	
-17	          Payload	Speex	...	Audio starts here
-
-Total Header Size: 17 Bytes
-
-
-3. Positional Voice Packet Plus a target (Channel 3)
-Byte Offset	 Field Name	   Type	  Size	Notes
-0            Player ID	    uint16	2	
-2	           Channel ID	   uint8	 1	   Value is 0x03
-3	           Position X	   float	 4	
-7	           Position Y	   float	 4	
-11	          Position Z	   float	 4	
-15	          Target ID	    uint16	2	   
-17	          Data Length	  uint16	2	
-19	          Payload	Speex	...	Audio starts here
-
-Total Header Size: 19 Bytes
+| Byte Offset | Field Name  | Type   | Size | Notes             |
+| ----------- | ----------- | ------ | ---- | ----------------- |
+| 0           | Player ID   | uint16 | 2    |                   |
+| 2           | Channel ID  | uint8  | 1    | Value is `0x03`   |
+| 3           | Position X  | float  | 4    |                   |
+| 7           | Position Y  | float  | 4    |                   |
+| 11          | Position Z  | float  | 4    |                   |
+| 15          | Target ID   | uint16 | 2    |                   |
+| 17          | Data Length | uint16 | 2    |                   |
+| 19          | Payload     | Speex  | …    | Audio starts here |
 
 So for channel ID you can expect these header sizes:
 
