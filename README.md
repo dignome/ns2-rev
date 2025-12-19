@@ -2,6 +2,9 @@ Just a PoC vibe-coded NS2 netcode dumper.  So far it can re-assemble message fra
 
 See notes for more information.
 
+Also useful is the udpreplaygo repo - can use it to replay a game from client connect to map change (if it dosn't crash).
+https://github.com/dignome/udpreplaygo
+
 This project is intended for **educational, research, and interoperability purposes only**.
 
 It is not designed or intended to be used for:
