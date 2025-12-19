@@ -29,57 +29,40 @@ playerid is interpreted by lodword value
 
 1. Standard Voice Packet (Channel 1)
 Used for all chat or team chat (non-positional).
+Byte Offset	 Field Name	   Type	  Size	Notes
+0            Player ID	    uint16	2	
+2	           Channel ID	   uint8	 1	   Value is 0x01
+3	           Data Length	  uint16	2	
+5	           Payload	Speex	...	Audio starts here
 
 Total Header Size: 5 Bytes
 
-Plaintext
-
- Byte 0       Byte 1       Byte 2       Byte 3       Byte 4
-+------------+------------+------------+------------+------------+
-|  Player ID (uint16)     | Channel ID |   Data Length (uint16)  |
-|  (Little Endian)        |   (0x01)   |   (Little Endian)       |
-+------------+------------+------------+------------+------------+
-|      DATA PAYLOAD (Speex Frames) starts here...                |
-+----------------------------------------------------------------+ 
-
-Total Header Size: 5 Bytes
 
 2. Positional Voice Packet (Channel 2)
-Used for local/proximity chat (3D audio). The game injects 12 bytes of coordinate data between the Channel ID and the Data Length.
+Byte Offset	 Field Name	   Type	  Size	Notes
+0            Player ID	    uint16	2	
+2	           Channel ID	   uint8	 1	   Value is 0x02
+3	           Position X	   float	 4	
+7	           Position Y	   float	 4	
+11	          Position Z	   float	 4	 
+15	          Data Length	  uint16	2	
+17	          Payload	Speex	...	Audio starts here
 
 Total Header Size: 17 Bytes
 
-Plaintext
 
- Byte 0       Byte 1       Byte 2       Byte 3       Byte 4       Byte 5       Byte 6
-+------------+------------+------------+------------+------------+------------+------------+
-|  Player ID (uint16)     | Channel ID |      Position X (float / 32-bit int)              |
-|                         | (0x02/0x03)|                                                   |
-+------------+------------+------------+------------+------------+------------+------------+
-
- Byte 7       Byte 8       Byte 9       Byte 10      Byte 11      Byte 12      Byte 13
-+------------+------------+------------+------------+------------+------------+------------+
-|      Position Y (float / 32-bit int)              |      Position Z (float / 32-bit int) |
-|                                                   |                                      |
-+------------+------------+------------+------------+------------+------------+------------+
-
- Byte 14      Byte 15      Byte 16
-+------------+------------+------------+
-|      Position Z (cont.) | Data Len   |
-|                         | (uint16)   |
-+------------+------------+------------+
-| DATA PAYLOAD starts...               |
-+--------------------------------------+
 3. Positional Voice Packet Plus a target (Channel 3)
-Byte Offset	Field Name	Type	Size	Notes
-0	Player ID	uint16	2	
-2	Channel ID	uint8	1	Value is 0x03
-3	Position X	float	4	
-7	Position Y	float	4	
-11	Position Z	float	4	
-15	Target ID	uint16	2	The extra field
-17	Data Length	uint16	2	
-19	Payload	Speex	...	Audio starts here
+Byte Offset	 Field Name	   Type	  Size	Notes
+0            Player ID	    uint16	2	
+2	           Channel ID	   uint8	 1	   Value is 0x03
+3	           Position X	   float	 4	
+7	           Position Y	   float	 4	
+11	          Position Z	   float	 4	
+15	          Target ID	    uint16	2	   
+17	          Data Length	  uint16	2	
+19	          Payload	Speex	...	Audio starts here
+
+Total Header Size: 19 Bytes
 
 So for channel ID you can expect these header sizes:
 
@@ -89,6 +72,6 @@ Channel 2: 17 Bytes
 
 Channel 3: 19 Bytes
 
-Followed by speex frames
+Followed by speex frames which are wideband type or 16khz when decoded
 
 After voice packets if there is any more data that will indicate a state snapshot is present.
