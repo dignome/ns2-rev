@@ -1,0 +1,94 @@
+Reliable message type 0x04 - either a ping or a waiting for server indicator
+
+DISCONNECT:
+client reliable message 020b00000000 - client is disconnecting
+server reliable message 03 - confirm disconnect
+
+MAP LOADED - client ready message: (use as game counter)
+client reliable message 0301
+
+
+
+Voice / State Snapshot Message (TYPE 5)
+
+First byte is 0x05 (Type 5)
+
+Next 2 bytes of the data stream is the voice packet count - if that is zero then go directly to the state packet processing
+
+There are 3 different voice packet headers:
+
+5 byte header format: (<playerid - 2 bytes>,<Channel - 0x1 - 1 byte>,<length - 2 bytes> followed by encoded voice bytes up to <length>
+
+ie: [05 00] [01] [3C 00] [speex data up to length]
+
+multiple voice packets with possibly different headers can be in one packet
+
+playerid is interpreted by lodword value
+
+3rd member is the playback channel - 0x1 for global/team chat and 0x2 or 0x3 for proximity/spatial chat.
+
+1. Standard Voice Packet (Channel 1)
+Used for all chat or team chat (non-positional).
+
+Total Header Size: 5 Bytes
+
+Plaintext
+
+ Byte 0       Byte 1       Byte 2       Byte 3       Byte 4
++------------+------------+------------+------------+------------+
+|  Player ID (uint16)     | Channel ID |   Data Length (uint16)  |
+|  (Little Endian)        |   (0x01)   |   (Little Endian)       |
++------------+------------+------------+------------+------------+
+|      DATA PAYLOAD (Speex Frames) starts here...                |
++----------------------------------------------------------------+ 
+
+Total Header Size: 5 Bytes
+
+2. Positional Voice Packet (Channel 2)
+Used for local/proximity chat (3D audio). The game injects 12 bytes of coordinate data between the Channel ID and the Data Length.
+
+Total Header Size: 17 Bytes
+
+Plaintext
+
+ Byte 0       Byte 1       Byte 2       Byte 3       Byte 4       Byte 5       Byte 6
++------------+------------+------------+------------+------------+------------+------------+
+|  Player ID (uint16)     | Channel ID |      Position X (float / 32-bit int)              |
+|                         | (0x02/0x03)|                                                   |
++------------+------------+------------+------------+------------+------------+------------+
+
+ Byte 7       Byte 8       Byte 9       Byte 10      Byte 11      Byte 12      Byte 13
++------------+------------+------------+------------+------------+------------+------------+
+|      Position Y (float / 32-bit int)              |      Position Z (float / 32-bit int) |
+|                                                   |                                      |
++------------+------------+------------+------------+------------+------------+------------+
+
+ Byte 14      Byte 15      Byte 16
++------------+------------+------------+
+|      Position Z (cont.) | Data Len   |
+|                         | (uint16)   |
++------------+------------+------------+
+| DATA PAYLOAD starts...               |
++--------------------------------------+
+3. Positional Voice Packet Plus a target (Channel 3)
+Byte Offset	Field Name	Type	Size	Notes
+0	Player ID	uint16	2	
+2	Channel ID	uint8	1	Value is 0x03
+3	Position X	float	4	
+7	Position Y	float	4	
+11	Position Z	float	4	
+15	Target ID	uint16	2	The extra field
+17	Data Length	uint16	2	
+19	Payload	Speex	...	Audio starts here
+
+So for channel ID you can expect these header sizes:
+
+Channel 1: 5 Bytes
+
+Channel 2: 17 Bytes
+
+Channel 3: 19 Bytes
+
+Followed by speex frames
+
+After voice packets if there is any more data that will indicate a state snapshot is present.
