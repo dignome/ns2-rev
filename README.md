@@ -1,4 +1,4 @@
-Just a PoC vibe-coded NS2 netcode dumper.  So far it can re-assemble message fragments and can dump the voice portion of the type 5 (voice/state snapshot) message.
+Just a PoC vibe-coded NS2 (Natural Selection 2 - the game) netcode dumper.  So far it can re-assemble message fragments and can dump the voice portion of the type 5 (voice/state snapshot) message.
 
 See notes for more information.
 
