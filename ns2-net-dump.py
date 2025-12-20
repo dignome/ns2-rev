@@ -21,6 +21,19 @@ from speex_decoder import (
 DATA_DIR = 'data'
 MAX_PRINT_FILES = 10  # Limit console spam for consistency checker
 
+# Type 7 Mode values
+CLIENT_MODES = {
+    0x1: "WaitingForAuth",
+    0x2: "ConnectAttempt",
+    0x3: "Authenticating",
+    0x4: "Connecting",
+    0x5: "WaitingForServer",
+    0x6: "Connected",
+    0x7: "Disconnecting",
+    0x8: "Disconnected",
+    0x9: "DownloadingLevel"
+}
+
 # Global Flag for Voice Dumping (Set via CLI args)
 DUMP_VOICE = False
 
@@ -49,6 +62,15 @@ class GameState:
         self.precache_animation_table = [] # List of {'id': int, 'path': str}
         self.precache_sound_table = [] # List of {'id': int, 'path': str}
         self.precache_cinematic_table = [] # List of {'id': int, 'path': str}
+        
+        # Authentication
+        self.auth_salt = None
+        self.auth_enabled = False
+        self.server_port = None
+        self.server_ip = None
+        self.server_steam_id = None
+        
+        self.server_mode = "None"
 
 # Global Instance
 initial_game_state = GameState()
@@ -154,7 +176,7 @@ def parse_class_table(reader):
     - Maps Class ID -> CRC32 Checksum.
     - Ensures the Client's C++ class layout matches the Server's (prevents crashes/desyncs).
     
-    Table 2: Class Names (The 'mapNameIterators')
+    Table 2: Class Names
     - Maps Class Name (String) -> Class ID.
     - Allows the engine to instantiate the correct entity when it receives a Class ID in future packets.
     """
@@ -274,6 +296,55 @@ def parse_generic_string_table(reader, target_list, label):
             
     if count > 5:
         print(f"    ... ({count - 5} entries hidden)")
+
+def handle_authentication_packet(data):
+    """
+    Handles Server -> Client 'Authentication' packet (Opcode 0x01).
+    Routine: M4::ServerGame::SendAuthenticationPacket
+    """
+    # Initialize reader
+    reader = BinaryReader(data)
+    
+    # 1. Skip Opcode (0x01)
+    opcode = reader.read_uint8()
+    
+    # 3. Read Password Salt
+    # Definition: M4::UInt8 passwordSalt[0xa]; -> 10 Bytes
+    # Code: M4::BinaryWriter::WriteBlock(..., numBytes: 0xa)
+    SALT_SIZE = 10
+    salt_bytes = reader.read_bytes(SALT_SIZE)
+    initial_game_state.auth_salt = salt_bytes.hex().upper()
+    
+    # 4. Read Authentication Enabled Flag
+    # Code: M4::BinaryWriter::WriteBool(...) -> Writes UInt32 (4 bytes)
+    initial_game_state.auth_enabled = reader.read_bool()
+    
+    print(f"\n[Packet 0x04] AUTHENTICATION:")
+    print(f"  Salt: {initial_game_state.auth_salt}")
+    print(f"  Auth Enabled: {initial_game_state.auth_enabled}")
+    
+    # 5. Conditional Server Details
+    # Code: if (this->m_authenticationEnabled != 0)
+    if initial_game_state.auth_enabled:
+        # Code: WriteUInt32(Port)
+        initial_game_state.server_port = reader.read_uint32()
+        
+        # Code: WriteUInt32(Address)
+        # Note: Address is likely packed UInt32. We convert to String IP.
+        raw_addr = reader.read_uint32()
+        try:
+            # Convert Little Endian UInt32 back to bytes, then standard IPv4 string
+            packed_addr = struct.pack('<I', raw_addr)
+            initial_game_state.server_ip = socket.inet_ntoa(packed_addr)
+        except:
+            initial_game_state.server_ip = f"Unknown({raw_addr})"
+            
+        # Code: WriteUInt64(Id) -> SteamID
+        initial_game_state.server_steam_id = reader.read_uint64()
+        
+        print(f"  Service Port: {initial_game_state.server_port}")
+        print(f"  Service Address: {initial_game_state.server_ip}")
+        print(f"  Steam ID: {initial_game_state.server_steam_id} (0x{initial_game_state.server_steam_id:016X})")
 
 def handle_connecting_packet(data):
     """Handles Server -> Client 'Connecting' packet (0x02)."""
@@ -471,15 +542,54 @@ def parse_voice_and_state(data, session_id):
         # State Snapshot Check
         if cursor < len(data):
             remaining = len(data) - cursor
-            # print(f"[Snapshot] Present ({remaining} bytes)")
+            #print(f"[Snapshot] Present ({remaining} bytes)")
 
     except struct.error:
         pass
 
+def parse_mode_packet(data):
+    """
+    Handles Server -> Client 'OnMode' packet (Opcode 0x07).
+    Sets the current connection state of the client.
+    """
+    reader = BinaryReader(data)
+    
+    # 1. Skip Opcode (0x07)
+    opcode = reader.read_uint8()
+    
+    # 2. Read Mode ID (1 Byte)
+    mode_id = reader.read_uint8()
+    
+    # Lookup name
+    mode_name = CLIENT_MODES.get(mode_id, f"Unknown_0x{mode_id:02X}")
+    initial_game_state.server_mode = mode_id
+    
+    print(f"\n[Packet 0x07] SET MODE: {mode_name} ({mode_id})")
+    
+def parse_disconnect_packet(data):
+    """
+    Handles Server -> Client 'Disconnect' packet (System Opcode 0x02).
+    Structure: [Opcode: 1] [Reason: 4] [Message: NullString]
+    """
+    reader = BinaryReader(data)
+    
+    # 1. Skip Opcode (0x02)
+    opcode = reader.read_uint8()
+    
+    # 2. Read Reason (UInt32)
+    reason_code = reader.read_uint32()
+    
+    # 3. Read Message (Null Terminated String)
+    message = reader.read_string_null()
+    
+    print(f"\n[Packet 0x02] DISCONNECT (System):")
+    print(f"  Reason Code: {reason_code}")
+    print(f"  Message: {message}")
+
 # ==================================================================================
 # USER PROCESSING HOOK (Main Dispatcher)
 # ==================================================================================
-def on_message_reassembled(data, direction, stream, session_id, seq):
+def on_message_reassembled(data, direction, stream, session_id, seq, is_system=False):
     msg_len = len(data)
     if msg_len == 0: return
 
@@ -490,15 +600,32 @@ def on_message_reassembled(data, direction, stream, session_id, seq):
 
     op_code = data[0]
 
-    # 2. Connecting Packet
-    if direction == "SERVER" and stream == "RELIABLE" and op_code == 0x02:
-        handle_connecting_packet(data)
+    # --- SERVER RELIABLE PACKETS ---
+    if direction == "SERVER" and stream == "RELIABLE":
+        
+        # Opcode 0x02: Collision Handler
+        if op_code == 0x02:
+            if is_system:
+                # System Packet 0x02 -> Disconnect
+                handle_disconnect_packet(data)
+            else:
+                # Normal Packet 0x02 -> Connecting
+                handle_connecting_packet(data)
 
-    # 3. Voice / State Packet
+        # 0x04: Authentication
+        elif op_code == 0x01:
+            handle_authentication_packet(data)
+            
+        # 0x07: OnMode
+        elif op_code == 0x07:
+            parse_mode_packet(data)
+    
+    # 5. Voice / State Packet
     if direction == "SERVER" and stream == "UNRELIABLE" and op_code == 0x05:
         # We always process this packet to advance past voice data 
         # and potentially find the State Snapshot at the end.
         parse_voice_and_state(data, session_id)
+
 
 # ==================================================================================
 # NS2 Fragment Assembler
@@ -515,29 +642,33 @@ class MessageAssembler:
         self.total_len = 0
         self.active = False
         self.start_seq = -1
+        self.is_system = False
 
     def reset(self):
         self.buffer = bytearray()
         self.total_len = 0
         self.active = False
         self.start_seq = -1
+        self.is_system = False
 
-    def ingest_chunk(self, is_start, total_msg_len, payload, packet_seq):
+    def ingest_chunk(self, is_start, is_system, total_msg_len, payload, packet_seq):
         if is_start:
             if self.active: self.reset()
             self.buffer = bytearray(payload)
             self.total_len = total_msg_len
             self.active = True
             self.start_seq = packet_seq
+            self.is_system = is_system
         else:
             if not self.active: return None
             self.buffer.extend(payload)
 
         if self.active and len(self.buffer) >= self.total_len:
             final_data = bytes(self.buffer[:self.total_len])
+            was_system = self.is_system
             self.reset()
-            return final_data
-        return None
+            return final_data, was_system
+        return None, False
 
 class ReliableStream:
     def __init__(self):
@@ -595,6 +726,7 @@ def parse_chunks_in_payload(data, packet_seq, assembler, type_label, session_id,
             cursor += 1
             
             is_start = False
+            is_system = False
             total_len = 0
             frag_len = 0
             
@@ -603,6 +735,10 @@ def parse_chunks_in_payload(data, packet_seq, assembler, type_label, session_id,
                 cursor += 2
             else:
                 if cursor + 5 > len(data): break
+                
+                # Check System Bit (Bit 0)
+                is_system = (flag & 0x01) != 0
+                
                 b1, b2, b3 = data[cursor], data[cursor+1], data[cursor+2]
                 cursor += 3
                 total_len = b1 | (b2 << 8) | (b3 << 16)
@@ -615,7 +751,7 @@ def parse_chunks_in_payload(data, packet_seq, assembler, type_label, session_id,
             payload = data[cursor : cursor + frag_len]
             cursor += frag_len
 
-            completed_msg = assembler.ingest_chunk(is_start, total_len, payload, packet_seq)
+            completed_msg, was_system = assembler.ingest_chunk(is_start, is_system, total_len, payload, packet_seq)
             
             if completed_msg:
                 on_message_reassembled(
@@ -623,7 +759,8 @@ def parse_chunks_in_payload(data, packet_seq, assembler, type_label, session_id,
                     direction=source_tag, 
                     stream=type_label, 
                     session_id=session_id, 
-                    seq=packet_seq
+                    seq=packet_seq,
+                    is_system=was_system
                 )
 
         except struct.error:
