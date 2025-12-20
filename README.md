@@ -2,7 +2,7 @@ Just a PoC vibe-coded NS2 (Natural Selection 2 - the game) netcode dumper.  So f
 
 See notes for more information.
 
-Also useful is the udpreplaygo repo - can use it to replay a game from client connect to map change (if it dosn't crash).
+Also useful is the udpreplaygo repo - can use it to replay a game from client connect to map change (if it doesn't crash).
 https://github.com/dignome/udpreplaygo
 
 This project is intended for **educational, research, and interoperability purposes only**.
