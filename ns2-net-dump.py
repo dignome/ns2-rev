@@ -6,7 +6,7 @@ import os
 import zlib
 import argparse
 import sys
-from utils import BinaryReader  # Import from your new file
+from utils import BinaryReader, BitReader
 
 from speex_decoder import (
     decode_speex_bundle,
@@ -57,6 +57,7 @@ class GameState:
         
         self.network_messages = [] # Network Messages Table
         
+        # Precache
         self.precache_string_table = [] # List of {'id': int, 'string': str}
         self.precache_model_table = [] # List of {'id': int, 'path': str}
         self.precache_animation_table = [] # List of {'id': int, 'path': str}
@@ -236,7 +237,7 @@ def parse_message_table(reader):
     
     for i in range(msg_count):
         # Implicit Index: The loop counter 'i' IS the Message ID (+1 usually)
-        msg_id = i + 1  # Spark Engine usually uses 1-based IDs for messages
+        msg_id = i  #
         
         # 0044acba: WriteNullTerminatedString(name)
         msg_name = reader.read_string_null()
@@ -252,6 +253,8 @@ def parse_message_table(reader):
         
         if i < 10:
             print(f"    [ID {msg_id}] {msg_name:<30} | Checksum: {msg_sum:08X}")
+            
+        i = i + 1
             
     if msg_count > 10:
         print(f"    ... ({msg_count - 10} messages hidden)")
@@ -547,6 +550,41 @@ def parse_voice_and_state(data, session_id):
     except struct.error:
         pass
 
+def handle_network_message(data):
+    """
+    Handles Server -> Client 'Network Message' (This can be intternal or script)
+    """
+    try:
+        reader = BitReader(data)
+        
+        # 1. Read Opcode (VInt) - Should be 6
+        # Code: M4::BitWriter::WriteUInt(&writer, 6)
+        opcode = reader.read_uint()
+        
+        # 2. Read Message Index (VInt)
+        # Code: WriteUInt(..., GetMessageIndex(this, netMessage))
+        msg_index = reader.read_uint()
+        
+        # Lookup Name
+        msg_name = f"Unknown({msg_index})"
+        for msg in initial_game_state.network_messages:
+            if msg['id'] == msg_index:
+                msg_name = msg['name']
+                break
+        
+        print(f"\n[Packet 0x06] NETWORK MESSAGE:")
+        print(f"  Message: {msg_name} (ID: {msg_index})")
+        
+        # The remainder of the packet is the message-specific payload.
+        # Need to set up the schema next to parse this accurately.
+        # Dump the bitstream size.
+        
+        remaining_bits = (len(data) * 8) - (reader.byte_offset * 8 + reader.bit_offset)
+        print(f"  Payload: ~{remaining_bits} bits remaining")
+
+    except Exception as e:
+        print(f"[Packet 0x06] Error: {e}")
+
 def parse_mode_packet(data):
     """
     Handles Server -> Client 'OnMode' packet (Opcode 0x07).
@@ -615,6 +653,10 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
         # 0x04: Authentication
         elif op_code == 0x01:
             handle_authentication_packet(data)
+        
+        # 0x06: Network Message (either script or internal)
+        elif op_code == 0x06:
+            handle_network_message(data)
             
         # 0x07: OnMode
         elif op_code == 0x07:
