@@ -2,9 +2,8 @@ import os
 import wave
 from collections import defaultdict
 
-# Your compiled pyd from speex.pyx should be importable as "speex"
-# and it defines the codec class as "new".
-import speex  # <- your pyd name
+# Import the pySpeex pyd
+import speex
 
 SAMPLE_RATE = 16000     # speex.pyx hardcodes WB mode
 CHANNELS = 1
