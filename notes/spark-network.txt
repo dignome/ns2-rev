@@ -16,8 +16,11 @@
 #      * The Unreliable Sequence is UInt32.
 #
 # 4. Payload Chunks (Loop until end of packet):
-#    - Start Chunk: [Flag: 1 - 0x02] [TotalMsgLen: 3] [FragLen: 2] [Payload...]
+#    - Start Chunk: [Flag: 1 - see below] [TotalMsgLen: 3] [FragLen: 2] [Payload...]
 #    - Continuation Chunk: [Flag: 1 - 0xFF] [FragLen: 2] [Payload...]
+#
+#    Flag is either a 2 bits indicator or 0xFF for continuation
+#            Flag_System = 0x1, Flag_Reliable = 0x2
 #
 #    - Data from multiple chunks can present in the same udp packet
 # ==================================================================================
