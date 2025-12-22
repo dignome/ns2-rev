@@ -557,15 +557,13 @@ def handle_network_message(data):
     try:
         reader = BitReader(data)
         
-        # 1. Read Opcode (VInt) - Should be 6
-        # Code: M4::BitWriter::WriteUInt(&writer, 6)
+        # 1. Read Opcode - Should be 6
         opcode = reader.read_uint()
         
-        # 2. Read Message Index (VInt)
-        # Code: WriteUInt(..., GetMessageIndex(this, netMessage))
+        # 2. Read Message Index
         msg_index = reader.read_uint()
         
-        # Lookup Name
+        # Lookup Name in network_messages
         msg_name = f"Unknown({msg_index})"
         for msg in initial_game_state.network_messages:
             if msg['id'] == msg_index:
