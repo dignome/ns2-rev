@@ -1,35 +1,46 @@
-Just a PoC vibe-coded NS2 (Natural Selection 2 - the game) netcode dumper.
+# NS2 Netcode Dumper
 
-What it does:
+> **Note:** This is a Proof of Concept (PoC) "vibe-coded" tool for analyzing *Natural Selection 2* network traffic.
 
-Scans a wireshark saved pcap network capture of traffic between the client and server extracting any information available to the client sent by the server.
+## 📖 Overview
+This tool scans **Wireshark saved `.pcap` files** to capture traffic between the client and server. It extracts information sent by the server that is available to the client.
 
-Capable of dumping any kind of Network Message (as long as they are in the schema - and if not you can add to it).
+## ✨ Features
 
-Is capable of extracting and dumping as wav audio the speex encoded voice chat packets sent by the server to the client including spatial (type 2 or 3).
+* **Traffic Analysis:** Scans `.pcap` dumps for relevant game packets.
+* **Message Dumping:** Capable of dumping *any* kind of Network Message defined in the schema.
+    * *Extensible:* If a message isn't in the schema, you can add it.
+* **Audio Extraction:** Decodes Speex-encoded voice chat packets (sent by the server) and dumps them as `.wav` files.
+    * *Spatial Support:* Includes support for spatial audio types (Type 2 or 3).
 
-There is currently no easy way of creating the schema definition file - it is defined on the lua side.  Have included a basic schema from stock NS2 definitions.
+## ⚠️ Limitations & Future Work
 
-What it doesn't do:
+* **State Snapshots:** Does not currently parse state snapshots (e.g., client movement updates or server-sent snapshots).
+* **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
 
-Does not currently parse state snapshots including client movement updates or server sent snapshots (future work)
+## 🛠️ Usage Notes
 
-Does not act as a client in that it can not authentice and join a NS2 server as a client -- although that would be interesting if possible.
+### Schema Definitions
+There is currently no automated way to create the schema definition file, as it is defined on the Lua side of the game engine.
+* A **basic schema** derived from stock NS2 definitions is included in this repo.
 
-See notes for more information.
+### Related Tools
+This tool pairs well with **udpreplaygo**, which can replay a game session from client connection to map change.
+* [View udpreplaygo on GitHub](https://github.com/dignome/udpreplaygo)
 
+---
 
+## ⚖️ Disclaimer
 
-Also useful is the udpreplaygo repo - can use it to replay a game from client connect to map change (if it doesn't crash).
-https://github.com/dignome/udpreplaygo
-
+> [!WARNING]
+> **Educational Use Only**
 
 This project is intended for **educational, research, and interoperability purposes only**.
 
 It is not designed or intended to be used for:
-- Cheating in online games
-- Circumventing security or anti-cheat mechanisms
-- Harassment, exploitation, or abuse of services or users
-- Violating any software license, terms of service, or applicable laws
+* Cheating in online games
+* Circumventing security or anti-cheat mechanisms
+* Harassment, exploitation, or abuse of services or users
+* Violating any software license, terms of service, or applicable laws
 
-By using this repository, you agree to use it responsibly and ethically.
+**By using this repository, you agree to use it responsibly and ethically.**
