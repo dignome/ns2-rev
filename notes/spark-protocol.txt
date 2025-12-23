@@ -1,4 +1,4 @@
-Reliable message type 0x04 - either a ping or a waiting for server indicator
+Reliable message type 0x04 -  keepalive?
 
 DISCONNECT:
 client reliable message 020b00000000 - client is disconnecting
