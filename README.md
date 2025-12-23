@@ -13,6 +13,7 @@ There is currently no easy way of creating the schema definition file - it is de
 What it doesn't do:
 
 Does not currently parse state snapshots including client movement updates or server sent snapshots (future work)
+Does not act as a client in that it can not authentice and join a NS2 server as a client -- although that would be interesting if possible.
 
 See notes for more information.
 
