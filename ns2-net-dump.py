@@ -8,6 +8,7 @@ import zlib
 import argparse
 import sys
 import json
+import math
 from utils import BinaryReader, BitReader, unpack_field
 
 from speex_decoder import (
@@ -515,6 +516,78 @@ def handle_connecting_packet(data):
         import traceback
         traceback.print_exc()
 
+_TWO_PI = 2.0 * math.pi
+
+def decode_move36(buf, off):
+    if off + 36 > len(buf):
+        return None, off
+
+    serial = struct.unpack_from('<I', buf, off)[0]; off += 4
+    t      = struct.unpack_from('<f', buf, off)[0]; off += 4
+    dt     = struct.unpack_from('<f', buf, off)[0]; off += 4
+    tdt    = struct.unpack_from('<f', buf, off)[0]; off += 4
+
+    mx, my, mz = struct.unpack_from('<bbb', buf, off); off += 3
+    mx_f, my_f, mz_f = mx/127.0, my/127.0, mz/127.0
+
+    pitch_u16 = struct.unpack_from('<H', buf, off)[0]; off += 2
+    yaw_u16   = struct.unpack_from('<H', buf, off)[0]; off += 2
+
+    # u16 is a full-turn fixed-point (0..65535 => 0..360deg)
+    pitch_deg = pitch_u16 * 360.0 / 65536.0
+    yaw_deg   = yaw_u16   * 360.0 / 65536.0
+
+    # optional radians if you want them
+    pitch_rad = pitch_u16 * _TWO_PI / 65536.0
+    yaw_rad   = yaw_u16   * _TWO_PI / 65536.0
+
+    commands = struct.unpack_from('<I', buf, off)[0]; off += 4
+    hotkey = buf[off]; off += 1
+
+    snapshots_base = struct.unpack_from('<I', buf, off)[0]; off += 4
+    snapshots_mask = struct.unpack_from('<I', buf, off)[0]; off += 4
+
+    snaps = []
+    for bit in range(32):
+        if snapshots_mask & (1 << bit):
+            snaps.append(snapshots_base + bit)
+            if len(snaps) >= 10:
+                break
+
+    return {
+        "serial": serial,
+        "time": t,
+        "deltaTime": dt,
+        "totalDeltaTime": tdt,
+        "move": (mx_f, my_f, mz_f),
+        "pitch_u16": pitch_u16,
+        "yaw_u16": yaw_u16,
+        "pitch_deg": pitch_deg,
+        "yaw_deg": yaw_deg,
+        "pitch_rad": pitch_rad,
+        "yaw_rad": yaw_rad,
+        "commands": commands,
+        "hotkey": hotkey,
+        "snapshotsBase": snapshots_base,
+        "snapshotsMask": snapshots_mask,
+        "snapshotsUsed": snaps,
+    }, off
+
+
+def parse_client_moves(move_bytes):
+    # ProcessMovePacket reads 3 moves. :contentReference[oaicite:4]{index=4}
+    off = 0
+    moves = []
+    for _ in range(3):
+        m, off = decode_move36(move_bytes, off)
+        if m is None:
+            break
+        moves.append(m)
+
+    # If anything remains, dump it too (future-proofing)
+    trailing = move_bytes[off:]
+    return moves, trailing
+
 def parse_client_voice_and_state(data):
     """
     Layout (based on ServerWorld::OnClientStatePacket):
@@ -532,8 +605,8 @@ def parse_client_voice_and_state(data):
       u8[]  voiceBytes (voiceLen)
       u8[]  remaining movement bytes (dump as hex)
     """
-    # do we have enough data?
-    if len(data) < 1 + 4 + 4 + 1 + 2:
+    # do we have enough data (1 + 4 + 4 + 1 + 2)?
+    if len(data) < 12:
         return
 
     try:
@@ -605,19 +678,21 @@ def parse_client_voice_and_state(data):
                     pass
 
         # Remaining bytes are movement packet data -> dump hex on one line
-        movement = data[cursor:]
-        movement_hex = movement.hex().upper()
+        move_bytes = data[cursor:]
+        moves, trailing = parse_client_moves(move_bytes)
 
-        # Optional small header print (keep it compact)
-        if pos is not None:
-            if entity_id is not None:
-                print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} "
-                      f"pos=<{pos[0]:.2f},{pos[1]:.2f},{pos[2]:.2f}> ent={entity_id} voiceLen={voice_len} | {movement_hex}")
-            else:
-                print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} "
-                      f"pos=<{pos[0]:.2f},{pos[1]:.2f},{pos[2]:.2f}> voiceLen={voice_len} | {movement_hex}")
-        else:
-            print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} voiceLen={voice_len} | {movement_hex}")
+        for i, m in enumerate(moves):
+            mx, my, mz = m["move"]
+            print(
+                f"[MOVE] i={i} serial={m['serial']} t={m['time']:.4f} dt={m['deltaTime']:.4f} "
+                f"tdt={m['totalDeltaTime']:.4f} move=<{mx:.3f},{my:.3f},{mz:.3f}> "
+                f"yaw={m['yaw_deg']:.2f}deg pitch={m['pitch_deg']:.2f}deg "
+                f"cmd=0x{m['commands']:08X} hk={m['hotkey']} "
+                f"base={m['snapshotsBase']} mask=0x{m['snapshotsMask']:08X}"
+            )
+
+        if trailing:
+            print(f"[MOVE_TRAIL] {trailing.hex().upper()}")
 
     except Exception:
         # don't crash the main decode loop
