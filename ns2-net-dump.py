@@ -355,7 +355,7 @@ def handle_authentication_packet(data):
     # Code: M4::BinaryWriter::WriteBool(...) -> Writes UInt32 (4 bytes)
     initial_game_state.auth_enabled = reader.read_bool()
     
-    print(f"\n[Packet 0x04] AUTHENTICATION:")
+    print(f"\n[Packet 0x01] AUTHENTICATION:")
     print(f"  Salt: {initial_game_state.auth_salt}")
     print(f"  Auth Enabled: {initial_game_state.auth_enabled}")
     
