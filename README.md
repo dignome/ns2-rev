@@ -21,7 +21,7 @@ This tool scans **Wireshark saved `.pcap` files** to capture traffic between the
 ## 🛠️ Usage Notes
 
 ### Schema Definitions
-There is currently no automated way to create the schema definition file, as it is defined on the Lua side of the game engine.
+There is currently no automated way to create the schema definition file (that I'm willing to share), as it is defined on the Lua side of the game engine.
 * A **basic schema** derived from stock NS2 definitions is included in this repo.
 
 ### Related Tools
