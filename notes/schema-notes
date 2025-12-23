@@ -1,0 +1,46 @@
+You can find defintions for network messages in the NS2 lua directories:
+
+Example from schema file:
+
+  "81": {
+    "id": 81,
+    "name": "ScoreUpdate",
+    "fields": [
+      {
+        "name": "points",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "res",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "wasKill",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+
+Same definition in lua:
+
+local kScoreUpdate =
+{
+    points = "integer (0 to " .. kMaxScore .. ")",
+    res = "integer (0 to " .. kMaxPersonalResources .. ")",
+    wasKill = "boolean"
+}
+Shared.RegisterNetworkMessage("ScoreUpdate", kScoreUpdate)
+
+The Fields of the message as defined in the schema should be arranged alphabetically by the name field (order in which unpacked from the bit stream).
