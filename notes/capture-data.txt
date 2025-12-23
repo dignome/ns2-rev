@@ -1,0 +1,11 @@
+Start wireshark and capture on your primary internet interface.
+
+Play the game.
+  
+When done select the server IP address from the list of captured traffic, right click, and select Prepare as filter -> Selected.
+
+Paste it and simply modify the filter rule:
+
+ip.src == the.server.ip.address || ip.dst == the.server.ip.address
+
+Apply and then save the capture.
