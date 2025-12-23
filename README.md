@@ -15,7 +15,7 @@ This tool scans **Wireshark saved `.pcap` files** to capture traffic between the
 
 ## ⚠️ Limitations & Future Work
 
-* **State Snapshots:** Does not currently parse state snapshots (e.g., client movement updates or server-sent snapshots).
+* **State Snapshots:** Does not currently parse state snapshots from the server.
 * **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
 
 ## 🛠️ Usage Notes
