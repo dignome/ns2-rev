@@ -45,6 +45,7 @@ os.makedirs(DATA_DIR, exist_ok=True)
 class GameState:
     def __init__(self):
         self.map_load_count = 0
+        self.current_client_index = None
         self.map_name = None
         self.is_secure = False
         self.is_thunderdome = False
@@ -355,7 +356,7 @@ def handle_authentication_packet(data):
     # Code: M4::BinaryWriter::WriteBool(...) -> Writes UInt32 (4 bytes)
     initial_game_state.auth_enabled = reader.read_bool()
     
-    print(f"\n[Packet 0x04] AUTHENTICATION:")
+    print(f"\n[Packet 0x01] AUTHENTICATION:")
     print(f"  Salt: {initial_game_state.auth_salt}")
     print(f"  Auth Enabled: {initial_game_state.auth_enabled}")
     
@@ -514,6 +515,115 @@ def handle_connecting_packet(data):
         import traceback
         traceback.print_exc()
 
+def parse_client_voice_and_state(data):
+    """
+    Layout (based on ServerWorld::OnClientStatePacket):
+      u8    opcode (0x04)
+      u32   ackedServerFrame
+      u32   clientFrame
+      u8    channel
+        if channel == 2:
+            f32 x, f32 y, f32 z
+        if channel == 3:
+            f32 x, f32 y, f32 z
+            u16 unknown
+            u32 entityId
+      u16   voiceLen
+      u8[]  voiceBytes (voiceLen)
+      u8[]  remaining movement bytes (dump as hex)
+    """
+    # do we have enough data?
+    if len(data) < 1 + 4 + 4 + 1 + 2:
+        return
+
+    try:
+        cursor = 1  # skip opcode 0x04
+
+        acked_server_frame = struct.unpack_from('<I', data, cursor)[0]
+        cursor += 4
+
+        client_frame = struct.unpack_from('<I', data, cursor)[0]
+        cursor += 4
+
+        channel = data[cursor]
+        cursor += 1
+
+        # Optional voice spatial header
+        pos = None
+        entity_id = None
+
+        if channel == 2:
+            # 3 floats
+            if cursor + 12 > len(data):
+                return
+            x, y, z = struct.unpack_from('<fff', data, cursor)
+            cursor += 12
+            pos = (x, y, z)
+
+        elif channel == 3:
+            # 3 floats + u16 + u32 entityId
+            if cursor + 12 + 2 + 4 > len(data):
+                return
+            x, y, z = struct.unpack_from('<fff', data, cursor)
+            cursor += 12
+            _unknown = struct.unpack_from('<H', data, cursor)[0]
+            cursor += 2
+            entity_id = struct.unpack_from('<I', data, cursor)[0]
+            cursor += 4
+            pos = (x, y, z)
+
+        # voice length
+        if cursor + 2 > len(data):
+            return
+        voice_len = struct.unpack_from('<H', data, cursor)[0]
+        cursor += 2
+
+        # sanity: server rejects > 0x3fff, match that behavior
+        if voice_len > 0x3FFF:
+            print(f"[ClientState 0x04] Client sent too much voice data: {voice_len}")
+            # still dump remaining bytes as "movement" from here (best-effort)
+            movement_hex = data[cursor:].hex().upper()
+            print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} | {movement_hex}")
+            return
+
+        if cursor + voice_len > len(data):
+            # truncated packet
+            return
+
+        voice_bytes = data[cursor:cursor + voice_len]
+        cursor += voice_len
+
+        # Decode Speex immediately using latched client index from SetClientIndex
+        if DUMP_VOICE and voice_len > 0:
+            client_index = initial_game_state.current_client_index
+            if client_index is not None:
+                try:
+                    pcm = decode_speex_bundle(client_index, channel, voice_bytes)
+                    if pcm:
+                        append_pcm(initial_game_state.map_load_count, client_index, channel, pcm)
+                except Exception:
+                    pass
+
+        # Remaining bytes are movement packet data -> dump hex on one line
+        movement = data[cursor:]
+        movement_hex = movement.hex().upper()
+
+        # Optional small header print (keep it compact)
+        if pos is not None:
+            if entity_id is not None:
+                print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} "
+                      f"pos=<{pos[0]:.2f},{pos[1]:.2f},{pos[2]:.2f}> ent={entity_id} voiceLen={voice_len} | {movement_hex}")
+            else:
+                print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} "
+                      f"pos=<{pos[0]:.2f},{pos[1]:.2f},{pos[2]:.2f}> voiceLen={voice_len} | {movement_hex}")
+        else:
+            print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} voiceLen={voice_len} | {movement_hex}")
+
+    except Exception:
+        # don't crash the main decode loop
+        return
+
+
 def parse_voice_and_state(data, session_id):
     """
     Parses Type 5 Packet: Voice Data + Optional State Snapshot.
@@ -623,6 +733,9 @@ def handle_network_message(data):
                 try:
                     val = unpack_field(reader, field)
                     
+                    if msg_name == "SetClientIndex" and field_name == "clientIndex":
+                        initial_game_state.current_client_index = int(val)
+                    
                     # Format output nicely
                     if isinstance(val, float):
                         print(f"    {field_name}: {val:.4f}")
@@ -726,7 +839,7 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
                 # Normal Packet 0x02 -> Connecting
                 handle_connecting_packet(data)
 
-        # 0x04: Authentication
+        # 0x01: Authentication
         elif op_code == 0x01:
             handle_authentication_packet(data)
         
@@ -755,6 +868,10 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
         # We always process this packet to advance past voice data 
         # and potentially find the State Snapshot at the end.
         parse_voice_and_state(data, session_id)
+        
+    # 6. Client Voice / State Packet (Moves)
+    if direction == "CLIENT" and stream == "UNRELIABLE" and op_code == 0x04:
+        parse_client_voice_and_state(data)
 
 
 # ==================================================================================
