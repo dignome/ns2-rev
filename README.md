@@ -16,8 +16,11 @@ Does not currently parse state snapshots including client movement updates or se
 
 See notes for more information.
 
+
+
 Also useful is the udpreplaygo repo - can use it to replay a game from client connect to map change (if it doesn't crash).
 https://github.com/dignome/udpreplaygo
+
 
 This project is intended for **educational, research, and interoperability purposes only**.
 
