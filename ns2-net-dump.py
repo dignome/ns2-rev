@@ -21,7 +21,7 @@ from speex_decoder import (
 # CONFIGURATION & GLOBALS
 # ==================================================================================
 DATA_DIR = 'data'
-MAX_PRINT_FILES = 10  # Limit console spam for consistency checker
+MAX_PRINT_FILES = 10  # Limit console spam for connecting information
 
 # Type 7 Mode values
 CLIENT_MODES = {
