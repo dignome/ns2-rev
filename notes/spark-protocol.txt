@@ -1,4 +1,5 @@
 Reliable message type 0x04 -  keepalive?
+Server and Client send this and there is no payload
 
 DISCONNECT:
 client reliable message 020b00000000 - client is disconnecting
