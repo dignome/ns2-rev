@@ -1,6 +1,6 @@
 # NS2 Netcode Dumper
 
-> **Note:** This is a Proof of Concept (PoC) "vibe-coded" tool for analyzing *Natural Selection 2* network traffic.
+> **Note:** This is a Proof of Concept (PoC) "vibe-coded" tool for analyzing *Natural Selection 2* network traffic.  Much of the code and even my understanding of how this works was derrived from the use of AI and RE tools.
 
 ## 📖 Overview
 This tool scans **Wireshark saved `.pcap` files** to capture traffic between the client and server. It extracts information sent by the server that is available to the client.
