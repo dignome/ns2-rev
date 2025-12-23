@@ -1,3 +1,4 @@
+# ns2-net-dump - Parse pcap network capture and dump data
 import dpkt
 import socket
 import struct
@@ -6,7 +7,8 @@ import os
 import zlib
 import argparse
 import sys
-from utils import BinaryReader, BitReader
+import json
+from utils import BinaryReader, BitReader, unpack_field
 
 from speex_decoder import (
     decode_speex_bundle,
@@ -75,6 +77,32 @@ class GameState:
 
 # Global Instance
 initial_game_state = GameState()
+
+# --- SCHEMA STORAGE ---
+# 1. Static Definitions loaded from JSON (Key: Name string)
+SCHEMA_DEFS = {} 
+
+# 2. Runtime Schema mapped to current Server IDs (Key: Server ID int)
+RUNTIME_SCHEMA = {}
+
+def load_schema_definitions(json_path):
+    """Loads the JSON and indexes it by Name."""
+    global SCHEMA_DEFS
+    try:
+        with open(json_path, 'r') as f:
+            raw_data = json.load(f)
+            for _, data in raw_data.items():
+                name = data['name']
+                SCHEMA_DEFS[name] = data
+        print(f"[Schema] Loaded {len(SCHEMA_DEFS)} message definitions from {json_path}")
+    except Exception as e:
+        print(f"[Schema] Error loading JSON: {e}")
+
+# Call this immediately at script start
+load_schema_definitions("ns2_schema_basic.json")
+
+# Limit message dumps
+LIST_LIMIT = 10
 
 # ==================================================================================
 # PACKET HANDLERS
@@ -196,11 +224,11 @@ def parse_class_table(reader):
         
         initial_game_state.net_class_checksums.append({'class_id': cls_id, 'checksum': cls_sum})
         
-        if i < 10:
+        if i < LIST_LIMIT:
             print(f"    [{i}] Class ID: {cls_id:<5} | Checksum: {cls_sum:08X}")
     
-    if checksum_count > 10:
-        print(f"    ... ({checksum_count - 10} entries hidden)")
+    if checksum_count > LIST_LIMIT:
+        print(f"    ... ({checksum_count - LIST_LIMIT} entries hidden)")
 
     # ==========================================================================
     # 2. Network Class Names (String -> ID)
@@ -217,47 +245,52 @@ def parse_class_table(reader):
         
         initial_game_state.net_class_names.append({'class_name': cls_name, 'class_id': cls_id})
         
-        if i < 10:
+        if i < LIST_LIMIT:
             print(f"    [{i}] ID: {cls_id:<5} | Name: {cls_name}")
 
-    if name_count > 10:
-        print(f"    ... ({name_count - 10} entries hidden)")
+    if name_count > LIST_LIMIT:
+        print(f"    ... ({name_count - LIST_LIMIT} entries hidden)")
+
 
 def parse_message_table(reader):
     """
-    MessageTable.
+    MessageTable parsing + Dynamic Schema Building.
     """
     print("  --- Message Table ---")
-
-    # 0044ac7e: WriteUInt16(count)
     msg_count = reader.read_uint16()
     print(f"  Network Messages ({msg_count}):")
     
     initial_game_state.network_messages = []
     
+    # Clear previous runtime schema
+    global RUNTIME_SCHEMA
+    RUNTIME_SCHEMA.clear()
+    
+    mapped_count = 0
+    
     for i in range(msg_count):
-        # Implicit Index: The loop counter 'i' IS the Message ID (+1 usually)
-        msg_id = i  #
-        
-        # 0044acba: WriteNullTerminatedString(name)
+        msg_id = i 
         msg_name = reader.read_string_null()
-        
-        # 0044accc: WriteUInt32(checksum)
         msg_sum = reader.read_uint32()
         
+        # 1. Store in GameState (Display purposes)
         initial_game_state.network_messages.append({
             'id': msg_id, 
             'name': msg_name, 
             'checksum': msg_sum
         })
         
-        if i < 10:
+        # 2. Build Runtime Schema Link
+        # Does this server message name exist in our JSON?
+        if msg_name in SCHEMA_DEFS:
+            RUNTIME_SCHEMA[msg_id] = SCHEMA_DEFS[msg_name]
+            mapped_count += 1
+        
+        if i < LIST_LIMIT: # Limit print spam
             print(f"    [ID {msg_id}] {msg_name:<30} | Checksum: {msg_sum:08X}")
             
-        i = i + 1
-            
-    if msg_count > 10:
-        print(f"    ... ({msg_count - 10} messages hidden)")
+    print(f"  ... ({msg_count} total messages)")
+    print(f"  [Schema] Successfully mapped {mapped_count} IDs to JSON definitions.")
 
 def parse_generic_string_table(reader, target_list, label):
     """
@@ -294,11 +327,11 @@ def parse_generic_string_table(reader, target_list, label):
             'val': res_val
         })
         
-        if i < 5:
+        if i < LIST_LIMIT:
             print(f"    [{i}] {res_val}")
             
-    if count > 5:
-        print(f"    ... ({count - 5} entries hidden)")
+    if count > LIST_LIMIT:
+        print(f"    ... ({count - LIST_LIMIT} entries hidden)")
 
 def handle_authentication_packet(data):
     """
@@ -552,36 +585,75 @@ def parse_voice_and_state(data, session_id):
 
 def handle_network_message(data):
     """
-    Handles Server -> Client 'Network Message' (This can be intternal or script)
+    Handles Network Message  (Opcode 0x06).
+    Uses RUNTIME_SCHEMA to decode specific fields.
     """
     try:
         reader = BitReader(data)
         
-        # 1. Read Opcode - Should be 6
-        opcode = reader.read_uint()
+        # 1. Header
+        opcode = reader.read_bits(8)
+        msg_index = reader.read_bits(16)
+        timestamp = reader.read_float()
         
-        # 2. Read Message Index
-        msg_index = reader.read_uint()
-        
-        # Lookup Name in network_messages
+        # 2. Lookup Name and Schema
         msg_name = f"Unknown({msg_index})"
-        for msg in initial_game_state.network_messages:
-            if msg['id'] == msg_index:
-                msg_name = msg['name']
-                break
+        schema = RUNTIME_SCHEMA.get(msg_index)
+        
+        # Fallback name lookup if not in schema but in game state
+        if not schema:
+            for m in initial_game_state.network_messages:
+                if m['id'] == msg_index:
+                    msg_name = m['name']
+                    break
+        else:
+            msg_name = schema['name']
         
         print(f"\n[Packet 0x06] NETWORK MESSAGE:")
         print(f"  Message: {msg_name} (ID: {msg_index})")
+        print(f"  Timestamp: {timestamp:.4f}")
         
-        # The remainder of the packet is the message-specific payload.
-        # Need to set up the schema next to parse this accurately.
-        # Dump the bitstream size.
+        # 3. Payload Parsing
+        if schema:
+            print("  -- Payload --")
+            fields = schema.get('fields', [])
+            
+            for field in fields:
+                field_name = field['name']
+                try:
+                    val = unpack_field(reader, field)
+                    
+                    # Format output nicely
+                    if isinstance(val, float):
+                        print(f"    {field_name}: {val:.4f}")
+                    elif isinstance(val, dict) and 'x' in val: # Vector
+                        print(f"    {field_name}: <{val['x']:.2f}, {val['y']:.2f}, {val['z']:.2f}>")
+                    else:
+                        print(f"    {field_name}: {val}")
+                        
+                except Exception as e:
+                    print(f"    {field_name}: [Error unpacking] {e}")
+                    break
+        else:
+            print("  [!] No Schema Definition found for this ID.")
+
+        # 4. Debug: Print remaining bits (Garbage/Padding check)
+        total_bits = len(data) * 8
+        current_bit_pos = (reader.byte_offset * 8) + reader.bit_offset
+        remaining_bits = total_bits - current_bit_pos
         
-        remaining_bits = (len(data) * 8) - (reader.byte_offset * 8 + reader.bit_offset)
-        print(f"  Payload: ~{remaining_bits} bits remaining")
+        if remaining_bits > 0 and remaining_bits < 64: # Only print if small garbage remains
+             # If we parsed correctly, this should just be the byte alignment padding
+             pass
+        elif remaining_bits > 0:
+             # If we didn't have a schema, dump the hex
+             raw_payload = data[reader.byte_offset:]
+             print(f"  Unparsed Payload ({remaining_bits} bits): {raw_payload.hex().upper()}")
 
     except Exception as e:
-        print(f"[Packet 0x06] Error: {e}")
+        print(f"[Packet 0x06] Critical Error: {e}")
+        import traceback
+        traceback.print_exc()
 
 def parse_mode_packet(data):
     """
@@ -629,6 +701,12 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
     msg_len = len(data)
     if msg_len == 0: return
 
+    # --- ADDED: Raw Hex Dump ---
+    # format: [RAW] SERVER RELIABLE Seq:1 Op:0x06 | <HEX_DATA>
+    op_debug = data[0]
+    print(f"[RAW] {direction:<6} {stream:<10} Seq:{seq:<3} Op:0x{op_debug:02X} | {data.hex().upper()}")
+    # ---------------------------
+
     # 1. Map Load Detection
     if direction == "CLIENT" and stream == "RELIABLE":
         if handle_map_load_finished(data):
@@ -659,6 +737,18 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
         # 0x07: OnMode
         elif op_code == 0x07:
             parse_mode_packet(data)
+    
+    # --- SERVER UNRELIABLE PACKETS ---
+    if direction == "SERVER" and stream == "UNRELIABLE":
+        # 0x06: Network Message (either script or internal)
+        if op_code == 0x06:
+            handle_network_message(data)
+    
+    # --- CLIENT RELIABLE PACKETS ---
+    if direction == "CLIENT" and stream == "RELIABLE":
+        # Network Message
+        if op_code == 0x06:
+            handle_network_message(data)
     
     # 5. Voice / State Packet
     if direction == "SERVER" and stream == "UNRELIABLE" and op_code == 0x05:

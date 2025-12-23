@@ -1,0 +1,6681 @@
+{
+  "0": {
+    "id": 0,
+    "name": "PlaySoundMessage",
+    "fields": [
+      {
+        "name": "parent",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 2,
+        "compression": []
+      },
+      {
+        "name": "resource",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 10,
+        "memBytes": 2,
+        "compression": []
+      },
+      {
+        "name": "modifier",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "origin",
+        "type": "Position",
+        "group": "Public",
+        "maxBits": 42,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 15,
+            "stepValue": 0.125,
+            "min_raw": -16000,
+            "range_raw": 32000
+          },
+          {
+            "step": 1,
+            "bits": 12,
+            "stepValue": 0.125,
+            "min_raw": -2000,
+            "range_raw": 4000
+          },
+          {
+            "step": 2,
+            "bits": 15,
+            "stepValue": 0.125,
+            "min_raw": -16000,
+            "range_raw": 32000
+          }
+        ]
+      }
+    ]
+  },
+  "1": {
+    "id": 1,
+    "name": "StopEffectMessage",
+    "fields": [
+      {
+        "name": "parent",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 2,
+        "compression": []
+      },
+      {
+        "name": "resource",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 10,
+        "memBytes": 2,
+        "compression": []
+      }
+    ]
+  },
+  "2": {
+    "id": 2,
+    "name": "VariableMessage",
+    "fields": [
+      {
+        "name": "name",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 2048,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "value",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 2048,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "3": {
+    "id": 3,
+    "name": "CommandMessage",
+    "fields": [
+      {
+        "name": "value",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 2048,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "4": {
+    "id": 4,
+    "name": "Health",
+    "fields": [
+      {
+        "name": "armor",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 11,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "clientIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "health",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 13,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "maxArmor",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 11,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "maxHealth",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 13,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "5": {
+    "id": 5,
+    "name": "TechPoints",
+    "fields": [
+      {
+        "name": "builtFraction",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 7,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "eggCount",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 6,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "entityIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "healthFraction",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 7,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "location",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "powerNodeFraction",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 7,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "6": {
+    "id": 6,
+    "name": "Recycle",
+    "fields": [
+      {
+        "name": "resGained",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "resLost",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "7": {
+    "id": 7,
+    "name": "Consume",
+    "fields": [
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "8": {
+    "id": 8,
+    "name": "Reset",
+    "fields": []
+  },
+  "9": {
+    "id": 9,
+    "name": "ClientBotDebugTarget",
+    "fields": [
+      {
+        "name": "targetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "10": {
+    "id": 10,
+    "name": "BotDebugSetFollowMode",
+    "fields": [
+      {
+        "name": "follow",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "11": {
+    "id": 11,
+    "name": "BotDebuggingTargetDestroyed",
+    "fields": [
+      {
+        "name": "destroyedTargetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "12": {
+    "id": 12,
+    "name": "BotDebuggingSectionUpdate",
+    "fields": [
+      {
+        "name": "contents",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 2048,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "sectionType",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "13": {
+    "id": 13,
+    "name": "InitAVState",
+    "fields": [
+      {
+        "name": "startsOn",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "14": {
+    "id": 14,
+    "name": "GlobalCommStats",
+    "fields": [
+      {
+        "name": "ammopackEfficiency",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "ammopackRefill",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 18,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "ammopackResExpired",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "ammopackResUsed",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "catpackEfficiency",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "catpackResExpired",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "catpackResUsed",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "medpackAccuracy",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "medpackEfficiency",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "medpackRefill",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 18,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "medpackResExpired",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "medpackResUsed",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "15": {
+    "id": 15,
+    "name": "MarineCommStats",
+    "fields": [
+      {
+        "name": "ammopackEfficiency",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "ammopackRefill",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 18,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "ammopackResExpired",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "ammopackResUsed",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "catpackEfficiency",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "catpackResExpired",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "catpackResUsed",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "medpackAccuracy",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "medpackEfficiency",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "medpackRefill",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 18,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "medpackResExpired",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "medpackResUsed",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "16": {
+    "id": 16,
+    "name": "BuildingSummary",
+    "fields": [
+      {
+        "name": "built",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "lost",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "17": {
+    "id": 17,
+    "name": "KillGraph",
+    "fields": [
+      {
+        "name": "gameMinute",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "killerTeamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "18": {
+    "id": 18,
+    "name": "RTGraph",
+    "fields": [
+      {
+        "name": "destroyed",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "gameMinute",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "19": {
+    "id": 19,
+    "name": "HiveSkillGraph",
+    "fields": [
+      {
+        "name": "gameMinute",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "joined",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "steamId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "20": {
+    "id": 20,
+    "name": "TechLog",
+    "fields": [
+      {
+        "name": "activeRTs",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 5,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "built",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "destroyed",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "finishedMinute",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "recycled",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "teamRes",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 15,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 15,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 20000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "21": {
+    "id": 21,
+    "name": "GameData",
+    "fields": [
+      {
+        "name": "alienAcc",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "alienRTsBuilt",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "alienRTsLost",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "gameLengthMinutes",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "marineAcc",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "marineOnosAcc",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": -101,
+            "range_raw": 10100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "marineRTsBuilt",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "marineRTsLost",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "22": {
+    "id": 22,
+    "name": "PlayerStats",
+    "fields": [
+      {
+        "name": "accuracy",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "accuracyOnos",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": -101,
+            "range_raw": 10100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "assists",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "deaths",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "hiveSkill",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "isMarine",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "isRookie",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "kills",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "killstreak",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "minutesBuilding",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "minutesComm",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "minutesPlaying",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "pdmg",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 52428701
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "playerName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 640,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "score",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "sdmg",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 52428701
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "steamId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "23": {
+    "id": 23,
+    "name": "EndStatsStatus",
+    "fields": [
+      {
+        "name": "statusId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 5,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "timeMinutes",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 17,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 17,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 102300
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "24": {
+    "id": 24,
+    "name": "EndStatsWeapon",
+    "fields": [
+      {
+        "name": "accuracy",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "accuracyOnos",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": -101,
+            "range_raw": 10100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "kills",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "pdmg",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 52428701
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "sdmg",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 52428701
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "wTechId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "25": {
+    "id": 25,
+    "name": "DeathStats",
+    "fields": [
+      {
+        "name": "currentAcc",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "currentAccOnos",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": -101,
+            "range_raw": 10100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "kills",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "lastAcc",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 10000
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "lastAccOnos",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 14,
+            "stepValue": 0.009999999776482582,
+            "min_raw": -101,
+            "range_raw": 10100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "pdmg",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 52428701
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "sdmg",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 52428701
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "26": {
+    "id": 26,
+    "name": "DisabledOption",
+    "fields": [
+      {
+        "name": "disabledOption",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 256,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "27": {
+    "id": 27,
+    "name": "SetAlienWeaponUseHUDSlot",
+    "fields": [
+      {
+        "name": "slotMode",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "28": {
+    "id": 28,
+    "name": "SetAutopickup",
+    "fields": [
+      {
+        "name": "autoPickup",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "autoPickupBetter",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "29": {
+    "id": 29,
+    "name": "ServerConfirmedHitEffects",
+    "fields": [
+      {
+        "name": "serverBlood",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "30": {
+    "id": 30,
+    "name": "CameraShake",
+    "fields": [
+      {
+        "name": "intensity",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 7,
+            "stepValue": 0.009999999776482582,
+            "min_raw": 0,
+            "range_raw": 100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "31": {
+    "id": 31,
+    "name": "CreateDecal",
+    "fields": [
+      {
+        "name": "decalIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 5,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "normal",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "posx",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "posy",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "posz",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "scale",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 7,
+            "stepValue": 0.05000000074505806,
+            "min_raw": 0,
+            "range_raw": 100
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "32": {
+    "id": 32,
+    "name": "SetPlayerCallingCard",
+    "fields": [
+      {
+        "name": "callingCard",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 6,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "33": {
+    "id": 33,
+    "name": "SetPlayerVariant",
+    "fields": [
+      {
+        "name": "alienStructuresVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "alienTunnelsVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "arcVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "axeVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "babblerEggVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "babblerVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "clogVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "cystVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "drifterVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "eggVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "exoVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "extractorVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "fadeVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "flamethrowerVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "gorgeVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "grenadeLauncherVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "harvesterVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "hmgVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "hydraVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "isMale",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "lerkVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "macVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "marineStructuresVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "marineVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 5,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "onosVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "pistolVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "rifleVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "shotgunVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "shoulderPadIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 5,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "skulkVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "welderVariant",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "34": {
+    "id": 34,
+    "name": "VoiceMessage",
+    "fields": [
+      {
+        "name": "voiceId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 6,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "35": {
+    "id": 35,
+    "name": "HitEffect",
+    "fields": [
+      {
+        "name": "altMode",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "damage",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "direction",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "doerId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "posx",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "posy",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "posz",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "showtracer",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "surface",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 5,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "targetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "36": {
+    "id": 36,
+    "name": "Damage",
+    "fields": [
+      {
+        "name": "amount",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.0625,
+            "min_raw": 0,
+            "range_raw": 32768
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "posx",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "posy",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "posz",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 16,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 16,
+            "stepValue": 0.05000000074505806,
+            "min_raw": -32760,
+            "range_raw": 65520
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "targetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "type",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "37": {
+    "id": 37,
+    "name": "MarkEnemy",
+    "fields": [
+      {
+        "name": "targetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "weaponId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "38": {
+    "id": 38,
+    "name": "HitSound",
+    "fields": [
+      {
+        "name": "hitsound",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "39": {
+    "id": 39,
+    "name": "AbilityResult",
+    "fields": [
+      {
+        "name": "castTime",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "success",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "40": {
+    "id": 40,
+    "name": "JoinError",
+    "fields": [
+      {
+        "name": "reason",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "41": {
+    "id": 41,
+    "name": "PlayedTutorial",
+    "fields": []
+  },
+  "42": {
+    "id": 42,
+    "name": "CommanderLoginError",
+    "fields": []
+  },
+  "43": {
+    "id": 43,
+    "name": "CommanderPing",
+    "fields": [
+      {
+        "name": "position",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "44": {
+    "id": 44,
+    "name": "TechNodeUpdate",
+    "fields": [
+      {
+        "name": "available",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "hasTech",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "prereqResearchProgress",
+        "type": "Float",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "researchProgress",
+        "type": "Float",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "researched",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "researching",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "45": {
+    "id": 45,
+    "name": "Ping",
+    "fields": [
+      {
+        "name": "clientIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "ping",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 10,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "46": {
+    "id": 46,
+    "name": "WorldText",
+    "fields": [
+      {
+        "name": "data",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "messageType",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "position",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "47": {
+    "id": 47,
+    "name": "CommanderError",
+    "fields": [
+      {
+        "name": "data",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 384,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "position",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "48": {
+    "id": 48,
+    "name": "SelectAndGoto",
+    "fields": [
+      {
+        "name": "entityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "49": {
+    "id": 49,
+    "name": "ComSelect",
+    "fields": [
+      {
+        "name": "entityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "50": {
+    "id": 50,
+    "name": "TakeDamageIndicator",
+    "fields": [
+      {
+        "name": "damage",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "worldX",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "worldZ",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "51": {
+    "id": 51,
+    "name": "TechNodeInstance",
+    "fields": [
+      {
+        "name": "entity",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "progress",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "removed",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "researchId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "52": {
+    "id": 52,
+    "name": "SetName",
+    "fields": [
+      {
+        "name": "name",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 640,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "53": {
+    "id": 53,
+    "name": "GameEnd",
+    "fields": [
+      {
+        "name": "win",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "54": {
+    "id": 54,
+    "name": "EntityChanged",
+    "fields": [
+      {
+        "name": "newEntityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "oldEntityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "55": {
+    "id": 55,
+    "name": "ResetGame",
+    "fields": []
+  },
+  "56": {
+    "id": 56,
+    "name": "SelectUnit",
+    "fields": [
+      {
+        "name": "keepSelection",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "selected",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "unitId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "57": {
+    "id": 57,
+    "name": "SelectHotkeyGroup",
+    "fields": [
+      {
+        "name": "groupNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "58": {
+    "id": 58,
+    "name": "CommAction",
+    "fields": [
+      {
+        "name": "shiftDown",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "59": {
+    "id": 59,
+    "name": "CommTargetedAction",
+    "fields": [
+      {
+        "name": "orientationRadians",
+        "type": "Angle",
+        "group": "Public",
+        "maxBits": 11,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 11,
+            "stepValue": 0.003069460391998291,
+            "min_raw": 0,
+            "range_raw": 2047
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "shiftDown",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "targetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "x",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "y",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "z",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "60": {
+    "id": 60,
+    "name": "CommTargetedActionWorld",
+    "fields": [
+      {
+        "name": "orientationRadians",
+        "type": "Angle",
+        "group": "Public",
+        "maxBits": 11,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 11,
+            "stepValue": 0.003069460391998291,
+            "min_raw": 0,
+            "range_raw": 2047
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "shiftDown",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "targetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "x",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "y",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "z",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "61": {
+    "id": 61,
+    "name": "CreateHotKeyGroup",
+    "fields": [
+      {
+        "name": "groupNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "62": {
+    "id": 62,
+    "name": "DangerMusicUpdate",
+    "fields": [
+      {
+        "name": "active",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "origin",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "teamIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "63": {
+    "id": 63,
+    "name": "MinimapAlert",
+    "fields": [
+      {
+        "name": "entityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "entityTechId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "worldX",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "worldZ",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "64": {
+    "id": 64,
+    "name": "VoteConcedeCast",
+    "fields": [
+      {
+        "name": "voterName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 640,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "votesMoreNeeded",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "65": {
+    "id": 65,
+    "name": "VoteEjectCast",
+    "fields": [
+      {
+        "name": "voterName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 640,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "votesMoreNeeded",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "66": {
+    "id": 66,
+    "name": "TeamConceded",
+    "fields": [
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "67": {
+    "id": 67,
+    "name": "MutePlayer",
+    "fields": [
+      {
+        "name": "muteClientIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "setMute",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "68": {
+    "id": 68,
+    "name": "GorgeBuildStructure",
+    "fields": [
+      {
+        "name": "direction",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "lastClickedPosition",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "lastClickedPositionNormal",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "origin",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "structureIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "69": {
+    "id": 69,
+    "name": "ChatClient",
+    "fields": [
+      {
+        "name": "message",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 3848,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamOnly",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "70": {
+    "id": 70,
+    "name": "Chat",
+    "fields": [
+      {
+        "name": "locationId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 10,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "message",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 3848,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "playerName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 640,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "teamOnly",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamType",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "71": {
+    "id": 71,
+    "name": "ChatUnlocalized",
+    "fields": [
+      {
+        "name": "locationId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 10,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "message",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 3848,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "playerName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 640,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "teamOnly",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamType",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "72": {
+    "id": 72,
+    "name": "DebugLine",
+    "fields": [
+      {
+        "name": "a",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "b",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "endPoint",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "g",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "lifetime",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "r",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "startPoint",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "73": {
+    "id": 73,
+    "name": "DebugCapsule",
+    "fields": [
+      {
+        "name": "capsuleHeight",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "capsuleRadius",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "lifetime",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "sweepEnd",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "sweepStart",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "74": {
+    "id": 74,
+    "name": "DumpRoundStats",
+    "fields": [
+      {
+        "name": "dumpRoundStats",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "75": {
+    "id": 75,
+    "name": "DebugGrenades",
+    "fields": [
+      {
+        "name": "enabled",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "76": {
+    "id": 76,
+    "name": "TechNodeBase",
+    "fields": [
+      {
+        "name": "addOnTechId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "available",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "hasTech",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "prereq1",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "prereq2",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "prereqResearchProgress",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "requiresTarget",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "researchProgress",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "researched",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "researching",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "techId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techType",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "time",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "77": {
+    "id": 77,
+    "name": "ClearTechTree",
+    "fields": []
+  },
+  "78": {
+    "id": 78,
+    "name": "SetCommunicationStatus",
+    "fields": [
+      {
+        "name": "communicationStatus",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "79": {
+    "id": 79,
+    "name": "Buy",
+    "fields": [
+      {
+        "name": "techId1",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId2",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId3",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId4",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId5",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId6",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId7",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "techId8",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 9,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "80": {
+    "id": 80,
+    "name": "AutoConcedeWarning",
+    "fields": [
+      {
+        "name": "team1Conceding",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "time",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "81": {
+    "id": 81,
+    "name": "ScoreUpdate",
+    "fields": [
+      {
+        "name": "points",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 14,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "res",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "wasKill",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "82": {
+    "id": 82,
+    "name": "SetAchievement",
+    "fields": [
+      {
+        "name": "name",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 384,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "83": {
+    "id": 83,
+    "name": "SpectatePlayer",
+    "fields": [
+      {
+        "name": "entityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "84": {
+    "id": 84,
+    "name": "SwitchFromFirstPersonSpectate",
+    "fields": [
+      {
+        "name": "mode",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "85": {
+    "id": 85,
+    "name": "SwitchFirstPersonSpectatePlayer",
+    "fields": [
+      {
+        "name": "forward",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "86": {
+    "id": 86,
+    "name": "SetClientIndex",
+    "fields": [
+      {
+        "name": "clientIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "87": {
+    "id": 87,
+    "name": "ServerHidden",
+    "fields": [
+      {
+        "name": "hidden",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "88": {
+    "id": 88,
+    "name": "SetClientTeamNumber",
+    "fields": [
+      {
+        "name": "teamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "89": {
+    "id": 89,
+    "name": "WaitingForAutoTeamBalance",
+    "fields": [
+      {
+        "name": "waiting",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "90": {
+    "id": 90,
+    "name": "SetTimeWaveSpawnEnds",
+    "fields": [
+      {
+        "name": "time",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "91": {
+    "id": 91,
+    "name": "SetIsRespawning",
+    "fields": [
+      {
+        "name": "isRespawning",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "92": {
+    "id": 92,
+    "name": "SetDesiredSpawnPoint",
+    "fields": [
+      {
+        "name": "desiredSpawnPoint",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 54,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 19,
+            "stepValue": 0.0078125,
+            "min_raw": -256000,
+            "range_raw": 512000
+          },
+          {
+            "step": 1,
+            "bits": 16,
+            "stepValue": 0.0078125,
+            "min_raw": -32000,
+            "range_raw": 64000
+          },
+          {
+            "step": 2,
+            "bits": 19,
+            "stepValue": 0.0078125,
+            "min_raw": -256000,
+            "range_raw": 512000
+          }
+        ]
+      }
+    ]
+  },
+  "93": {
+    "id": 93,
+    "name": "DeathMessage",
+    "fields": [
+      {
+        "name": "iconIndex",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 6,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "killerId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "killerIsPlayer",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "killerTeamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "targetId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "targetIsPlayer",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "targetTeamNumber",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 3,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "94": {
+    "id": 94,
+    "name": "DumpTeamBrain",
+    "fields": []
+  },
+  "95": {
+    "id": 95,
+    "name": "RoundStatsProcessingCompleted",
+    "fields": []
+  },
+  "96": {
+    "id": 96,
+    "name": "NSLTournamentName",
+    "fields": [
+      {
+        "name": "tournamentName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 1024,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "97": {
+    "id": 97,
+    "name": "NSLTeamPlacement",
+    "fields": [
+      {
+        "name": "playerIds",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 1048,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 1024,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "teamPlacement",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "98": {
+    "id": 98,
+    "name": "TeamMessage",
+    "fields": [
+      {
+        "name": "data",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "type",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 5,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "99": {
+    "id": 99,
+    "name": "CreatePulseEffect",
+    "fields": [
+      {
+        "name": "colorA",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "colorB",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "colorG",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "colorR",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "duration",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "entityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "frequency",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "100": {
+    "id": 100,
+    "name": "StartNearbyAmbientSounds",
+    "fields": [
+      {
+        "name": "distance",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "origin",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "101": {
+    "id": 101,
+    "name": "DebugConcede",
+    "fields": [
+      {
+        "name": "teamNum",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "102": {
+    "id": 102,
+    "name": "AFKWarning",
+    "fields": [
+      {
+        "name": "maxAFKTime",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "timeAFK",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "103": {
+    "id": 103,
+    "name": "OnPhase",
+    "fields": [
+      {
+        "name": "phaseGateId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "phasedEntityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "104": {
+    "id": 104,
+    "name": "hitreg",
+    "fields": [
+      {
+        "name": "entity",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "entity_anim",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 4000,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "entity_data",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 4000,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "hit",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "hitSerial",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "moveSerial",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "time",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "trace_end",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "trace_fraction",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "trace_start",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "105": {
+    "id": 105,
+    "name": "SnowBallHit",
+    "fields": [
+      {
+        "name": "origin",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "pitch",
+        "type": "Angle",
+        "group": "Public",
+        "maxBits": 13,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 13,
+            "stepValue": 0.0007670840714126825,
+            "min_raw": 0,
+            "range_raw": 8191
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "roll",
+        "type": "Angle",
+        "group": "Public",
+        "maxBits": 13,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 13,
+            "stepValue": 0.0007670840714126825,
+            "min_raw": 0,
+            "range_raw": 8191
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "yaw",
+        "type": "Angle",
+        "group": "Public",
+        "maxBits": 13,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 13,
+            "stepValue": 0.0007670840714126825,
+            "min_raw": 0,
+            "range_raw": 8191
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      }
+    ]
+  },
+  "106": {
+    "id": 106,
+    "name": "DebugPrintEntityField",
+    "fields": [
+      {
+        "name": "entityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "fieldName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 512,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "107": {
+    "id": 107,
+    "name": "DebugPrintEntityFieldP",
+    "fields": [
+      {
+        "name": "entityId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "fieldName",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 512,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "108": {
+    "id": 108,
+    "name": "DebugTraceVisualization",
+    "fields": [
+      {
+        "name": "endPoint",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "fraction",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "lifetime",
+        "type": "Fixed",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          }
+        ]
+      },
+      {
+        "name": "startPoint",
+        "type": "Vector",
+        "group": "Public",
+        "maxBits": 96,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      }
+    ]
+  },
+  "109": {
+    "id": 109,
+    "name": "SendVote",
+    "fields": [
+      {
+        "name": "choice",
+        "type": "Bool",
+        "group": "Public",
+        "maxBits": 1,
+        "memBytes": 0,
+        "compression": []
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "110": {
+    "id": 110,
+    "name": "VoteResults",
+    "fields": [
+      {
+        "name": "noVotes",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "requiredVotes",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "state",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 2,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "yesVotes",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "111": {
+    "id": 111,
+    "name": "VoteComplete",
+    "fields": [
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "112": {
+    "id": 112,
+    "name": "VoteCannotStart",
+    "fields": [
+      {
+        "name": "reason",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "113": {
+    "id": 113,
+    "name": "VoteKickPlayer",
+    "fields": [
+      {
+        "name": "client_index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "expireTime",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "kick_client",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "114": {
+    "id": 114,
+    "name": "AddVoteMap",
+    "fields": [
+      {
+        "name": "index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 8,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 256,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "115": {
+    "id": 115,
+    "name": "VoteChangeMap",
+    "fields": [
+      {
+        "name": "client_index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "expireTime",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "map_index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "116": {
+    "id": 116,
+    "name": "VoteResetGame",
+    "fields": [
+      {
+        "name": "client_index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "expireTime",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "117": {
+    "id": 117,
+    "name": "VoteRandomizeRR",
+    "fields": [
+      {
+        "name": "client_index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "expireTime",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "118": {
+    "id": 118,
+    "name": "VotingForceEvenTeams",
+    "fields": [
+      {
+        "name": "client_index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "expireTime",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "119": {
+    "id": 119,
+    "name": "VoteAddCommanderBots",
+    "fields": [
+      {
+        "name": "client_index",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "expireTime",
+        "type": "Time",
+        "group": "Public",
+        "maxBits": 26,
+        "memBytes": 0,
+        "compression": [
+          {
+            "step": 0,
+            "bits": 26,
+            "stepValue": 0.00390625,
+            "min_raw": 0,
+            "range_raw": 34359740
+          },
+          {
+            "step": 1,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 32278
+          },
+          {
+            "step": 2,
+            "bits": 32,
+            "stepValue": 0,
+            "min_raw": 0,
+            "range_raw": 0
+          }
+        ]
+      },
+      {
+        "name": "voteId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 32,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "120": {
+    "id": 120,
+    "name": "DisplayBadge",
+    "fields": [
+      {
+        "name": "badge",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "clientId",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 12,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "column",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "121": {
+    "id": 121,
+    "name": "SelectBadge",
+    "fields": [
+      {
+        "name": "badge",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "column",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 4,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "122": {
+    "id": 122,
+    "name": "BadgeRows",
+    "fields": [
+      {
+        "name": "badge",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "columns",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 11,
+        "memBytes": 4,
+        "compression": []
+      }
+    ]
+  },
+  "123": {
+    "id": 123,
+    "name": "BadgeName",
+    "fields": [
+      {
+        "name": "badge",
+        "type": "Integer",
+        "group": "Public",
+        "maxBits": 7,
+        "memBytes": 4,
+        "compression": []
+      },
+      {
+        "name": "name",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 1024,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  },
+  "124": {
+    "id": 124,
+    "name": "ServerAdminPrint",
+    "fields": [
+      {
+        "name": "message",
+        "type": "String",
+        "group": "Public",
+        "maxBits": 1024,
+        "memBytes": 0,
+        "compression": []
+      }
+    ]
+  }
+}
