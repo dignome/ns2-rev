@@ -12,7 +12,15 @@ Example from schema file:
         "group": "Public",
         "maxBits": 14,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 14,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 9999
+          }
+        ]
       },
       {
         "name": "res",
@@ -20,15 +28,21 @@ Example from schema file:
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 100
+          }
+        ]
       },
       {
         "name": "wasKill",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -44,3 +58,12 @@ local kScoreUpdate =
 Shared.RegisterNetworkMessage("ScoreUpdate", kScoreUpdate)
 
 The Fields of the message as defined in the schema should be arranged alphabetically by the name field (order in which unpacked from the bit stream).
+
+For Types:
+
+      3 components: Angles, Vector, Position
+      1 component : Angle, Fixed, Integer, Time
+      0 component : Bool, String, Float (Float keeps maxBits only)
+      memBytes(integer param) is only present for Integer
+
+      Most Float data seems to be sent as Fixed type.
