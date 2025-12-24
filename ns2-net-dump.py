@@ -11,6 +11,12 @@ import json
 import math
 from utils import BinaryReader, BitReader, unpack_field
 
+# avoid string decode errors
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="backslashreplace")
+
 from speex_decoder import (
     decode_speex_bundle,
     append_pcm,
@@ -22,7 +28,11 @@ from speex_decoder import (
 # CONFIGURATION & GLOBALS
 # ==================================================================================
 DATA_DIR = 'data'
-MAX_PRINT_FILES = 10  # Limit console spam for connecting information
+
+# Limit consistency file info
+MAX_PRINT_FILES = 10
+# Limit message dumps
+LIST_LIMIT = 10
 
 # Type 7 Mode values
 CLIENT_MODES = {
@@ -103,8 +113,6 @@ def load_schema_definitions(json_path):
 # Call this immediately at script start
 load_schema_definitions("ns2_schema_basic.json")
 
-# Limit message dumps
-LIST_LIMIT = 10
 
 # ==================================================================================
 # PACKET HANDLERS
@@ -588,7 +596,7 @@ def parse_client_moves(move_bytes):
     trailing = move_bytes[off:]
     return moves, trailing
 
-def parse_client_voice_and_state(data):
+def parse_client_voice_and_moves(data):
     """
     Layout (based on ServerWorld::OnClientStatePacket):
       u8    opcode (0x04)
@@ -698,7 +706,6 @@ def parse_client_voice_and_state(data):
         # don't crash the main decode loop
         return
 
-
 def parse_voice_and_state(data, session_id):
     """
     Parses Type 5 Packet: Voice Data + Optional State Snapshot.
@@ -763,7 +770,7 @@ def parse_voice_and_state(data, session_id):
         # State Snapshot Check
         if cursor < len(data):
             remaining = len(data) - cursor
-            #print(f"[Snapshot] Present ({remaining} bytes)")
+            print(f"[Snapshot] Present ({remaining} bytes)")
 
     except struct.error:
         pass
@@ -944,9 +951,9 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
         # and potentially find the State Snapshot at the end.
         parse_voice_and_state(data, session_id)
         
-    # 6. Client Voice / State Packet (Moves)
+    # 6. Client Voice / Moves
     if direction == "CLIENT" and stream == "UNRELIABLE" and op_code == 0x04:
-        parse_client_voice_and_state(data)
+        parse_client_voice_and_moves(data)
 
 
 # ==================================================================================

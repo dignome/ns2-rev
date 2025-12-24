@@ -9,7 +9,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 2,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4094
+          }
+        ]
       },
       {
         "name": "resource",
@@ -17,35 +25,28 @@
         "group": "Public",
         "maxBits": 10,
         "memBytes": 2,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 10,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 1023
+          }
+        ]
       },
       {
         "name": "modifier",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 32759
           }
         ]
       },
@@ -54,28 +55,30 @@
         "type": "Position",
         "group": "Public",
         "maxBits": 42,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 15,
             "stepValue": 0.125,
             "min_raw": -16000,
-            "range_raw": 32000
+            "range_raw": 32000,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 12,
             "stepValue": 0.125,
             "min_raw": -2000,
-            "range_raw": 4000
+            "range_raw": 4000,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 15,
             "stepValue": 0.125,
             "min_raw": -16000,
-            "range_raw": 32000
+            "range_raw": 32000,
+            "role": "z"
           }
         ]
       }
@@ -91,7 +94,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 2,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4094
+          }
+        ]
       },
       {
         "name": "resource",
@@ -99,7 +110,15 @@
         "group": "Public",
         "maxBits": 10,
         "memBytes": 2,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 10,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 1023
+          }
+        ]
       }
     ]
   },
@@ -111,17 +130,13 @@
         "name": "name",
         "type": "String",
         "group": "Public",
-        "maxBits": 2048,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 2048
       },
       {
         "name": "value",
         "type": "String",
         "group": "Public",
-        "maxBits": 2048,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 2048
       }
     ]
   },
@@ -133,9 +148,7 @@
         "name": "value",
         "type": "String",
         "group": "Public",
-        "maxBits": 2048,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 2048
       }
     ]
   },
@@ -149,7 +162,15 @@
         "group": "Public",
         "maxBits": 11,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 11,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 2045
+          }
+        ]
       },
       {
         "name": "clientIndex",
@@ -157,7 +178,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "health",
@@ -165,7 +194,15 @@
         "group": "Public",
         "maxBits": 13,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 13,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 8191
+          }
+        ]
       },
       {
         "name": "maxArmor",
@@ -173,7 +210,15 @@
         "group": "Public",
         "maxBits": 11,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 11,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 2045
+          }
+        ]
       },
       {
         "name": "maxHealth",
@@ -181,7 +226,15 @@
         "group": "Public",
         "maxBits": 13,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 13,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 8191
+          }
+        ]
       }
     ]
   },
@@ -194,28 +247,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 7,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 7,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -225,7 +263,15 @@
         "group": "Public",
         "maxBits": 6,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 6,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 63
+          }
+        ]
       },
       {
         "name": "entityIndex",
@@ -233,35 +279,28 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "healthFraction",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 7,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 7,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -271,35 +310,28 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65534
+          }
+        ]
       },
       {
         "name": "powerNodeFraction",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 7,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 7,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -309,7 +341,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4
+          }
+        ]
       },
       {
         "name": "techId",
@@ -317,7 +357,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -331,35 +379,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "resLost",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 32767
           }
         ]
       },
@@ -369,7 +410,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -383,7 +432,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -402,7 +459,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -414,9 +479,7 @@
         "name": "follow",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -430,7 +493,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -442,9 +513,7 @@
         "name": "contents",
         "type": "String",
         "group": "Public",
-        "maxBits": 2048,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 2048
       },
       {
         "name": "sectionType",
@@ -452,7 +521,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 2
+          }
+        ]
       }
     ]
   },
@@ -464,9 +541,7 @@
         "name": "startsOn",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -479,28 +554,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -510,7 +570,15 @@
         "group": "Public",
         "maxBits": 18,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 18,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 262143
+          }
+        ]
       },
       {
         "name": "ammopackResExpired",
@@ -518,7 +586,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "ammopackResUsed",
@@ -526,35 +602,28 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "catpackEfficiency",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -564,7 +633,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "catpackResUsed",
@@ -572,35 +649,28 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "medpackAccuracy",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -609,28 +679,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -640,7 +695,15 @@
         "group": "Public",
         "maxBits": 18,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 18,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 262143
+          }
+        ]
       },
       {
         "name": "medpackResExpired",
@@ -648,7 +711,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "medpackResUsed",
@@ -656,7 +727,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       }
     ]
   },
@@ -669,28 +748,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -700,7 +764,15 @@
         "group": "Public",
         "maxBits": 18,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 18,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 262143
+          }
+        ]
       },
       {
         "name": "ammopackResExpired",
@@ -708,7 +780,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "ammopackResUsed",
@@ -716,35 +796,28 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "catpackEfficiency",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -754,7 +827,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "catpackResUsed",
@@ -762,35 +843,28 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "medpackAccuracy",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -799,28 +873,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -830,7 +889,15 @@
         "group": "Public",
         "maxBits": 18,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 18,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 262143
+          }
+        ]
       },
       {
         "name": "medpackResExpired",
@@ -838,7 +905,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       },
       {
         "name": "medpackResUsed",
@@ -846,7 +921,15 @@
         "group": "Public",
         "maxBits": 16,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 16,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 65535
+          }
+        ]
       }
     ]
   },
@@ -860,7 +943,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "lost",
@@ -868,7 +959,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "teamNumber",
@@ -876,7 +975,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       },
       {
         "name": "techId",
@@ -884,7 +991,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -897,28 +1012,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -928,7 +1028,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       }
     ]
   },
@@ -940,37 +1048,20 @@
         "name": "destroyed",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "gameMinute",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -980,7 +1071,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       }
     ]
   },
@@ -993,28 +1092,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1022,9 +1106,7 @@
         "name": "joined",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "steamId",
@@ -1032,7 +1114,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "teamNumber",
@@ -1040,7 +1130,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       }
     ]
   },
@@ -1054,51 +1152,40 @@
         "group": "Public",
         "maxBits": 5,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 5,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 23
+          }
+        ]
       },
       {
         "name": "built",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "destroyed",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "finishedMinute",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1106,9 +1193,7 @@
         "name": "recycled",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "teamNumber",
@@ -1116,35 +1201,28 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       },
       {
         "name": "teamRes",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 15,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 15,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 20000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1154,7 +1232,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -1167,28 +1253,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1198,7 +1269,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "alienRTsLost",
@@ -1206,35 +1285,28 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "gameLengthMinutes",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1243,28 +1315,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1273,28 +1330,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": -101,
             "range_raw": 10100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1304,7 +1346,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "marineRTsLost",
@@ -1312,7 +1362,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       }
     ]
   },
@@ -1325,28 +1383,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1355,28 +1398,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": -101,
             "range_raw": 10100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1386,7 +1414,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 254
+          }
+        ]
       },
       {
         "name": "deaths",
@@ -1394,7 +1430,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 254
+          }
+        ]
       },
       {
         "name": "hiveSkill",
@@ -1402,23 +1446,27 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "isMarine",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "isRookie",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "kills",
@@ -1426,7 +1474,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 254
+          }
+        ]
       },
       {
         "name": "killstreak",
@@ -1434,35 +1490,28 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 254
+          }
+        ]
       },
       {
         "name": "minutesBuilding",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1471,28 +1520,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1501,28 +1535,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1531,28 +1550,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 52428701
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1560,9 +1564,7 @@
         "name": "playerName",
         "type": "String",
         "group": "Public",
-        "maxBits": 640,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 640
       },
       {
         "name": "score",
@@ -1570,35 +1572,28 @@
         "group": "Public",
         "maxBits": 14,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 14,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 9999
+          }
+        ]
       },
       {
         "name": "sdmg",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 52428701
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1608,7 +1603,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -1622,35 +1625,28 @@
         "group": "Public",
         "maxBits": 5,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 5,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 22
+          }
+        ]
       },
       {
         "name": "timeMinutes",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 17,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 17,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 102300
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -1665,28 +1661,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1695,28 +1676,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": -101,
             "range_raw": 10100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1726,35 +1692,28 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 254
+          }
+        ]
       },
       {
         "name": "pdmg",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 52428701
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1763,28 +1722,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 52428701
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1794,7 +1738,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       },
       {
         "name": "wTechId",
@@ -1802,7 +1754,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -1815,28 +1775,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1845,28 +1790,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": -101,
             "range_raw": 10100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1876,35 +1806,28 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 254
+          }
+        ]
       },
       {
         "name": "lastAcc",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 10000
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1913,28 +1836,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 14,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 14,
             "stepValue": 0.009999999776482582,
             "min_raw": -101,
             "range_raw": 10100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1943,28 +1851,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 52428701
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -1973,28 +1866,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 52428701
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -2008,9 +1886,7 @@
         "name": "disabledOption",
         "type": "String",
         "group": "Public",
-        "maxBits": 256,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 256
       }
     ]
   },
@@ -2024,7 +1900,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 3
+          }
+        ]
       }
     ]
   },
@@ -2036,17 +1920,13 @@
         "name": "autoPickup",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "autoPickupBetter",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -2058,9 +1938,7 @@
         "name": "serverBlood",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -2073,28 +1951,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 7,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 7,
             "stepValue": 0.009999999776482582,
             "min_raw": 0,
             "range_raw": 100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -2110,7 +1973,15 @@
         "group": "Public",
         "maxBits": 5,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 5,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 25
+          }
+        ]
       },
       {
         "name": "normal",
@@ -2118,35 +1989,28 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 161
+          }
+        ]
       },
       {
         "name": "posx",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2155,28 +2019,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2185,28 +2034,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2215,28 +2049,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 7,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 7,
             "stepValue": 0.05000000074505806,
             "min_raw": 0,
             "range_raw": 100
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -2252,7 +2071,15 @@
         "group": "Public",
         "maxBits": 6,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 6,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 41
+          }
+        ]
       }
     ]
   },
@@ -2266,7 +2093,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 8
+          }
+        ]
       },
       {
         "name": "alienTunnelsVariant",
@@ -2274,7 +2109,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 8
+          }
+        ]
       },
       {
         "name": "arcVariant",
@@ -2282,7 +2125,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       },
       {
         "name": "axeVariant",
@@ -2290,7 +2141,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 9
+          }
+        ]
       },
       {
         "name": "babblerEggVariant",
@@ -2298,7 +2157,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "babblerVariant",
@@ -2306,7 +2173,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "clogVariant",
@@ -2314,7 +2189,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "cystVariant",
@@ -2322,7 +2205,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       },
       {
         "name": "drifterVariant",
@@ -2330,7 +2221,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       },
       {
         "name": "eggVariant",
@@ -2338,7 +2237,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 8
+          }
+        ]
       },
       {
         "name": "exoVariant",
@@ -2346,7 +2253,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       },
       {
         "name": "extractorVariant",
@@ -2354,7 +2269,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       },
       {
         "name": "fadeVariant",
@@ -2362,7 +2285,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "flamethrowerVariant",
@@ -2370,7 +2301,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       },
       {
         "name": "gorgeVariant",
@@ -2378,7 +2317,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "grenadeLauncherVariant",
@@ -2386,7 +2333,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       },
       {
         "name": "harvesterVariant",
@@ -2394,7 +2349,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 8
+          }
+        ]
       },
       {
         "name": "hmgVariant",
@@ -2402,7 +2365,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       },
       {
         "name": "hydraVariant",
@@ -2410,15 +2381,21 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "isMale",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "lerkVariant",
@@ -2426,7 +2403,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "macVariant",
@@ -2434,7 +2419,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       },
       {
         "name": "marineStructuresVariant",
@@ -2442,7 +2435,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       },
       {
         "name": "marineVariant",
@@ -2450,7 +2451,15 @@
         "group": "Public",
         "maxBits": 5,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 5,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 23
+          }
+        ]
       },
       {
         "name": "onosVariant",
@@ -2458,7 +2467,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 7
+          }
+        ]
       },
       {
         "name": "pistolVariant",
@@ -2466,7 +2483,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 11
+          }
+        ]
       },
       {
         "name": "rifleVariant",
@@ -2474,7 +2499,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 12
+          }
+        ]
       },
       {
         "name": "shotgunVariant",
@@ -2482,7 +2515,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       },
       {
         "name": "shoulderPadIndex",
@@ -2490,7 +2531,15 @@
         "group": "Public",
         "maxBits": 5,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 5,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 18
+          }
+        ]
       },
       {
         "name": "skulkVariant",
@@ -2498,7 +2547,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 10
+          }
+        ]
       },
       {
         "name": "welderVariant",
@@ -2506,7 +2563,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 5
+          }
+        ]
       }
     ]
   },
@@ -2520,7 +2585,15 @@
         "group": "Public",
         "maxBits": 6,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 6,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 46
+          }
+        ]
       }
     ]
   },
@@ -2532,9 +2605,7 @@
         "name": "altMode",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "damage",
@@ -2542,7 +2613,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 511
+          }
+        ]
       },
       {
         "name": "direction",
@@ -2550,7 +2629,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 161
+          }
+        ]
       },
       {
         "name": "doerId",
@@ -2558,35 +2645,28 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "posx",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2595,28 +2675,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2625,28 +2690,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2654,9 +2704,7 @@
         "name": "showtracer",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "surface",
@@ -2664,7 +2712,15 @@
         "group": "Public",
         "maxBits": 5,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 5,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 17
+          }
+        ]
       },
       {
         "name": "targetId",
@@ -2672,7 +2728,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -2685,28 +2749,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.0625,
             "min_raw": 0,
             "range_raw": 32768
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2715,28 +2764,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2745,28 +2779,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2775,28 +2794,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 16,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 16,
             "stepValue": 0.05000000074505806,
             "min_raw": -32760,
             "range_raw": 65520
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2806,7 +2810,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "type",
@@ -2814,7 +2826,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       }
     ]
   },
@@ -2828,7 +2848,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "weaponId",
@@ -2836,7 +2864,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -2850,7 +2886,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 2
+          }
+        ]
       }
     ]
   },
@@ -2863,28 +2907,13 @@
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -2892,9 +2921,7 @@
         "name": "success",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "techId",
@@ -2902,7 +2929,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -2916,7 +2951,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 3
+          }
+        ]
       }
     ]
   },
@@ -2939,28 +2982,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -2974,75 +3019,41 @@
         "name": "available",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "hasTech",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "prereqResearchProgress",
-        "type": "Float",
+        "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 32759
           }
         ]
       },
       {
         "name": "researchProgress",
-        "type": "Float",
+        "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -3050,17 +3061,13 @@
         "name": "researched",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "researching",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "techId",
@@ -3068,7 +3075,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -3082,7 +3097,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "ping",
@@ -3090,7 +3113,15 @@
         "group": "Public",
         "maxBits": 10,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 10,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 999
+          }
+        ]
       }
     ]
   },
@@ -3103,28 +3134,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -3134,35 +3150,45 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 4
+          }
+        ]
       },
       {
         "name": "position",
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -3176,37 +3202,37 @@
         "name": "data",
         "type": "String",
         "group": "Public",
-        "maxBits": 384,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 384
       },
       {
         "name": "position",
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -3222,7 +3248,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -3236,7 +3270,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -3249,28 +3291,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 32759
           }
         ]
       },
@@ -3279,28 +3306,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -3309,28 +3321,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -3346,35 +3343,28 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "progress",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 32759
           }
         ]
       },
@@ -3382,9 +3372,7 @@
         "name": "removed",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "researchId",
@@ -3392,7 +3380,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 447
+          }
+        ]
       }
     ]
   },
@@ -3404,9 +3400,7 @@
         "name": "name",
         "type": "String",
         "group": "Public",
-        "maxBits": 640,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 640
       }
     ]
   },
@@ -3420,7 +3414,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 2
+          }
+        ]
       }
     ]
   },
@@ -3434,7 +3436,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "oldEntityId",
@@ -3442,7 +3452,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -3459,17 +3477,13 @@
         "name": "keepSelection",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "selected",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "teamNumber",
@@ -3477,7 +3491,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 4
+          }
+        ]
       },
       {
         "name": "unitId",
@@ -3485,7 +3507,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -3499,7 +3529,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 8
+          }
+        ]
       }
     ]
   },
@@ -3511,9 +3549,7 @@
         "name": "shiftDown",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "techId",
@@ -3521,7 +3557,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -3534,28 +3578,13 @@
         "type": "Angle",
         "group": "Public",
         "maxBits": 11,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 11,
             "stepValue": 0.003069460391998291,
             "min_raw": 0,
             "range_raw": 2047
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -3563,9 +3592,7 @@
         "name": "shiftDown",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "targetId",
@@ -3573,7 +3600,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "techId",
@@ -3581,35 +3616,28 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "x",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -3618,28 +3646,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -3648,28 +3661,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -3684,28 +3682,13 @@
         "type": "Angle",
         "group": "Public",
         "maxBits": 11,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 11,
             "stepValue": 0.003069460391998291,
             "min_raw": 0,
             "range_raw": 2047
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -3713,9 +3696,7 @@
         "name": "shiftDown",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "targetId",
@@ -3723,7 +3704,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "techId",
@@ -3731,35 +3720,28 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "x",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -3768,28 +3750,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -3798,28 +3765,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -3835,7 +3787,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 8
+          }
+        ]
       }
     ]
   },
@@ -3847,37 +3807,37 @@
         "name": "active",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "origin",
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -3887,7 +3847,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       }
     ]
   },
@@ -3901,7 +3869,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "entityTechId",
@@ -3909,7 +3885,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId",
@@ -3917,35 +3901,28 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "worldX",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 32759
           }
         ]
       },
@@ -3954,28 +3931,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -3989,9 +3951,7 @@
         "name": "voterName",
         "type": "String",
         "group": "Public",
-        "maxBits": 640,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 640
       },
       {
         "name": "votesMoreNeeded",
@@ -3999,7 +3959,15 @@
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 64
+          }
+        ]
       }
     ]
   },
@@ -4011,9 +3979,7 @@
         "name": "voterName",
         "type": "String",
         "group": "Public",
-        "maxBits": 640,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 640
       },
       {
         "name": "votesMoreNeeded",
@@ -4021,7 +3987,15 @@
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 64
+          }
+        ]
       }
     ]
   },
@@ -4035,7 +4009,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4
+          }
+        ]
       }
     ]
   },
@@ -4049,15 +4031,21 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "setMute",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -4070,28 +4058,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -4100,28 +4090,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -4130,28 +4122,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -4160,28 +4154,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -4191,7 +4187,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 4
+          }
+        ]
       }
     ]
   },
@@ -4203,17 +4207,13 @@
         "name": "message",
         "type": "String",
         "group": "Public",
-        "maxBits": 3848,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 3848
       },
       {
         "name": "teamOnly",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -4227,23 +4227,27 @@
         "group": "Public",
         "maxBits": 10,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 10,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 1001
+          }
+        ]
       },
       {
         "name": "message",
         "type": "String",
         "group": "Public",
-        "maxBits": 3848,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 3848
       },
       {
         "name": "playerName",
         "type": "String",
         "group": "Public",
-        "maxBits": 640,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 640
       },
       {
         "name": "teamNumber",
@@ -4251,15 +4255,21 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4
+          }
+        ]
       },
       {
         "name": "teamOnly",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "teamType",
@@ -4267,7 +4277,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 2
+          }
+        ]
       }
     ]
   },
@@ -4281,23 +4299,27 @@
         "group": "Public",
         "maxBits": 10,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 10,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 1001
+          }
+        ]
       },
       {
         "name": "message",
         "type": "String",
         "group": "Public",
-        "maxBits": 3848,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 3848
       },
       {
         "name": "playerName",
         "type": "String",
         "group": "Public",
-        "maxBits": 640,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 640
       },
       {
         "name": "teamNumber",
@@ -4305,15 +4327,21 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4
+          }
+        ]
       },
       {
         "name": "teamOnly",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "teamType",
@@ -4321,7 +4349,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 2
+          }
+        ]
       }
     ]
   },
@@ -4334,28 +4370,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 32767
           }
         ]
       },
@@ -4364,28 +4385,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -4394,28 +4400,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -4424,28 +4432,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 161
           }
         ]
       },
@@ -4454,28 +4447,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -4484,28 +4462,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -4514,28 +4477,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -4550,28 +4515,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 161
           }
         ]
       },
@@ -4580,28 +4530,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -4610,28 +4545,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -4640,28 +4560,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -4670,28 +4592,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -4705,9 +4629,7 @@
         "name": "dumpRoundStats",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -4719,9 +4641,7 @@
         "name": "enabled",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -4735,23 +4655,27 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 447
+          }
+        ]
       },
       {
         "name": "available",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "hasTech",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "prereq1",
@@ -4759,7 +4683,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 447
+          }
+        ]
       },
       {
         "name": "prereq2",
@@ -4767,35 +4699,28 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 447
+          }
+        ]
       },
       {
         "name": "prereqResearchProgress",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -4803,37 +4728,20 @@
         "name": "requiresTarget",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "researchProgress",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 612
           }
         ]
       },
@@ -4841,17 +4749,13 @@
         "name": "researched",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "researching",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "techId",
@@ -4859,7 +4763,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 447
+          }
+        ]
       },
       {
         "name": "techType",
@@ -4867,7 +4779,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 14
+          }
+        ]
       },
       {
         "name": "time",
@@ -4875,7 +4795,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 360
+          }
+        ]
       }
     ]
   },
@@ -4894,7 +4822,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 3
+          }
+        ]
       }
     ]
   },
@@ -4908,7 +4844,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId2",
@@ -4916,7 +4860,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId3",
@@ -4924,7 +4876,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId4",
@@ -4932,7 +4892,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId5",
@@ -4940,7 +4908,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId6",
@@ -4948,7 +4924,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId7",
@@ -4956,7 +4940,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       },
       {
         "name": "techId8",
@@ -4964,7 +4956,15 @@
         "group": "Public",
         "maxBits": 9,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 9,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 446
+          }
+        ]
       }
     ]
   },
@@ -4976,37 +4976,20 @@
         "name": "team1Conceding",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "time",
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -5022,7 +5005,15 @@
         "group": "Public",
         "maxBits": 14,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 14,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 9999
+          }
+        ]
       },
       {
         "name": "res",
@@ -5030,15 +5021,21 @@
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 100
+          }
+        ]
       },
       {
         "name": "wasKill",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -5050,9 +5047,7 @@
         "name": "name",
         "type": "String",
         "group": "Public",
-        "maxBits": 384,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 384
       }
     ]
   },
@@ -5066,7 +5061,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -5080,7 +5083,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 4
+          }
+        ]
       }
     ]
   },
@@ -5092,9 +5103,7 @@
         "name": "forward",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -5108,7 +5117,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -5120,9 +5137,7 @@
         "name": "hidden",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -5136,7 +5151,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4
+          }
+        ]
       }
     ]
   },
@@ -5148,9 +5171,7 @@
         "name": "waiting",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -5163,28 +5184,13 @@
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -5198,9 +5204,7 @@
         "name": "isRespawning",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       }
     ]
   },
@@ -5213,28 +5217,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 54,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 19,
             "stepValue": 0.0078125,
             "min_raw": -256000,
-            "range_raw": 512000
+            "range_raw": 512000,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 16,
             "stepValue": 0.0078125,
             "min_raw": -32000,
-            "range_raw": 64000
+            "range_raw": 64000,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 19,
             "stepValue": 0.0078125,
             "min_raw": -256000,
-            "range_raw": 512000
+            "range_raw": 512000,
+            "role": "z"
           }
         ]
       }
@@ -5250,7 +5256,15 @@
         "group": "Public",
         "maxBits": 6,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 6,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 50
+          }
+        ]
       },
       {
         "name": "killerId",
@@ -5258,15 +5272,21 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "killerIsPlayer",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "killerTeamNumber",
@@ -5274,7 +5294,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4
+          }
+        ]
       },
       {
         "name": "targetId",
@@ -5282,15 +5310,21 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "targetIsPlayer",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "targetTeamNumber",
@@ -5298,7 +5332,15 @@
         "group": "Public",
         "maxBits": 3,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 3,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4
+          }
+        ]
       }
     ]
   },
@@ -5320,9 +5362,7 @@
         "name": "tournamentName",
         "type": "String",
         "group": "Public",
-        "maxBits": 1024,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1024
       }
     ]
   },
@@ -5334,17 +5374,13 @@
         "name": "playerIds",
         "type": "String",
         "group": "Public",
-        "maxBits": 1048,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1048
       },
       {
         "name": "teamName",
         "type": "String",
         "group": "Public",
-        "maxBits": 1024,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1024
       },
       {
         "name": "teamPlacement",
@@ -5352,7 +5388,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 2
+          }
+        ]
       }
     ]
   },
@@ -5366,7 +5410,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "type",
@@ -5374,7 +5426,15 @@
         "group": "Public",
         "maxBits": 5,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 5,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 23
+          }
+        ]
       }
     ]
   },
@@ -5388,7 +5448,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "colorB",
@@ -5396,7 +5464,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "colorG",
@@ -5404,7 +5480,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "colorR",
@@ -5412,35 +5496,28 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "duration",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 612
           }
         ]
       },
@@ -5450,35 +5527,28 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "frequency",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 32759
           }
         ]
       }
@@ -5493,28 +5563,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 161
           }
         ]
       },
@@ -5523,28 +5578,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -5560,7 +5617,15 @@
         "group": "Public",
         "maxBits": 1,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 1,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 1
+          }
+        ]
       }
     ]
   },
@@ -5573,28 +5638,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 161
           }
         ]
       },
@@ -5603,24 +5653,9 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
@@ -5640,7 +5675,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "phasedEntityId",
@@ -5648,7 +5691,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       }
     ]
   },
@@ -5662,31 +5713,33 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "entity_anim",
         "type": "String",
         "group": "Public",
-        "maxBits": 4000,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 4000
       },
       {
         "name": "entity_data",
         "type": "String",
         "group": "Public",
-        "maxBits": 4000,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 4000
       },
       {
         "name": "hit",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "hitSerial",
@@ -5694,7 +5747,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "moveSerial",
@@ -5702,35 +5763,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "time",
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 32767
           }
         ]
       },
@@ -5739,28 +5793,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -5769,28 +5825,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 161
           }
         ]
       },
@@ -5799,28 +5840,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -5835,28 +5878,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -5865,28 +5910,13 @@
         "type": "Angle",
         "group": "Public",
         "maxBits": 13,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 13,
             "stepValue": 0.0007670840714126825,
             "min_raw": 0,
             "range_raw": 8191
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -5895,28 +5925,13 @@
         "type": "Angle",
         "group": "Public",
         "maxBits": 13,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 13,
             "stepValue": 0.0007670840714126825,
             "min_raw": 0,
             "range_raw": 8191
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -5925,28 +5940,13 @@
         "type": "Angle",
         "group": "Public",
         "maxBits": 13,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 13,
             "stepValue": 0.0007670840714126825,
             "min_raw": 0,
             "range_raw": 8191
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       }
@@ -5962,15 +5962,21 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "fieldName",
         "type": "String",
         "group": "Public",
-        "maxBits": 512,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 512
       }
     ]
   },
@@ -5984,15 +5990,21 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "fieldName",
         "type": "String",
         "group": "Public",
-        "maxBits": 512,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 512
       }
     ]
   },
@@ -6005,28 +6017,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       },
@@ -6035,28 +6049,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
+            "range_raw": 161
           }
         ]
       },
@@ -6065,28 +6064,13 @@
         "type": "Fixed",
         "group": "Public",
         "maxBits": 32,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
             "range_raw": 0
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
           }
         ]
       },
@@ -6095,28 +6079,30 @@
         "type": "Vector",
         "group": "Public",
         "maxBits": 96,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "x"
           },
           {
-            "step": 1,
+            "component": 1,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "y"
           },
           {
-            "step": 2,
+            "component": 2,
             "bits": 32,
             "stepValue": 0,
             "min_raw": 0,
-            "range_raw": 0
+            "range_raw": 0,
+            "role": "z"
           }
         ]
       }
@@ -6130,9 +6116,7 @@
         "name": "choice",
         "type": "Bool",
         "group": "Public",
-        "maxBits": 1,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1
       },
       {
         "name": "voteId",
@@ -6140,7 +6124,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6154,7 +6146,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "requiredVotes",
@@ -6162,7 +6162,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "state",
@@ -6170,7 +6178,15 @@
         "group": "Public",
         "maxBits": 2,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 2,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 2
+          }
+        ]
       },
       {
         "name": "voteId",
@@ -6178,7 +6194,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "yesVotes",
@@ -6186,7 +6210,15 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       }
     ]
   },
@@ -6200,7 +6232,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6214,7 +6254,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 9
+          }
+        ]
       }
     ]
   },
@@ -6228,35 +6276,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "expireTime",
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -6266,7 +6307,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "voteId",
@@ -6274,7 +6323,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6288,15 +6345,21 @@
         "group": "Public",
         "maxBits": 8,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 8,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 255
+          }
+        ]
       },
       {
         "name": "name",
         "type": "String",
         "group": "Public",
-        "maxBits": 256,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 256
       }
     ]
   },
@@ -6310,35 +6373,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "expireTime",
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -6348,7 +6404,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "voteId",
@@ -6356,7 +6420,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6370,35 +6442,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "expireTime",
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -6408,7 +6473,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6422,35 +6495,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "expireTime",
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -6460,7 +6526,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6474,35 +6548,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "expireTime",
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -6512,7 +6579,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6526,35 +6601,28 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       },
       {
         "name": "expireTime",
         "type": "Time",
         "group": "Public",
         "maxBits": 26,
-        "memBytes": 0,
-        "compression": [
+        "components": [
           {
-            "step": 0,
+            "component": 0,
             "bits": 26,
             "stepValue": 0.00390625,
             "min_raw": 0,
             "range_raw": 34359740
-          },
-          {
-            "step": 1,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 32278
-          },
-          {
-            "step": 2,
-            "bits": 32,
-            "stepValue": 0,
-            "min_raw": 0,
-            "range_raw": 0
           }
         ]
       },
@@ -6564,7 +6632,15 @@
         "group": "Public",
         "maxBits": 32,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 32,
+            "stepValue": 1,
+            "min_raw": -2147483648,
+            "range_raw": 4294967295
+          }
+        ]
       }
     ]
   },
@@ -6578,7 +6654,15 @@
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 93
+          }
+        ]
       },
       {
         "name": "clientId",
@@ -6586,7 +6670,15 @@
         "group": "Public",
         "maxBits": 12,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 12,
+            "stepValue": 1,
+            "min_raw": -1,
+            "range_raw": 4095
+          }
+        ]
       },
       {
         "name": "column",
@@ -6594,7 +6686,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 10
+          }
+        ]
       }
     ]
   },
@@ -6608,7 +6708,15 @@
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 93
+          }
+        ]
       },
       {
         "name": "column",
@@ -6616,7 +6724,15 @@
         "group": "Public",
         "maxBits": 4,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 4,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 10
+          }
+        ]
       }
     ]
   },
@@ -6630,7 +6746,15 @@
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 93
+          }
+        ]
       },
       {
         "name": "columns",
@@ -6638,7 +6762,15 @@
         "group": "Public",
         "maxBits": 11,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 11,
+            "stepValue": 1,
+            "min_raw": 0,
+            "range_raw": 2047
+          }
+        ]
       }
     ]
   },
@@ -6652,15 +6784,21 @@
         "group": "Public",
         "maxBits": 7,
         "memBytes": 4,
-        "compression": []
+        "components": [
+          {
+            "component": 0,
+            "bits": 7,
+            "stepValue": 1,
+            "min_raw": 1,
+            "range_raw": 93
+          }
+        ]
       },
       {
         "name": "name",
         "type": "String",
         "group": "Public",
-        "maxBits": 1024,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1024
       }
     ]
   },
@@ -6672,9 +6810,7 @@
         "name": "message",
         "type": "String",
         "group": "Public",
-        "maxBits": 1024,
-        "memBytes": 0,
-        "compression": []
+        "maxBits": 1024
       }
     ]
   }

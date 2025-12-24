@@ -130,6 +130,10 @@ class BitReader:
         num_bytes = (max_bits + 7) // 8
         try:
             byte_data = raw_val.to_bytes(num_bytes, byteorder='little')
+            
+            # Stop on NULL
+            byte_data = byte_data.split(b"\x00", 1)[0]
+            
             # 3. Decode UTF-8 and strip null terminators
             return byte_data.decode('utf-8', errors='ignore').rstrip('\x00')
         except:
@@ -145,11 +149,11 @@ class BitReader:
 def unpack_field(reader, field):
     """
     Reads a single field based on the schema definition.
-    Handles Integers, Floats, Bools, Strings, and Compressed Vectors.
+    Handles Integers, Floats, Bools, Strings, and (optionally) component/rangestep encoded types.
     """
-    f_type = field['type']
-    f_name = field['name']
-    
+    f_type = field.get('type')
+    f_name = field.get('name')
+
     # --- 1. Boolean ---
     if f_type == 'Bool':
         return reader.read_bool()
@@ -159,76 +163,59 @@ def unpack_field(reader, field):
         max_bits = field.get('maxBits', 0)
         return reader.read_string(max_bits)
 
-    # --- 3. Vector / Position / Angles (3-Component Types) ---
-    if f_type in ['Vector', 'Position', 'Angles', 'DebugLine']: 
-        # Note: DebugLine has endpoints which are Vectors, but the schema 
-        # lists them as type Vector.
-        
-        # NS2 Vectors usually have 3 compression steps in the JSON (x, y, z)
-        comps = field.get('compression', [])
-        
-        # Helper to read one component based on a compression step
-        def read_component(step_info):
-            bits = step_info['bits']
-            raw_val = reader.read_bits(bits)
-            # Decompress: (Raw + Min) * StepValue
-            min_raw = step_info.get('min_raw', 0)
-            step_val = step_info.get('stepValue', 0)
-            # If stepValue is 0, it might be an uncompressed integer passed as float
-            if step_val == 0 and bits == 32: return float(raw_val) # Likely raw
-            return (raw_val + min_raw) * step_val
+    # Helper to read one component described by a range-step entry
+    def read_component(step_info):
+        bits = int(step_info.get('bits', 0))
+        raw_val = reader.read_bits(bits)
 
-        # If we have compression data for 3 axes
+        min_raw = step_info.get('min_raw', 0)
+        step_val = step_info.get('stepValue', 0)
+
+        # Decode rule you’re using everywhere:
+        #   value = (raw + min_raw) * stepValue
+        # If stepValue is 0, treat as raw (+min) integer-ish value.
+        if step_val:
+            return (raw_val + min_raw) * step_val
+        else:
+            return raw_val + min_raw
+
+    # --- 3. 3-Component Types ---
+    # (your schema uses components[0..2] for xyz)
+    if f_type in ['Vector', 'Position', 'Angles', 'DebugLine']:
+        comps = field.get('components', [])
+
         if len(comps) >= 3:
             x = read_component(comps[0])
             y = read_component(comps[1])
             z = read_component(comps[2])
-            return {'x': x, 'y': y, 'z': z}
+            return {'x': float(x), 'y': float(y), 'z': float(z)}
         else:
-            # Fallback: Read 3 raw floats (96 bits)
+            # Fallback: raw floats
             x = reader.read_float()
             y = reader.read_float()
             z = reader.read_float()
             return {'x': x, 'y': y, 'z': z}
 
-    # --- 4. Integers, Fixed, Time, Angle (Scalar Types) ---
-    # These often utilize RangeStep compression
-    
-    # Check for compression steps first
-    compress_steps = field.get('compression', [])
-    
-    if compress_steps:
-        # Default to the first step (Step 0)
-        step_info = compress_steps[0]
-        
-        bits_to_read = step_info['bits']
-        raw_value = reader.read_bits(bits_to_read)
-        
-        # Decompress
-        min_raw = step_info.get('min_raw', 0)
-        step_val = step_info.get('stepValue', 0)
-        
-        # Calculate Value
-        if step_val != 0:
-            val = (raw_value + min_raw) * step_val
-        else:
-            # If step is 0, it's usually just the raw value (offset by min)
-            val = raw_value + min_raw
-            
-        # Cast based on type
+    # --- 4. Scalar Types that may use a single component (range step) ---
+    # Integer / Fixed / Time / Angle often use components[0]
+    comps = field.get('components', [])
+    if comps:
+        val = read_component(comps[0])
         if f_type == 'Integer':
             return int(val)
-        return val # Float/Fixed/Time return as float
+        return float(val)  # Fixed/Time/Angle -> float
 
     # --- 5. Uncompressed Scalars (Fallback) ---
     max_bits = field.get('maxBits', 32)
-    
+
     if f_type == 'Float':
-        # If explicitly 32 bits and no compression, read as IEEE float
+        # Your note: keep maxBits as the number of bits to read.
         if max_bits == 32:
             return reader.read_float()
-        else:
-            return reader.read_bits(max_bits) # Rare compressed float without steps
-            
-    # Default Integer Read
+        return reader.read_bits(max_bits)
+
+    if f_type == 'Integer':
+        return reader.read_bits(max_bits)
+
+    # Default: read bits
     return reader.read_bits(max_bits)
