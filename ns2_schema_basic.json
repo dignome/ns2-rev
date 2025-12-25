@@ -251,7 +251,7 @@
           {
             "component": 0,
             "bits": 7,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 100
           }
@@ -298,7 +298,7 @@
           {
             "component": 0,
             "bits": 7,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 100
           }
@@ -329,7 +329,7 @@
           {
             "component": 0,
             "bits": 7,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 100
           }
@@ -558,7 +558,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -621,7 +621,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -668,7 +668,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -683,7 +683,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -752,7 +752,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -815,7 +815,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -862,7 +862,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -877,7 +877,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -1016,7 +1016,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1059,7 +1059,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1096,7 +1096,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1183,7 +1183,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1220,7 +1220,7 @@
           {
             "component": 0,
             "bits": 15,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 20000
           }
@@ -1257,7 +1257,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -1304,7 +1304,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1319,7 +1319,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -1334,7 +1334,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": -101,
             "range_raw": 10100
           }
@@ -1387,7 +1387,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -1402,7 +1402,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": -101,
             "range_raw": 10100
           }
@@ -1509,7 +1509,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1524,7 +1524,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1539,7 +1539,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1554,7 +1554,7 @@
           {
             "component": 0,
             "bits": 26,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 52428701
           }
@@ -1591,7 +1591,7 @@
           {
             "component": 0,
             "bits": 26,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 52428701
           }
@@ -1644,7 +1644,7 @@
           {
             "component": 0,
             "bits": 17,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 102300
           }
@@ -1665,7 +1665,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -1680,7 +1680,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": -101,
             "range_raw": 10100
           }
@@ -1711,7 +1711,7 @@
           {
             "component": 0,
             "bits": 26,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 52428701
           }
@@ -1726,7 +1726,7 @@
           {
             "component": 0,
             "bits": 26,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 52428701
           }
@@ -1779,7 +1779,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -1794,7 +1794,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": -101,
             "range_raw": 10100
           }
@@ -1825,7 +1825,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 10000
           }
@@ -1840,7 +1840,7 @@
           {
             "component": 0,
             "bits": 14,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": -101,
             "range_raw": 10100
           }
@@ -1855,7 +1855,7 @@
           {
             "component": 0,
             "bits": 26,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 52428701
           }
@@ -1870,7 +1870,7 @@
           {
             "component": 0,
             "bits": 26,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 52428701
           }
@@ -1955,7 +1955,7 @@
           {
             "component": 0,
             "bits": 7,
-            "stepValue": 0.009999999776482582,
+            "stepValue": 0.01,
             "min_raw": 0,
             "range_raw": 100
           }
@@ -2008,7 +2008,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2023,7 +2023,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2038,7 +2038,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2053,7 +2053,7 @@
           {
             "component": 0,
             "bits": 7,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": 0,
             "range_raw": 100
           }
@@ -2664,7 +2664,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2679,7 +2679,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2694,7 +2694,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2768,7 +2768,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2783,7 +2783,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
@@ -2798,7 +2798,7 @@
           {
             "component": 0,
             "bits": 16,
-            "stepValue": 0.05000000074505806,
+            "stepValue": 0.05,
             "min_raw": -32760,
             "range_raw": 65520
           }
