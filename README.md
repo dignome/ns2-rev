@@ -10,7 +10,7 @@ This tool scans a **Wireshark saved `.pcapng` file** to analyze traffic between 
 * **Traffic Analysis:** Scans `.pcap` dumps for relevant game packets.
 * **Message Dumping:** Capable of dumping *any* kind of Network Message defined in the schema.
     * *Extensible:* If a message isn't in the schema, you can add it.
-* **Audio Extraction:** Decodes Speex-encoded voice chat packets (sent by the server) and dumps them as `.wav` files.
+* **Audio Extraction:** Decodes Speex-encoded voice chat packets (sent by the server or client) and dumps them as `.wav` files.
     * *Spatial Support:* Dumps regular voice chat and also positional voice chat and positional/target (Type 2 or 3).
 
 ## ⚠️ Limitations & Future Work
