@@ -19,6 +19,9 @@ This tool scans a **Wireshark saved `.pcapng` file** to analyze traffic between 
 * **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
 
 ## 🛠️ Usage Notes
+python ns2_net_dump.py spark-capture.pcapng [options --dump-voice] &> output.txt
+
+If using --dump-voice data is saved to wavs folder.
 
 ### Schema Definitions
 There is currently no automated way to create the schema definition file (that I'm willing to share), as it is defined on the Lua side of the game engine.
