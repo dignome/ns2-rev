@@ -19,7 +19,7 @@ This tool scans a **Wireshark saved `.pcapng` file** to analyze traffic between 
 * **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
 
 ## 🛠️ Usage Notes
-python ns2_net_dump.py spark-capture.pcapng [options --dump-voice] &> output.txt
+python ns2_net_dump.py spark-capture.pcapng --dump-voice &> output.txt
 
 If using --dump-voice data is saved to wavs folder.
 
