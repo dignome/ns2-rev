@@ -8,7 +8,8 @@ server reliable message 03 - confirm disconnect
 CLIENT CONNECTED - client connected: (use as map load counter)
 client reliable message 0301
 
-
+CLIENT VOICE / MOVEMENT:
+client unreliable message 04
 
 Voice / State Snapshot Message (TYPE 5)
 
