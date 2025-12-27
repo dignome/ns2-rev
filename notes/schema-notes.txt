@@ -74,7 +74,7 @@ First 3 bytes are the Entity ID / Sync (de-sync detection) 2 bytes and the Class
 
 Sync value is just a cycle per each read entity entry that goes 0->1->2->3->0 used to detect sync issue.  Resets to 0 on each state packet.
 
-If the Class ID is FF that means that class data should not be carried over into the new modified state (destroyed).
+If the Class ID is FF that means that class data for indicated Entity ID should not be carried over into the new modified state (destroyed).
 
 For a baseline copy (no previous state) it should be straightforward to read the data and build a state.  
 
