@@ -5,7 +5,7 @@ DISCONNECT:
 client reliable message 020b00000000 - client is disconnecting
 server reliable message 03 - confirm disconnect
 
-MAP LOADED - client ready message: (use as game counter)
+CLIENT CONNECTED - client connected: (use as map load counter)
 client reliable message 0301
 
 
