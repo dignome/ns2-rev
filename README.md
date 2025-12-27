@@ -15,7 +15,7 @@ This tool scans a **Wireshark saved `.pcapng` file** to analyze traffic between 
 
 ## ⚠️ Limitations & Future Work
 
-* **State Snapshots:** Does not currently parse state snapshots from the server.
+* **State Snapshots:** Handles the snapshot header / any performance data.  Not fully parsing the state data at this point.
 * **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
 
 ## 🛠️ Usage Notes
