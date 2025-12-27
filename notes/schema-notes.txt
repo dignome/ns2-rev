@@ -72,7 +72,7 @@ For the state packet processing which uses similar packing/unpacking as network 
 
 First 3 bytes are the Entity ID / Sync (de-sync detection) 2 bytes and the Class ID 1 byte.
 
-Sync value is just a cycle per each read entity entry that goes 0->1->2->3->0 used to detect sync issue.
+Sync value is just a cycle per each read entity entry that goes 0->1->2->3->0 used to detect sync issue.  Resets to 0 on each state packet.
 
 If the Class ID is FF that means that class data should not be carried over into the new modified state (destroyed).
 
