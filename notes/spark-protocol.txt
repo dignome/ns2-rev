@@ -5,12 +5,13 @@ DISCONNECT:
 client reliable message 020b00000000 - client is disconnecting
 server reliable message 03 - confirm disconnect
 
-MAP LOADED - client ready message: (use as game counter)
-client reliable message 0301
+CLIENT CONNECTED - client connected: (use as map load counter)
+client reliable message 0301 (type 3)
 
+CLIENT VOICE / MOVEMENT:
+client unreliable type 4
 
-
-Voice / State Snapshot Message (TYPE 5)
+Voice / State Snapshot Message (unreliable type 5)
 
 First byte is 0x05 (Type 5)
 
