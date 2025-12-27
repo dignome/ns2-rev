@@ -32,7 +32,7 @@ DATA_DIR = 'data'
 # Limit consistency file info
 MAX_PRINT_FILES = 10
 # Limit message dumps
-LIST_LIMIT = 10
+LIST_LIMIT = 225
 
 # Type 7 Mode values
 CLIENT_MODES = {
@@ -85,6 +85,9 @@ class GameState:
         self.server_ip = None
         self.server_steam_id = None
         
+        self.client_protocol = None
+        self.client_build = None
+        
         self.server_mode = "None"
 
 # Global Instance
@@ -92,46 +95,250 @@ initial_game_state = GameState()
 
 # --- SCHEMA STORAGE ---
 # 1. Static Definitions loaded from JSON (Key: Name string)
-SCHEMA_DEFS = {} 
+NETMSG_SCHEMA_DEFS = {} 
 
 # 2. Runtime Schema mapped to current Server IDs (Key: Server ID int)
-RUNTIME_SCHEMA = {}
+NETMSG_RUNTIME_SCHEMA = {}
 
-def load_schema_definitions(json_path):
-    """Loads the JSON and indexes it by Name."""
-    global SCHEMA_DEFS
+def _netmsg_checksum_u32(chk) -> int | None:
+    """
+    Accepts:
+      - int (already a checksum)
+      - str like "C70FB136" or "0xC70FB136"
+    Returns unsigned 32-bit int, or None if missing/invalid.
+    """
+    if chk is None:
+        return None
+    if isinstance(chk, int):
+        return chk & 0xFFFFFFFF
+
+    if isinstance(chk, str):
+        s = chk.strip().upper()
+        if s.startswith("0X"):
+            s = s[2:]
+        try:
+            return int(s, 16) & 0xFFFFFFFF
+        except Exception:
+            return None
+
+    return None
+
+
+def load_netmsg_schema_definitions(json_path: str) -> None:
+    """Loads the netmsg schema JSON and indexes it by netmsg name."""
+    global NETMSG_SCHEMA_DEFS
+    NETMSG_SCHEMA_DEFS = {}
+
     try:
-        with open(json_path, 'r') as f:
+        with open(json_path, "r") as f:
             raw_data = json.load(f)
-            for _, data in raw_data.items():
-                name = data['name']
-                SCHEMA_DEFS[name] = data
-        print(f"[Schema] Loaded {len(SCHEMA_DEFS)} message definitions from {json_path}")
+
+        for _, entry in raw_data.items():
+            name = entry.get("name")
+            if not name:
+                continue
+
+            # parse checksum string -> u32 (optional)
+            entry["_netmsg_checksum_u32"] = _netmsg_checksum_u32(entry.get("checksum"))
+            NETMSG_SCHEMA_DEFS[name] = entry
+
+        print(f"[NetMsgSchema] Loaded {len(NETMSG_SCHEMA_DEFS)} definitions from {json_path}")
+
     except Exception as e:
-        print(f"[Schema] Error loading JSON: {e}")
+        print(f"[NetMsgSchema] Error loading JSON: {e}")
 
 # Call this immediately at script start
-load_schema_definitions("ns2_schema_basic.json")
+load_netmsg_schema_definitions("ns2_netmsg_schema_bad.json")
 
 
 # ==================================================================================
 # PACKET HANDLERS
 # ==================================================================================
 
-def handle_map_load_finished(data):
-    """Handles Client -> Server 'Map Load Finished' signal (0x03 0x01)."""
-    if len(data) == 2 and data == b'\x03\x01':
-        # Only flush WAVs if voice dumping is enabled
-        if DUMP_VOICE and initial_game_state.map_load_count > 0:
-            try:
-                flush_map(initial_game_state.map_load_count, DATA_DIR)
-            except Exception as e:
-                print(f"[WAV Flush Error] {e}")
+def handle_client_handshake(data):
+    """
+    Handles Client -> Server initial handshake (Opcode 0x00).
 
-        initial_game_state.map_load_count += 1
-        print(f"\n[EVENT] Map Load Finished! Global Count: {initial_game_state.map_load_count}\n")
+    A) Spark network layer hello:
+       u8    opcode = 0x00
+       u8[8] "SPARKNET"
+       u32   helloTag (observed: 0x00000009)
+
+    B) Spark engine layer hello:
+       u8    opcode = 0x00
+       u8[8] "SPARKNET"
+       u32   protocolVersion (expected 0x16)
+       u32   buildNumber
+
+    We detect which one it is by the first u32 after the signature.
+    """
+    if not data or data[0] != 0x00:
+        return False
+
+    # Need at least opcode + signature + first_u32
+    if len(data) < 13:  # (1 + 8 + 4)
+        print(f"[Packet 0x00] HANDSHAKE: truncated (len={len(data)}) | {data.hex().upper()}")
+        return False
+
+    reader = BinaryReader(data)
+
+    # already checked opcode==0x00, jump to signature
+    reader.position(1)
+    sig = reader.read_bytes(8)
+    if sig != b"SPARKNET":
+        try:
+            sig_txt = sig.decode("ascii", errors="replace")
+        except Exception:
+            sig_txt = repr(sig)
+        print(f"[Packet 0x00] HANDSHAKE: bad signature '{sig_txt}' | {data.hex().upper()}")
+        return False
+
+    first_u32 = reader.read_uint32()
+
+    # -------------------------
+    # Variant A: spark network hello (tag == 0x09)
+    # -------------------------
+    if first_u32 == 0x00000009:
+        print(f"\n[Packet 0x00] HANDSHAKE (Client->Server) SPARKNET Hello (net):")
+        print(f"  Signature: SPARKNET")
+        print(f"  Tag:  0x{first_u32:08X} ({first_u32})")
+
+        # Optional: dump remainder (debug only)
+        extra_u32s = []
+        while reader.remaining() >= 4:
+            extra_u32s.append(reader.read_uint32())
+        if extra_u32s:
+            print("  ExtraU32s:", " ".join(f"0x{x:08X}({x})" for x in extra_u32s))
+
+        if reader.remaining() > 0:
+            tail_bytes = reader.read_bytes(reader.remaining())
+            print(f"  TrailingBytes ({len(tail_bytes)}): {tail_bytes.hex().upper()}")
+
+        # IMPORTANT: do NOT set protocol/build for this variant
         return True
-    return False
+
+    # -------------------------
+    # Variant B: spark engine hello
+    # first_u32 is protocolVersion
+    # -------------------------
+    protocol = first_u32
+
+    # Need buildNumber too for the full form
+    if len(data) < 17:  # (1 + 8 + 4 + 4)
+        print(f"\n[Packet 0x00] HANDSHAKE (Client->Server) SPARKNET Hello (engine):")
+        print(f"  Signature: SPARKNET")
+        print(f"  Protocol:  0x{protocol:08X} ({protocol})")
+        print(f"  [!] Truncated: missing buildNumber (len={len(data)}) | {data.hex().upper()}")
+        return False
+
+    build = reader.read_uint32()
+
+    # Only state we persist:
+    initial_game_state.client_protocol = protocol
+    initial_game_state.client_build = build
+
+    print(f"\n[Packet 0x00] HANDSHAKE (Client->Server) SPARKNET Hello (engine):")
+    print(f"  Signature: SPARKNET")
+    print(f"  Protocol:  0x{protocol:08X} ({protocol})")
+    print(f"  Build:     {build} (0x{build:08X})")
+
+    if protocol != 0x16:
+        print("  [!] Protocol mismatch: expected 0x16")
+
+    if reader.remaining() > 0:
+        extra_bytes = reader.read_bytes(reader.remaining())
+        print(f"  Extra bytes ({len(extra_bytes)}): {extra_bytes.hex().upper()}")
+
+    return True
+
+def handle_client_auth_response(data):
+    """
+    Handles Client -> Server auth response (Opcode 0x01).
+
+    Expected layout:
+      u8     opcode = 0x01
+      u8[16] passwordMd5Digest (or auth digest)
+      u64    steamId64 (LE)
+      u32    ticketLen
+      u8[]   ticketBytes (ticketLen)
+    """
+    if not data or data[0] != 0x01:
+        return False
+
+    # Need at least opcode + md5 + steamId + ticketLen
+    if len(data) < 29: # (1 + 16 + 8 + 4)
+        print(f"[Packet 0x01] CLIENT AUTH: truncated (len={len(data)}) | {data.hex().upper()}")
+        return False
+
+    reader = BinaryReader(data)
+
+    # Skip opcode (already checked)
+    reader.position(1)
+
+    md5_bytes = reader.read_bytes(16)
+    steam_id  = reader.read_uint64()
+    ticket_len = reader.read_uint32()
+
+    if reader.remaining() < ticket_len:
+        print(f"[Packet 0x01] CLIENT AUTH: ticketLen={ticket_len} but only {reader.remaining()} bytes remain")
+        print(f"  md5={md5_bytes.hex().upper()} steamId={steam_id}")
+        print(f"  raw={data.hex().upper()}")
+        return False
+
+    ticket = reader.read_bytes(ticket_len)
+
+    # Store for later if useful
+    initial_game_state.client_auth_md5 = md5_bytes.hex().upper()
+    initial_game_state.client_steam_id = steam_id
+    initial_game_state.client_auth_ticket_len = ticket_len
+
+    print(f"\n[Packet 0x01] CLIENT AUTH RESPONSE:")
+    print(f"  md5:        {initial_game_state.client_auth_md5}")
+    print(f"  steamId64:   {steam_id} (0x{steam_id:016X})")
+    print(f"  ticketLen:   {ticket_len}")
+    print(f"  ticket[0:32]: {ticket[:32].hex().upper()}" + (" ..." if ticket_len > 32 else ""))
+
+    # If there are trailing bytes beyond the ticket, dump them (future-proof)
+    if reader.remaining() > 0:
+        tail = reader.read_bytes(reader.remaining())
+        print(f"  trailing({len(tail)}): {tail.hex().upper()}")
+
+    return True
+
+
+def handle_client_connected(data):
+    """
+    Handles Client -> Server 'Client Connected' signal (0x03).
+    Layout:
+      u8 opcode = 0x03
+      u8 voiceEnabled (0/1 typically)
+    """
+    if len(data) < 2 or data[0] != 0x03:
+        return False
+
+    voice_flag = data[1]
+    voice_enabled = (voice_flag != 0)
+
+    # Only flush WAVs if voice dumping is enabled
+    if DUMP_VOICE and initial_game_state.map_load_count > 0:
+        try:
+            flush_map(initial_game_state.map_load_count, DATA_DIR)
+        except Exception as e:
+            print(f"[WAV Flush Error] {e}")
+
+    initial_game_state.map_load_count += 1
+
+    print(
+        f"\n[EVENT] Client connected - Global Count: {initial_game_state.map_load_count} | "
+        f"VoiceEnabled={voice_enabled} (0x{voice_flag:02X})\n"
+    )
+
+    # If there are unexpected extra bytes, show them (future-proof)
+    if len(data) > 2:
+        extra = data[2:].hex().upper()
+        print(f"[ClientConnected 0x03] Extra bytes ({len(data)-2}): {extra}")
+
+    return True
 
 def parse_consistency_checker(reader, num_files):
     """
@@ -235,7 +442,7 @@ def parse_class_table(reader):
         initial_game_state.net_class_checksums.append({'class_id': cls_id, 'checksum': cls_sum})
         
         if i < LIST_LIMIT:
-            print(f"    [{i}] Class ID: {cls_id:<5} | Checksum: {cls_sum:08X}")
+            print(f"    [{i}] Class Count: {cls_id:<5} | Checksum: {cls_sum:08X}")
     
     if checksum_count > LIST_LIMIT:
         print(f"    ... ({checksum_count - LIST_LIMIT} entries hidden)")
@@ -262,45 +469,65 @@ def parse_class_table(reader):
         print(f"    ... ({name_count - LIST_LIMIT} entries hidden)")
 
 
-def parse_message_table(reader):
+def parse_netmsg_table(reader: BinaryReader) -> None:
     """
-    MessageTable parsing + Dynamic Schema Building.
+    Parses the server's Network Message Table and builds NETMSG_RUNTIME_SCHEMA.
+
+    Also warns if the JSON netmsg checksum doesn't match the server netmsg checksum.
     """
-    print("  --- Message Table ---")
+    print("  --- NetMsg Table ---")
     msg_count = reader.read_uint16()
     print(f"  Network Messages ({msg_count}):")
-    
+
     initial_game_state.network_messages = []
-    
-    # Clear previous runtime schema
-    global RUNTIME_SCHEMA
-    RUNTIME_SCHEMA.clear()
-    
+
+    global NETMSG_RUNTIME_SCHEMA
+    NETMSG_RUNTIME_SCHEMA.clear()
+
     mapped_count = 0
-    
-    for i in range(msg_count):
-        msg_id = i 
+    mismatch_count = 0
+    missing_checksum_count = 0
+
+    for msg_id in range(msg_count):
         msg_name = reader.read_string_null()
-        msg_sum = reader.read_uint32()
-        
-        # 1. Store in GameState (Display purposes)
+        server_chk = reader.read_uint32() & 0xFFFFFFFF
+
         initial_game_state.network_messages.append({
-            'id': msg_id, 
-            'name': msg_name, 
-            'checksum': msg_sum
+            "id": msg_id,
+            "name": msg_name,
+            "checksum": server_chk
         })
-        
-        # 2. Build Runtime Schema Link
-        # Does this server message name exist in our JSON?
-        if msg_name in SCHEMA_DEFS:
-            RUNTIME_SCHEMA[msg_id] = SCHEMA_DEFS[msg_name]
+
+        schema = NETMSG_SCHEMA_DEFS.get(msg_name)
+        if schema:
             mapped_count += 1
-        
-        if i < LIST_LIMIT: # Limit print spam
-            print(f"    [ID {msg_id}] {msg_name:<30} | Checksum: {msg_sum:08X}")
-            
+            NETMSG_RUNTIME_SCHEMA[msg_id] = schema
+
+            json_chk = schema.get("_netmsg_checksum_u32")
+            if json_chk is None:
+                missing_checksum_count += 1
+                print(
+                    f"    [NetMsgSchema WARN] '{msg_name}' (ID {msg_id}) has no/invalid JSON checksum; "
+                    f"server=0x{server_chk:08X}"
+                )
+            elif json_chk != server_chk:
+                mismatch_count += 1
+                print(
+                    f"    [NetMsgSchema WARN] checksum mismatch for '{msg_name}' (ID {msg_id}): "
+                    f"server=0x{server_chk:08X} json=0x{json_chk:08X}"
+                )
+
+                # optional: mark it
+                schema["_netmsg_checksum_mismatch"] = True
+                schema["_netmsg_server_checksum_u32"] = server_chk
+
+        if msg_id < LIST_LIMIT:
+            print(f"    [ID {msg_id}] {msg_name:<30} | Checksum: {server_chk:08X}")
+
     print(f"  ... ({msg_count} total messages)")
-    print(f"  [Schema] Successfully mapped {mapped_count} IDs to JSON definitions.")
+    print(f"  [NetMsgSchema] Mapped {mapped_count} IDs to JSON definitions.")
+    if mismatch_count or missing_checksum_count:
+        print(f"  [NetMsgSchema] WARNINGS: {mismatch_count} mismatches, {missing_checksum_count} missing/invalid checksums.")
 
 def parse_generic_string_table(reader, target_list, label):
     """
@@ -348,49 +575,56 @@ def handle_authentication_packet(data):
     Handles Server -> Client 'Authentication' packet (Opcode 0x01).
     Routine: M4::ServerGame::SendAuthenticationPacket
     """
-    # Initialize reader
+    if not data:
+        return False
+
     reader = BinaryReader(data)
-    
-    # 1. Skip Opcode (0x01)
+
+    # 1) Read opcode (expected 0x01)
     opcode = reader.read_uint8()
-    
-    # 3. Read Password Salt
-    # Definition: M4::UInt8 passwordSalt[0xa]; -> 10 Bytes
-    # Code: M4::BinaryWriter::WriteBlock(..., numBytes: 0xa)
+    if opcode != 0x01:
+        return False
+
+    # 2) Password salt (10 bytes)
     SALT_SIZE = 10
+    if(reader.remaining() == 0):
+        print(f"[Packet 0x01] SERVER READY: (len={len(data)}) | {data.hex().upper()}")
+        return True
+    elif reader.remaining() < SALT_SIZE + 4:  # need salt + auth_enabled(bool=u32)
+        print(f"[Packet 0x01] AUTHENTICATION: truncated (len={len(data)}) | {data.hex().upper()}")
+        return False
+
     salt_bytes = reader.read_bytes(SALT_SIZE)
     initial_game_state.auth_salt = salt_bytes.hex().upper()
-    
-    # 4. Read Authentication Enabled Flag
-    # Code: M4::BinaryWriter::WriteBool(...) -> Writes UInt32 (4 bytes)
+
+    # 3) Authentication enabled flag (WriteBool -> u32)
     initial_game_state.auth_enabled = reader.read_bool()
-    
+
     print(f"\n[Packet 0x01] AUTHENTICATION:")
     print(f"  Salt: {initial_game_state.auth_salt}")
     print(f"  Auth Enabled: {initial_game_state.auth_enabled}")
-    
-    # 5. Conditional Server Details
-    # Code: if (this->m_authenticationEnabled != 0)
+
+    # 4) If enabled, server details follow
     if initial_game_state.auth_enabled:
-        # Code: WriteUInt32(Port)
+        # Need port(u32) + addr(u32) + steamid(u64)
+        if reader.remaining() < 16: #(4 + 4 + 8):
+            print(f"[Packet 0x01] AUTHENTICATION: truncated details (len={len(data)}) | {data.hex().upper()}")
+            return False
+
         initial_game_state.server_port = reader.read_uint32()
-        
-        # Code: WriteUInt32(Address)
-        # Note: Address is likely packed UInt32. We convert to String IP.
-        raw_addr = reader.read_uint32()
-        try:
-            # Convert Little Endian UInt32 back to bytes, then standard IPv4 string
-            packed_addr = struct.pack('<I', raw_addr)
-            initial_game_state.server_ip = socket.inet_ntoa(packed_addr)
-        except:
-            initial_game_state.server_ip = f"Unknown({raw_addr})"
-            
-        # Code: WriteUInt64(Id) -> SteamID
+        initial_game_state.server_ip = reader.read_ipv4_u32_le()
         initial_game_state.server_steam_id = reader.read_uint64()
-        
+
         print(f"  Service Port: {initial_game_state.server_port}")
         print(f"  Service Address: {initial_game_state.server_ip}")
-        print(f"  Steam ID: {initial_game_state.server_steam_id} (0x{initial_game_state.server_steam_id:016X})")
+        print(f"  Server ID: {initial_game_state.server_steam_id} (0x{initial_game_state.server_steam_id:016X})")
+
+    # Optional: dump trailing bytes (future-proof)
+    if reader.remaining() > 0:
+        tail = reader.read_bytes(reader.remaining())
+        print(f"  trailing({len(tail)}): {tail.hex().upper()}")
+
+    return True
 
 def handle_connecting_packet(data):
     """Handles Server -> Client 'Connecting' packet (0x02)."""
@@ -473,7 +707,7 @@ def handle_connecting_packet(data):
         parse_class_table(reader)
 
         # Message Table
-        parse_message_table(reader)
+        parse_netmsg_table(reader)
         
         # ==================================================================
         # ASSET PRECACHE TABLES (Refactored to Generic Function)
@@ -524,36 +758,36 @@ def handle_connecting_packet(data):
         import traceback
         traceback.print_exc()
 
-_TWO_PI = 2.0 * math.pi
+_TWO_PI = 6.283185307179586  # math.tau
 
-def decode_move36(buf, off):
-    if off + 36 > len(buf):
-        return None, off
+def decode_move36(reader: BinaryReader):
+    # Move is exactly 36 bytes from current offset
+    if reader.remaining() < 36:
+        return None
 
-    serial = struct.unpack_from('<I', buf, off)[0]; off += 4
-    t      = struct.unpack_from('<f', buf, off)[0]; off += 4
-    dt     = struct.unpack_from('<f', buf, off)[0]; off += 4
-    tdt    = struct.unpack_from('<f', buf, off)[0]; off += 4
+    serial = reader.read_uint32()
+    t      = reader.read_float32()
+    dt     = reader.read_float32()
+    tdt    = reader.read_float32()
 
-    mx, my, mz = struct.unpack_from('<bbb', buf, off); off += 3
-    mx_f, my_f, mz_f = mx/127.0, my/127.0, mz/127.0
+    mx, my, mz = reader.read_int8s(3)
+    mx_f, my_f, mz_f = mx / 127.0, my / 127.0, mz / 127.0
 
-    pitch_u16 = struct.unpack_from('<H', buf, off)[0]; off += 2
-    yaw_u16   = struct.unpack_from('<H', buf, off)[0]; off += 2
+    pitch_u16 = reader.read_uint16()
+    yaw_u16   = reader.read_uint16()
 
     # u16 is a full-turn fixed-point (0..65535 => 0..360deg)
     pitch_deg = pitch_u16 * 360.0 / 65536.0
     yaw_deg   = yaw_u16   * 360.0 / 65536.0
 
-    # optional radians if you want them
     pitch_rad = pitch_u16 * _TWO_PI / 65536.0
     yaw_rad   = yaw_u16   * _TWO_PI / 65536.0
 
-    commands = struct.unpack_from('<I', buf, off)[0]; off += 4
-    hotkey = buf[off]; off += 1
+    commands = reader.read_uint32()
+    hotkey   = reader.read_uint8()
 
-    snapshots_base = struct.unpack_from('<I', buf, off)[0]; off += 4
-    snapshots_mask = struct.unpack_from('<I', buf, off)[0]; off += 4
+    snapshots_base = reader.read_uint32()
+    snapshots_mask = reader.read_uint32()
 
     snaps = []
     for bit in range(32):
@@ -578,22 +812,22 @@ def decode_move36(buf, off):
         "hotkey": hotkey,
         "snapshotsBase": snapshots_base,
         "snapshotsMask": snapshots_mask,
-        "snapshotsUsed": snaps,
-    }, off
+        "snapshotsUsed": len(snaps),
+    }
 
 
-def parse_client_moves(move_bytes):
-    # ProcessMovePacket reads 3 moves. :contentReference[oaicite:4]{index=4}
-    off = 0
+def parse_client_moves(move_bytes: bytes):
+    # ProcessMovePacket reads 3 moves.
+    reader = BinaryReader(move_bytes)
     moves = []
+
     for _ in range(3):
-        m, off = decode_move36(move_bytes, off)
+        m = decode_move36(reader)
         if m is None:
             break
         moves.append(m)
 
-    # If anything remains, dump it too (future-proofing)
-    trailing = move_bytes[off:]
+    trailing = move_bytes[reader.tell():]
     return moves, trailing
 
 def parse_client_voice_and_moves(data):
@@ -618,16 +852,17 @@ def parse_client_voice_and_moves(data):
         return
 
     try:
-        cursor = 1  # skip opcode 0x04
+        reader = BinaryReader(data)
 
-        acked_server_frame = struct.unpack_from('<I', data, cursor)[0]
-        cursor += 4
+        # skip opcode 0x04
+        opcode = reader.read_uint8()
+        if opcode != 0x04:
+            return
 
-        client_frame = struct.unpack_from('<I', data, cursor)[0]
-        cursor += 4
+        acked_server_frame = reader.read_uint32()
+        client_frame       = reader.read_uint32()
 
-        channel = data[cursor]
-        cursor += 1
+        channel = reader.read_uint8()
 
         # Optional voice spatial header
         pos = None
@@ -635,44 +870,42 @@ def parse_client_voice_and_moves(data):
 
         if channel == 2:
             # 3 floats
-            if cursor + 12 > len(data):
+            if reader.remaining() < 12:
                 return
-            x, y, z = struct.unpack_from('<fff', data, cursor)
-            cursor += 12
+            x = reader.read_float32()
+            y = reader.read_float32()
+            z = reader.read_float32()
             pos = (x, y, z)
 
         elif channel == 3:
             # 3 floats + u16 + u32 entityId
-            if cursor + 12 + 2 + 4 > len(data):
+            if reader.remaining() < (12 + 2 + 4):
                 return
-            x, y, z = struct.unpack_from('<fff', data, cursor)
-            cursor += 12
-            _unknown = struct.unpack_from('<H', data, cursor)[0]
-            cursor += 2
-            entity_id = struct.unpack_from('<I', data, cursor)[0]
-            cursor += 4
+            x = reader.read_float32()
+            y = reader.read_float32()
+            z = reader.read_float32()
+            _unknown = reader.read_uint16()
+            entity_id = reader.read_uint32()
             pos = (x, y, z)
 
         # voice length
-        if cursor + 2 > len(data):
+        if reader.remaining() < 2:
             return
-        voice_len = struct.unpack_from('<H', data, cursor)[0]
-        cursor += 2
+        voice_len = reader.read_uint16()
 
         # sanity: server rejects > 0x3fff, match that behavior
         if voice_len > 0x3FFF:
             print(f"[ClientState 0x04] Client sent too much voice data: {voice_len}")
             # still dump remaining bytes as "movement" from here (best-effort)
-            movement_hex = data[cursor:].hex().upper()
+            movement_hex = data[reader.tell():].hex().upper()
             print(f"[MOVE04] ackedSrv={acked_server_frame} clientFrm={client_frame} ch={channel} | {movement_hex}")
             return
 
-        if cursor + voice_len > len(data):
+        if reader.remaining() < voice_len:
             # truncated packet
             return
 
-        voice_bytes = data[cursor:cursor + voice_len]
-        cursor += voice_len
+        voice_bytes = reader.read_bytes(voice_len)
 
         # Decode Speex immediately using latched client index from SetClientIndex
         if DUMP_VOICE and voice_len > 0:
@@ -686,7 +919,7 @@ def parse_client_voice_and_moves(data):
                     pass
 
         # Remaining bytes are movement packet data -> dump hex on one line
-        move_bytes = data[cursor:]
+        move_bytes = data[reader.tell():]
         moves, trailing = parse_client_moves(move_bytes)
 
         for i, m in enumerate(moves):
@@ -697,6 +930,7 @@ def parse_client_voice_and_moves(data):
                 f"yaw={m['yaw_deg']:.2f}deg pitch={m['pitch_deg']:.2f}deg "
                 f"cmd=0x{m['commands']:08X} hk={m['hotkey']} "
                 f"base={m['snapshotsBase']} mask=0x{m['snapshotsMask']:08X}"
+                f" snaps_used={m['snapshotsUsed']}"
             )
 
         if trailing:
@@ -705,6 +939,237 @@ def parse_client_voice_and_moves(data):
     except Exception:
         # don't crash the main decode loop
         return
+
+def inspect_first_entity(body_bytes, class_names_container=None):
+    """
+    Parses ONLY the first entity header in the snapshot body.
+    Handles the class_names_container being either a List of Dicts (from GameState) 
+    or a Dict (if mapped manually).
+    """
+    if len(body_bytes) < 3:
+        # print("    [Entity Parser] Body too short.")
+        return
+
+    reader = BinaryReader(body_bytes)
+    
+    # --- 1. Read Header (3 Bytes) ---
+    packed_id = reader.read_uint16()
+    class_idx = reader.read_uint8()
+
+    # --- 2. Decode Fields ---
+    entity_id = packed_id & 0x3FFF 
+    # Increment: It only increments (0 -> 1 -> 2 -> 3 -> 0) after successfully reading an entity header.  Starts at 0 every state snapshot.
+    sync_val  = packed_id >> 14
+    
+    # --- 3. Lookup Name ---
+    # If class_name comes back as FF (255) this means the entity id will not be carried over (destroy)
+    class_name = f"UNKNOWN_CLASS_{class_idx}"
+    
+    if class_names_container:
+        # Case A: List of Dicts (default GameState structure)
+        if isinstance(class_names_container, list):
+            for entry in class_names_container:
+                if entry.get('class_id') == class_idx:
+                    class_name = entry.get('class_name', "UNKNOWN_NAME")
+                    break
+        # Case B: Dictionary (if optimized later)
+        elif isinstance(class_names_container, dict):
+            class_name = class_names_container.get(class_idx, class_name)
+    else:
+        class_name = f"NO_MAPPING ({class_idx})"
+
+    print(f"    [Entity Check] Offset:0x00 | ID:{entity_id:<5} | Sync:{sync_val} | Class:{class_idx} -> '{class_name}'")
+
+def _parse_server_perf(reader: BinaryReader) -> dict:
+    """
+    On-wire ServerPerformanceData (from decomp readServerPerformanceData):
+      f64 timestamp
+      i32 score
+      i32 quality
+      u8  moverate
+      u8  interpMs
+      u8  tickrate
+      u8  sendrate
+      u8  maxPlayers
+      u16 durationMs
+      u8  numPlayers
+      u8  updateIntervalMs
+      u16 incompleteCount
+      u32 numEntitiesUpdated
+      u8  timeSpentOnUpdate
+      u16 movesProcessed
+      u16 timeSpentOnMoves
+      u16 timeSpentIdling
+      u8  numInterpWarns
+      u8  numInterpFails
+      u32 bytesSent
+      u8  clearingTimeMs10
+      u8  clearingTimeMs50
+      u8  clearingTimeMs100
+    Total = 47 bytes
+    """
+    return {
+        "timestamp": reader.read_float64(),
+        "score": reader.read_int32(),
+        "quality": reader.read_int32(),
+
+        "moverate": reader.read_uint8(),
+        "interpMs": reader.read_uint8(),
+        "tickrate": reader.read_uint8(),
+        "sendrate": reader.read_uint8(),
+        "maxPlayers": reader.read_uint8(),
+
+        "durationMs": reader.read_uint16(),
+        "numPlayers": reader.read_uint8(),
+        "updateIntervalMs": reader.read_uint8(),
+
+        "incompleteCount": reader.read_uint16(),
+        "numEntitiesUpdated": reader.read_uint32(),
+
+        "timeSpentOnUpdate": reader.read_uint8(),
+        "movesProcessed": reader.read_uint16(),
+        "timeSpentOnMoves": reader.read_uint16(),
+        "timeSpentIdling": reader.read_uint16(),
+
+        "numInterpWarns": reader.read_uint8(),
+        "numInterpFails": reader.read_uint8(),
+
+        "bytesSent": reader.read_uint32(),
+
+        "clearingTimeMs10": reader.read_uint8(),
+        "clearingTimeMs50": reader.read_uint8(),
+        "clearingTimeMs100": reader.read_uint8(),
+    }
+
+
+def _f32_from_u32(u: int) -> float:
+    return struct.unpack("<f", struct.pack("<I", u & 0xFFFFFFFF))[0]
+
+def _parse_snapshot_header_at(snapshot_bytes: bytes, start_off: int) -> tuple[dict, int]:
+    r = BinaryReader(snapshot_bytes)
+    r.position(start_off)
+
+    hdr = {}
+
+    hdr["serial"] = r.read_uint32()
+    hdr["time"] = _f32_from_u32(r.read_uint32())
+    hdr["lastUpdateTime"] = _f32_from_u32(r.read_uint32())
+    hdr["maxMoveTime"] = _f32_from_u32(r.read_uint32())
+    hdr["injectedMoveTime"] = _f32_from_u32(r.read_uint32())
+
+    hdr["moveSerial"] = r.read_uint32()
+    hdr["playerId"] = r.read_uint16()
+
+    # decomp: u32 != 0
+    hdr["controlling"] = (r.read_uint32() != 0)
+
+    owned_count = r.read_uint16()
+    hdr["ownedByCount"] = owned_count
+    if owned_count:
+        owned_ids = []
+        for _ in range(owned_count):
+            owned_ids.append(r.read_uint16())
+        hdr["ownedByIds_first64"] = owned_ids[:64]
+        if owned_count > 64:
+            hdr["ownedByIds_truncated"] = owned_count - 64
+
+    hdr["frameRate"] = _f32_from_u32(r.read_uint32())
+
+    perf_present = (r.read_uint32() != 0)
+    hdr["serverPerfPresent"] = perf_present
+
+    if perf_present:
+        # compact perf is 47 bytes
+        if r.remaining() < 47:
+            raise ValueError("perf_present but not enough bytes for perf")
+        hdr["serverPerf"] = _parse_server_perf(r)
+
+    # tail (not optional in decomp, but keep your best-effort behavior)
+    hdr["serverHadScriptError"] = r.read_uint32()
+
+    # decomp: u32 != 0
+    hdr["choked"] = (r.read_uint32() != 0)
+
+    hdr["serverFrame"] = r.read_uint32()
+    hdr["oldServerFrame"] = r.read_uint32()
+
+    move_count = r.read_uint16()
+    hdr["entityMoveTimeCount"] = move_count
+    if move_count:
+        mv = []
+        for _ in range(move_count):
+            eid = r.read_uint16()
+            bits = r.read_uint32()
+            t = _f32_from_u32(bits)
+            if len(mv) < 32:
+                mv.append((eid, t))
+        hdr["entityMoveTime_first32"] = mv
+        if move_count > 32:
+            hdr["entityMoveTime_truncated"] = move_count - 32
+
+    return hdr, r.tell()
+
+def _header_plausible(h: dict) -> bool:
+    # simple sanity heuristics; tweak as you learn ranges
+    fr = h.get("frameRate", 0.0)
+    oc = h.get("ownedByCount", -1)
+    pid = h.get("playerId", -1)
+
+    if not (0 <= pid <= 4096):
+        return False
+    if not (0 <= oc <= 2048):
+        return False
+    if not (fr == fr):  # NaN
+        return False
+    if not (-1.0 <= fr <= 300.0):
+        return False
+
+    # if perf is present, these should be small-ish u8/u16 fields
+    if h.get("serverPerfPresent") and "serverPerf" in h:
+        p = h["serverPerf"]
+        if not (0 <= p.get("tickrate", -1) <= 255): return False
+        if not (0 <= p.get("sendrate", -1) <= 255): return False
+        if not (0 <= p.get("maxPlayers", -1) <= 255): return False
+        if not (0 <= p.get("numPlayers", -1) <= 255): return False
+
+    return True
+
+def try_parse_state_snapshot_header(snapshot_bytes: bytes) -> tuple[dict | None, int]:
+    """
+    Tries both layouts:
+      A) snapshot_bytes starts at serial
+      B) snapshot_bytes starts at ReadHeader's leading-return-u32, so serial is at +4
+    Returns best parse, else (None, 0).
+    """
+    # Try A: start at 0
+    try:
+        hdr0, end0 = _parse_snapshot_header_at(snapshot_bytes, 0)
+        ok0 = _header_plausible(hdr0)
+    except Exception:
+        hdr0, end0, ok0 = None, 0, False
+
+    # Try B: start at 4 (consume leading u32)
+    try:
+        if len(snapshot_bytes) < 4:
+            raise ValueError("too short for leading u32")
+        lead = struct.unpack("<I", snapshot_bytes[:4])[0]
+        hdr4, end4 = _parse_snapshot_header_at(snapshot_bytes, 4)
+        hdr4["readHeader_return_u32"] = lead
+        ok4 = _header_plausible(hdr4)
+    except Exception:
+        hdr4, end4, ok4 = None, 0, False
+
+    # Pick best
+    if ok4 and not ok0:
+        return hdr4, end4
+    if ok0 and not ok4:
+        return hdr0, end0
+    if ok0 and ok4:
+        # prefer the one that consumes more bytes (usually means move list parsed cleanly)
+        return (hdr4, end4) if end4 > end0 else (hdr0, end0)
+
+    return None, 0
+
 
 def parse_voice_and_state(data, session_id):
     """
@@ -716,69 +1181,158 @@ def parse_voice_and_state(data, session_id):
     3. If --dump-voice is OFF: Skip over voice bytes.
     4. Check for State Snapshot data appearing after the voice payload.
     """
-    cursor = 1  # Skip OpCode (0x05)
+    # cursor = 1  # Skip OpCode (0x05)
     if len(data) < 3: return
 
     try:
+        reader = BinaryReader(data)
+
+        # Skip OpCode (0x05)
+        opcode = reader.read_uint8()
+        if opcode != 0x05:
+            return
+
         # Read Voice Packet Count (2 bytes)
-        voice_count = struct.unpack_from('<H', data, cursor)[0]
-        cursor += 2
+        voice_count = reader.read_uint16()
 
         for _ in range(voice_count):
-            if cursor + 3 > len(data): break 
-            player_id = struct.unpack_from('<H', data, cursor)[0]
-            channel_id = data[cursor + 2]
+            if reader.remaining() < 3:
+                break
+
+            # player_id = struct.unpack_from('<H', data, cursor)[0]
+            # channel_id = data[cursor + 2]
+            player_id = reader.read_uint16()
+            channel_id = reader.read_uint8()
 
             # --- DETERMINE HEADER FORMAT ---
             header_size = 0
             data_len = 0
-            
-            if channel_id == 0x01: # Standard
+
+            if channel_id == 0x01:  # Standard
+                # header_size = 5
+                # fields after (player_id:u16, channel:u8):
+                #   u16 data_len
                 header_size = 5
-                if cursor + header_size > len(data): break
-                data_len = struct.unpack_from('<H', data, cursor + 3)[0]
-            elif channel_id == 0x02: # Positional
+                if reader.remaining() < (header_size - 3):
+                    break
+                data_len = reader.read_uint16()
+
+            elif channel_id == 0x02:  # Positional
+                # header_size = 17
+                # fields after (player_id:u16, channel:u8):
+                #   f32 x,y,z (12) + u16 data_len (2)  => 14 bytes
                 header_size = 17
-                if cursor + header_size > len(data): break
-                data_len = struct.unpack_from('<H', data, cursor + 15)[0]
-            elif channel_id == 0x03: # Positional + Target
+                if reader.remaining() < (header_size - 3):
+                    break
+                # read/skip position floats (we don't use them here)
+                reader.read_float32()
+                reader.read_float32()
+                reader.read_float32()
+                data_len = reader.read_uint16()
+
+            elif channel_id == 0x03:  # Positional + Target
+                # header_size = 19
+                # fields after (player_id:u16, channel:u8):
+                #   f32 x,y,z (12) + u16 vc_entity (2) + u16 data_len (2) => 16 bytes
                 header_size = 19
-                if cursor + header_size > len(data): break
-                data_len = struct.unpack_from('<H', data, cursor + 17)[0]
+                if reader.remaining() < (header_size - 3):
+                    break
+                # read/skip position floats (we don't use them here)
+                reader.read_float32()
+                reader.read_float32()
+                reader.read_float32()
+                # entity either source or target
+                vc_entity = reader.read_uint16()
+                data_len = reader.read_uint16()
+
             else:
                 # print(f"[Voice Error] Unknown Channel ID: 0x{channel_id:02X}")
                 return
 
-            payload_start = cursor + header_size
-            payload_end = payload_start + data_len
+            # payload_start = cursor + header_size
+            # payload_end = payload_start + data_len
+            if reader.remaining() < data_len:
+                break
 
-            if payload_end > len(data): break
-            
             # --- CONDITIONAL DECODING ---
             if DUMP_VOICE:
-                speex_data = data[payload_start:payload_end]
+                speex_data = reader.read_bytes(data_len)
                 try:
                     pcm = decode_speex_bundle(player_id, channel_id, speex_data)
                     if pcm:
                         append_pcm(initial_game_state.map_load_count, player_id, channel_id, pcm)
-                except Exception as e:
+                except Exception:
                     pass
-            
+            else:
+                # If --dump-voice is OFF: Skip over voice bytes.
+                reader.skip(data_len)
+
             # Always advance cursor so we can find the Snapshot
-            cursor = payload_end
+            # (reader offset is already advanced by read_bytes/skip)
 
-        # State Snapshot Check
-        if cursor < len(data):
-            remaining = len(data) - cursor
-            print(f"[Snapshot] Present ({remaining} bytes)")
+        # 3. State Snapshot
+        # After voice loop, next 4 bytes are ALWAYS Snapshot Length
+        if reader.remaining() >= 4:
+            snapshot_len = reader.read_uint32()
+            actual_len = min(snapshot_len, reader.remaining())
 
-    except struct.error:
+            if actual_len > 0:
+                snap_bytes = reader.read_bytes(actual_len)
+                
+                try:
+                    # Parse header at offset 0 of the isolated snapshot bytes
+                    hdr, hdr_end_off = _parse_snapshot_header_at(snap_bytes, 0)
+                    
+                    print(f"[Snapshot] Len: {snapshot_len} | Serial: {hdr.get('serial')} | Time: {hdr.get('time', 0.0):.3f}")
+                    
+                    print(
+                        f"    moveSerial={hdr.get('moveSerial')} "
+                        f"playerId={hdr.get('playerId')} controlling={hdr.get('controlling')} "
+                        f"lastUpd={hdr.get('lastUpdateTime', 0.0):.3f} "
+                        f"frameRate={hdr.get('frameRate', 0.0):.3f}"
+                    )
+                    
+                    print(
+                        f"    ownedCount={hdr.get('ownedByCount')} "
+                        f"perf={hdr.get('serverPerfPresent')} scriptError={hdr.get('serverHadScriptError')} "
+                        f"choked={hdr.get('choked')} "
+                        f"serverFrame={hdr.get('serverFrame')} oldFrame={hdr.get('oldServerFrame')}"
+                    )
+
+                    # Print Perf if present
+                    if hdr.get("serverPerfPresent") and "serverPerf" in hdr:
+                        p = hdr["serverPerf"]
+                        print(
+                            f"    [Perf] Score:{p.get('score')} Tick:{p.get('tickrate')} "
+                            f"Send:{p.get('sendrate')} Players:{p.get('numPlayers')}/{p.get('maxPlayers')} "
+                            f"Qual:{p.get('quality')} EntsUpd:{p.get('numEntitiesUpdated')}"
+                        )
+                    
+                    # Dump Body Hex
+                    body_bytes = snap_bytes[hdr_end_off:]
+                    body_hex = body_bytes.hex().upper()
+                    print(f"    [Body Hex] {body_hex[:64]}..." if len(body_hex) > 64 else f"    [Body Hex] {body_hex}")
+                    
+                    # [INSERTION] Parse First Entity Header
+                    # We pass the raw list from GameState; the helper function now handles the iteration.
+                    class_list = getattr(initial_game_state, 'net_class_names', None)
+                    inspect_first_entity(body_bytes, class_list)
+
+                except Exception as e:
+                    print(f"[Snapshot] Error parsing header: {e}")
+
+                except Exception as e:
+                    print(f"[Snapshot] Error parsing header: {e}")
+
+    except Exception:
+        # match old behavior: don't crash main decode loop
         pass
+
 
 def handle_network_message(data):
     """
     Handles Network Message  (Opcode 0x06).
-    Uses RUNTIME_SCHEMA to decode specific fields.
+    Uses NETMSG_RUNTIME_SCHEMA to decode specific fields.
     """
     try:
         reader = BitReader(data)
@@ -790,7 +1344,7 @@ def handle_network_message(data):
         
         # 2. Lookup Name and Schema
         msg_name = f"Unknown({msg_index})"
-        schema = RUNTIME_SCHEMA.get(msg_index)
+        schema = NETMSG_RUNTIME_SCHEMA.get(msg_index)
         
         # Fallback name lookup if not in schema but in game state
         if not schema:
@@ -902,18 +1456,15 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
     print(f"[RAW] {direction:<6} {stream:<10} Seq:{seq:<3} Op:0x{op_debug:02X} | {data.hex().upper()}")
     # ---------------------------
 
-    # 1. Map Load Detection
-    if direction == "CLIENT" and stream == "RELIABLE":
-        if handle_map_load_finished(data):
-            return
-
     op_code = data[0]
 
-    # --- SERVER RELIABLE PACKETS ---
+    # (Server->Client) --- SERVER RELIABLE PACKETS ---
     if direction == "SERVER" and stream == "RELIABLE":
         
-        # Opcode 0x02: Collision Handler
-        if op_code == 0x02:
+        # 0x06: Network Message (either script or internal)
+        if op_code == 0x06:
+            handle_network_message(data)
+        elif op_code == 0x02: # Opcode 0x02: Collision Handler
             if is_system:
                 # System Packet 0x02 -> Disconnect
                 handle_disconnect_packet(data)
@@ -925,33 +1476,38 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
         elif op_code == 0x01:
             handle_authentication_packet(data)
         
-        # 0x06: Network Message (either script or internal)
-        elif op_code == 0x06:
-            handle_network_message(data)
-            
-        # 0x07: OnMode
+        # 0x07: OnMode (Mode Change)
         elif op_code == 0x07:
             parse_mode_packet(data)
     
-    # --- SERVER UNRELIABLE PACKETS ---
+    # (Server->Client) --- SERVER UNRELIABLE PACKETS ---
     if direction == "SERVER" and stream == "UNRELIABLE":
         # 0x06: Network Message (either script or internal)
         if op_code == 0x06:
             handle_network_message(data)
+        
+        # Voice / State Packet
+        elif op_code == 0x05:
+            parse_voice_and_state(data, session_id)
     
-    # --- CLIENT RELIABLE PACKETS ---
+    # (Client->Server) --- CLIENT RELIABLE PACKETS ---
     if direction == "CLIENT" and stream == "RELIABLE":
         # Network Message
         if op_code == 0x06:
             handle_network_message(data)
-    
-    # 5. Voice / State Packet
-    if direction == "SERVER" and stream == "UNRELIABLE" and op_code == 0x05:
-        # We always process this packet to advance past voice data 
-        # and potentially find the State Snapshot at the end.
-        parse_voice_and_state(data, session_id)
         
-    # 6. Client Voice / Moves
+        # Client Initiate Connection
+        elif op_code == 0x00:
+            handle_client_handshake(data)
+            
+        elif op_code == 0x01:
+            handle_client_auth_response(data)
+        
+        # Client Connected - Map Counter
+        elif op_code == 0x03:
+            handle_client_connected(data)
+ 
+    # (Client->Server) Client Voice / Moves
     if direction == "CLIENT" and stream == "UNRELIABLE" and op_code == 0x04:
         parse_client_voice_and_moves(data)
 

@@ -1,9 +1,37 @@
 import struct
 
 class BinaryReader:
-    def __init__(self, data):
+    def __init__(self, data: bytes):
         self.data = data
         self.offset = 0
+        
+    def position(self, pos: int):
+        self.offset = pos
+        return
+        
+    def skip(self, length: int):
+        self.offset = min(len(self.data), self.offset + length)
+        return
+        
+    def tell(self) -> int:
+        return self.offset
+
+    def remaining(self) -> int:
+        return max(0, len(self.data) - self.offset)
+
+    def read_float32(self) -> float:
+        val = struct.unpack('<f', self.data[self.offset:self.offset+4])[0]
+        self.offset += 4
+        return val
+
+    def read_int8(self) -> int:
+        # signed byte
+        b = self.data[self.offset]
+        self.offset += 1
+        return b - 256 if b >= 128 else b
+
+    def read_int8s(self, count: int):
+        return [self.read_int8() for _ in range(count)]
 
     def read_uint32(self):
         val = struct.unpack('<I', self.data[self.offset:self.offset+4])[0]
@@ -52,6 +80,38 @@ class BinaryReader:
             s = self.data[self.offset:end].decode('utf-8', errors='replace')
             self.offset = end + 1
         return s
+        
+    def read_ipv4_u32_le(self) -> str:
+        """
+        Reads a little-endian u32 IPv4 address and returns dotted-quad.
+        Equivalent to inet_ntoa(pack('<I', raw_u32)) but without struct/socket.
+        """
+        raw = self.read_uint32()
+        b0 = (raw >> 0) & 0xFF
+        b1 = (raw >> 8) & 0xFF
+        b2 = (raw >> 16) & 0xFF
+        b3 = (raw >> 24) & 0xFF
+        return f"{b0}.{b1}.{b2}.{b3}"
+        
+    def read_f32_bits(self) -> float:
+        # matches decomp behavior: read u32 then assign into float field
+        u = self.read_uint32()
+        return struct.unpack('<f', struct.pack('<I', u & 0xFFFFFFFF))[0]
+
+    def read_bool_u32_lowbyte(self) -> bool:
+        # decomp reads 4 bytes then casts to uint8
+        v = self.read_uint32()
+        return (v & 0xFF) != 0
+        
+    def read_float64(self) -> float:
+        val = struct.unpack('<d', self.data[self.offset:self.offset+8])[0]
+        self.offset += 8
+        return val
+        
+    def read_int32(self) -> int:
+        val = struct.unpack('<i', self.data[self.offset:self.offset+4])[0]
+        self.offset += 4
+        return val
         
 
 class BitReader:
