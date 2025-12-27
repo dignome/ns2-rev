@@ -148,7 +148,7 @@ def load_netmsg_schema_definitions(json_path: str) -> None:
         print(f"[NetMsgSchema] Error loading JSON: {e}")
 
 # Call this immediately at script start
-load_netmsg_schema_definitions("ns2_netmsg_schema_bad.json")
+load_netmsg_schema_definitions("ns2_netmsg_schema_basic.json")
 
 
 # ==================================================================================
@@ -1108,68 +1108,6 @@ def _parse_snapshot_header_at(snapshot_bytes: bytes, start_off: int) -> tuple[di
             hdr["entityMoveTime_truncated"] = move_count - 32
 
     return hdr, r.tell()
-
-def _header_plausible(h: dict) -> bool:
-    # simple sanity heuristics; tweak as you learn ranges
-    fr = h.get("frameRate", 0.0)
-    oc = h.get("ownedByCount", -1)
-    pid = h.get("playerId", -1)
-
-    if not (0 <= pid <= 4096):
-        return False
-    if not (0 <= oc <= 2048):
-        return False
-    if not (fr == fr):  # NaN
-        return False
-    if not (-1.0 <= fr <= 300.0):
-        return False
-
-    # if perf is present, these should be small-ish u8/u16 fields
-    if h.get("serverPerfPresent") and "serverPerf" in h:
-        p = h["serverPerf"]
-        if not (0 <= p.get("tickrate", -1) <= 255): return False
-        if not (0 <= p.get("sendrate", -1) <= 255): return False
-        if not (0 <= p.get("maxPlayers", -1) <= 255): return False
-        if not (0 <= p.get("numPlayers", -1) <= 255): return False
-
-    return True
-
-def try_parse_state_snapshot_header(snapshot_bytes: bytes) -> tuple[dict | None, int]:
-    """
-    Tries both layouts:
-      A) snapshot_bytes starts at serial
-      B) snapshot_bytes starts at ReadHeader's leading-return-u32, so serial is at +4
-    Returns best parse, else (None, 0).
-    """
-    # Try A: start at 0
-    try:
-        hdr0, end0 = _parse_snapshot_header_at(snapshot_bytes, 0)
-        ok0 = _header_plausible(hdr0)
-    except Exception:
-        hdr0, end0, ok0 = None, 0, False
-
-    # Try B: start at 4 (consume leading u32)
-    try:
-        if len(snapshot_bytes) < 4:
-            raise ValueError("too short for leading u32")
-        lead = struct.unpack("<I", snapshot_bytes[:4])[0]
-        hdr4, end4 = _parse_snapshot_header_at(snapshot_bytes, 4)
-        hdr4["readHeader_return_u32"] = lead
-        ok4 = _header_plausible(hdr4)
-    except Exception:
-        hdr4, end4, ok4 = None, 0, False
-
-    # Pick best
-    if ok4 and not ok0:
-        return hdr4, end4
-    if ok0 and not ok4:
-        return hdr0, end0
-    if ok0 and ok4:
-        # prefer the one that consumes more bytes (usually means move list parsed cleanly)
-        return (hdr4, end4) if end4 > end0 else (hdr0, end0)
-
-    return None, 0
-
 
 def parse_voice_and_state(data, session_id):
     """
