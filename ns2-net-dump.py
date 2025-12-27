@@ -32,7 +32,7 @@ DATA_DIR = 'data'
 # Limit consistency file info
 MAX_PRINT_FILES = 10
 # Limit message dumps
-LIST_LIMIT = 225
+LIST_LIMIT = 50
 
 # Type 7 Mode values
 CLIENT_MODES = {
@@ -415,59 +415,87 @@ def parse_consistency_checker(reader, num_files):
 def parse_class_table(reader):
     """
     ClassTable.
-    
-    This function synchronizes the dictionary of Network Classes between Server and Client.
-    
-    Table 1: Class Checksums
-    - Maps Class ID -> CRC32 Checksum.
-    - Ensures the Client's C++ class layout matches the Server's (prevents crashes/desyncs).
-    
-    Table 2: Class Names
-    - Maps Class Name (String) -> Class ID.
-    - Allows the engine to instantiate the correct entity when it receives a Class ID in future packets.
+
+    Synchronizes the dictionary of Network Classes between Server and Client.
+
+    Table 1: Class Definitions (ClassID -> ParentID, Checksum)
+      stream: u16 class_count, then class_count * (u16 parent_id, u32 checksum)
+      NOTE: ClassID is IMPLIED by the entry index (0..class_count-1)
+
+    Table 2: Class Names (Name -> ClassID)
+      stream: u16 name_count, then name_count * (cstring name, u16 class_id)
+
+    After parsing both tables, we print a merged view:
+
+      Class ID | Class Name | Parent Class | Checksum
+
+    formatted similarly to the NetMsg table output style.
     """
-    print("  --- Class Table ---")
+    # ==========================================================================
+    # 1) Table 1: class_id (implied by index) -> parent_id + checksum
+    # ==========================================================================
+    class_count = reader.read_uint16()
+
+    classes_by_id = {}
+    for class_id in range(class_count):
+        parent_id = reader.read_uint16()
+        checksum = reader.read_uint32()
+
+        classes_by_id[class_id] = {
+            "class_id": class_id,
+            "parent_id": parent_id,   # 0xFFFF => no parent/root
+            "checksum": checksum,
+        }
 
     # ==========================================================================
-    # 1. Network Class Checksums (ID -> Checksum)
-    # ==========================================================================
-    checksum_count = reader.read_uint16()
-    print(f"  Network Class Checksums ({checksum_count}):")
-    
-    initial_game_state.net_class_checksums = []
-    for i in range(checksum_count):
-        cls_id = reader.read_uint16()
-        cls_sum = reader.read_uint32()
-        
-        initial_game_state.net_class_checksums.append({'class_id': cls_id, 'checksum': cls_sum})
-        
-        if i < LIST_LIMIT:
-            print(f"    [{i}] Class Count: {cls_id:<5} | Checksum: {cls_sum:08X}")
-    
-    if checksum_count > LIST_LIMIT:
-        print(f"    ... ({checksum_count - LIST_LIMIT} entries hidden)")
-
-    # ==========================================================================
-    # 2. Network Class Names (String -> ID)
+    # 2) Table 2: name -> class_id
     # ==========================================================================
     name_count = reader.read_uint16()
-    print(f"  Network Class Names ({name_count}):")
-    
-    initial_game_state.net_class_names = []
-    for i in range(name_count):
-        # 00450adc: WriteNullTerminatedString
-        cls_name = reader.read_string_null()
-        # 00450af1: WriteUInt16
-        cls_id = reader.read_uint16()
-        
-        initial_game_state.net_class_names.append({'class_name': cls_name, 'class_id': cls_id})
-        
-        if i < LIST_LIMIT:
-            print(f"    [{i}] ID: {cls_id:<5} | Name: {cls_name}")
 
-    if name_count > LIST_LIMIT:
-        print(f"    ... ({name_count - LIST_LIMIT} entries hidden)")
+    id_to_name = {}
+    for _ in range(name_count):
+        name = reader.read_string_null()
+        cid = reader.read_uint16()
+        id_to_name[cid] = name
 
+    # ==========================================================================
+    # 3) Merge
+    # ==========================================================================
+    merged = []
+    for class_id in range(class_count):
+        entry = classes_by_id[class_id]
+        pid = entry["parent_id"]
+
+        merged.append({
+            "class_id": class_id,
+            "class_name": id_to_name.get(class_id, "<unnamed>"),
+            "parent_id": pid,
+            "parent_class": "<none>" if pid == 0xFFFF else id_to_name.get(pid, "<unnamed>"),
+            "checksum": entry["checksum"],
+        })
+
+    # Store for later use (optional but handy)
+    initial_game_state.net_classes_by_id = classes_by_id
+    initial_game_state.net_class_id_to_name = id_to_name
+    initial_game_state.net_classes = merged
+
+    # ==========================================================================
+    # 4) Pretty print merged table
+    # ==========================================================================
+    print("  --- Class Table ---")
+    print("  Class ID | Class Name                     | Parent Class                 | Checksum")
+    print("  -------- | ------------------------------ | ---------------------------- | --------")
+
+    limit = min(LIST_LIMIT, len(merged))
+    for row in merged[:limit]:
+        cid = f"[{row['class_id']}]"
+        print(f"  {cid:<8} | "
+              f"{row['class_name']:<30} | "
+              f"{row['parent_class']:<28} | "
+              f"{row['checksum']:08X}")
+
+    if len(merged) > LIST_LIMIT:
+        print(f"  ... ({len(merged) - LIST_LIMIT} entries hidden)")
 
 def parse_netmsg_table(reader: BinaryReader) -> None:
     """
@@ -488,6 +516,10 @@ def parse_netmsg_table(reader: BinaryReader) -> None:
     mismatch_count = 0
     missing_checksum_count = 0
 
+    # We'll collect rows so we can compute nice column widths before printing.
+    rows = []  # (id, name, checksum)
+    warn_lines = []  # strings to print (in order) as warnings
+
     for msg_id in range(msg_count):
         msg_name = reader.read_string_null()
         server_chk = reader.read_uint32() & 0xFFFFFFFF
@@ -497,6 +529,7 @@ def parse_netmsg_table(reader: BinaryReader) -> None:
             "name": msg_name,
             "checksum": server_chk
         })
+        rows.append((msg_id, msg_name, server_chk))
 
         schema = NETMSG_SCHEMA_DEFS.get(msg_name)
         if schema:
@@ -506,13 +539,13 @@ def parse_netmsg_table(reader: BinaryReader) -> None:
             json_chk = schema.get("_netmsg_checksum_u32")
             if json_chk is None:
                 missing_checksum_count += 1
-                print(
+                warn_lines.append(
                     f"    [NetMsgSchema WARN] '{msg_name}' (ID {msg_id}) has no/invalid JSON checksum; "
                     f"server=0x{server_chk:08X}"
                 )
-            elif json_chk != server_chk:
+            elif (json_chk & 0xFFFFFFFF) != server_chk:
                 mismatch_count += 1
-                print(
+                warn_lines.append(
                     f"    [NetMsgSchema WARN] checksum mismatch for '{msg_name}' (ID {msg_id}): "
                     f"server=0x{server_chk:08X} json=0x{json_chk:08X}"
                 )
@@ -521,11 +554,58 @@ def parse_netmsg_table(reader: BinaryReader) -> None:
                 schema["_netmsg_checksum_mismatch"] = True
                 schema["_netmsg_server_checksum_u32"] = server_chk
 
-        if msg_id < LIST_LIMIT:
-            print(f"    [ID {msg_id}] {msg_name:<30} | Checksum: {server_chk:08X}")
+    # ---- Formatting ----
+    # Clamp name column so long names don't blow up your log width.
+    max_name_len = 0
+    for _, name, _ in rows:
+        if len(name) > max_name_len:
+            max_name_len = len(name)
 
-    print(f"  ... ({msg_count} total messages)")
-    print(f"  [NetMsgSchema] Mapped {mapped_count} IDs to JSON definitions.")
+    name_w = min(max(max_name_len, 12), 80)  # between 12 and 80
+    id_w = max(len(str(msg_count - 1)), 2)   # enough digits for last ID
+
+    # Header
+    print(f"    {'ID':>{id_w}} | {'Message Name':<{name_w}} | Checksum")
+    print(f"    {'-'*id_w}-+-{'-'*name_w}-+--------")
+
+    # Print rows + inject WARN lines in the same relative order as your original:
+    # (WARN line(s) appear before the row for that ID).
+    #
+    # To preserve exact ordering, we can print WARN lines by scanning warn_lines
+    # already collected in order and matching "(ID X)".
+    #
+    # Fast/simple: build map ID->list[warnings].
+    warn_by_id = {}
+    for line in warn_lines:
+        # Try to extract "(ID N)" or "ID N" without regex dependency
+        # Example: "... (ID 22) ..." or "... (ID 22): ..."
+        marker = "ID "
+        idx = line.find(marker)
+        if idx != -1:
+            # read digits after "ID "
+            j = idx + len(marker)
+            k = j
+            while k < len(line) and line[k].isdigit():
+                k += 1
+            if k > j:
+                wid = int(line[j:k])
+                warn_by_id.setdefault(wid, []).append(line)
+
+    # Print the first LIST_LIMIT rows, like your other tables.
+    limit = min(LIST_LIMIT, len(rows))
+    for (msg_id, msg_name, server_chk) in rows[:limit]:
+        for w in warn_by_id.get(msg_id, []):
+            print(w)
+
+        # truncate name if needed
+        shown_name = msg_name if len(msg_name) <= name_w else (msg_name[:name_w-3] + "...")
+        print(f"    [{msg_id:>{id_w}}] | {shown_name:<{name_w}} | {server_chk:08X}")
+
+    if msg_count > LIST_LIMIT:
+        print(f"    ... ({msg_count - LIST_LIMIT} entries hidden)")
+
+    unmapped_count = msg_count - mapped_count
+    print(f"  [NetMsgSchema] Mapped {mapped_count}/{msg_count} IDs to JSON definitions ({unmapped_count} unmapped).")
     if mismatch_count or missing_checksum_count:
         print(f"  [NetMsgSchema] WARNINGS: {mismatch_count} mismatches, {missing_checksum_count} missing/invalid checksums.")
 
@@ -627,7 +707,9 @@ def handle_authentication_packet(data):
     return True
 
 def handle_connecting_packet(data):
-    """Handles Server -> Client 'Connecting' packet (0x02)."""
+    """Handles Server -> Client 'Connecting' packet (0x02).
+        Sends 2 compressed payloads
+    """
     try:
         # Header: [Uncompressed Size (4 bytes)] [Compressed Size (4 bytes)]
         if len(data) < 9: return
@@ -939,46 +1021,38 @@ def parse_client_voice_and_moves(data):
     except Exception:
         # don't crash the main decode loop
         return
-
-def inspect_first_entity(body_bytes, class_names_container=None):
-    """
-    Parses ONLY the first entity header in the snapshot body.
-    Handles the class_names_container being either a List of Dicts (from GameState) 
-    or a Dict (if mapped manually).
-    """
+    
+def inspect_first_entity(body_bytes):
     if len(body_bytes) < 3:
-        # print("    [Entity Parser] Body too short.")
         return
 
     reader = BinaryReader(body_bytes)
-    
-    # --- 1. Read Header (3 Bytes) ---
+
+    # --- 1) Read Header (3 bytes) ---
     packed_id = reader.read_uint16()
     class_idx = reader.read_uint8()
 
-    # --- 2. Decode Fields ---
-    entity_id = packed_id & 0x3FFF 
-    # Increment: It only increments (0 -> 1 -> 2 -> 3 -> 0) after successfully reading an entity header.  Starts at 0 every state snapshot.
-    sync_val  = packed_id >> 14
-    
-    # --- 3. Lookup Name ---
-    # If class_name comes back as FF (255) this means the entity id will not be carried over (destroy)
-    class_name = f"UNKNOWN_CLASS_{class_idx}"
-    
-    if class_names_container:
-        # Case A: List of Dicts (default GameState structure)
-        if isinstance(class_names_container, list):
-            for entry in class_names_container:
-                if entry.get('class_id') == class_idx:
-                    class_name = entry.get('class_name', "UNKNOWN_NAME")
-                    break
-        # Case B: Dictionary (if optimized later)
-        elif isinstance(class_names_container, dict):
-            class_name = class_names_container.get(class_idx, class_name)
-    else:
-        class_name = f"NO_MAPPING ({class_idx})"
+    # --- 2) Decode Fields ---
+    entity_id = packed_id & 0x3FFF
+    # Increment: It only increments (0 -> 1 -> 2 -> 3 -> 0) after successfully reading
+    # an entity header. Starts at 0 every state snapshot.
+    sync_val = packed_id >> 14
 
-    print(f"    [Entity Check] Offset:0x00 | ID:{entity_id:<5} | Sync:{sync_val} | Class:{class_idx} -> '{class_name}'")
+    # --- 3) Lookup Name ---
+    # If class_idx comes back as 0xFF (255), this means the entity id will not be carried over (destroy/no class).
+    if class_idx == 0xFF:
+        class_name = "<destroy/none>"
+    else:
+        id_to_name = getattr(initial_game_state, "net_class_id_to_name", None)
+        if not isinstance(id_to_name, dict) or not id_to_name:
+            class_name = f"NO_MAPPING ({class_idx})"
+        else:
+            class_name = id_to_name.get(class_idx, f"UNKNOWN_CLASS_{class_idx}")
+
+    print(
+        f"    [Entity Check] Offset:0x00 | ID:{entity_id:<5} | Sync:{sync_val} | "
+        f"Class:{class_idx} -> '{class_name}'"
+    )
 
 def _parse_server_perf(reader: BinaryReader) -> dict:
     """
@@ -1253,8 +1327,7 @@ def parse_voice_and_state(data, session_id):
                     
                     # [INSERTION] Parse First Entity Header
                     # We pass the raw list from GameState; the helper function now handles the iteration.
-                    class_list = getattr(initial_game_state, 'net_class_names', None)
-                    inspect_first_entity(body_bytes, class_list)
+                    inspect_first_entity(body_bytes)
 
                 except Exception as e:
                     print(f"[Snapshot] Error parsing header: {e}")
