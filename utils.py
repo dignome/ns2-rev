@@ -158,6 +158,25 @@ class BitReader:
                 self.byte_offset += 1
         
         return value
+        
+    def remaining_bits(self) -> int:
+        return (len(self.data) - self.byte_offset) * 8 - self.bit_offset
+        
+    def read_varint(reader):
+        """
+        Reads a 7-bit variable-length integer from the bit stream.
+        Used for reading field counts and indices in Diff updates.
+        """
+        result = 0
+        shift = 0
+        while True:
+            # Read 8 bits: 7 data bits + 1 continuation bit
+            val = reader.read_bits(8)
+            result |= (val & 0x7F) << shift
+            if not (val & 0x80):  # Check continuation bit (MSB)
+                break
+            shift += 7
+        return result
 
     def read_bool(self):
         """Matches M4::BitReader::ReadBool - Reads 1 bit."""
@@ -178,7 +197,7 @@ class BitReader:
     def read_string(self, max_bits):
         """
         Matches NetworkField_Type_String / ReadBlock2.
-        Reads a raw block of bits (defined by maxBits in schema), converts to ASCII.
+        Reads a raw block of bits (defined by numBits in schema), converts to ASCII.
         """
         if max_bits is None or max_bits == 0:
             return ""
@@ -205,43 +224,65 @@ class BitReader:
             self.bit_offset = 0
             self.byte_offset += 1
 
+# Type Map
+NET_TYPE_ANGLE    = 0x0
+NET_TYPE_ANGLES   = 0x1
+NET_TYPE_BOOL     = 0x2
+NET_TYPE_FIXED    = 0x3
+NET_TYPE_INTEGER  = 0x4
+NET_TYPE_POSITION = 0x5
+NET_TYPE_STRING   = 0x6
+NET_TYPE_VECTOR   = 0x7
+NET_TYPE_FLOAT    = 0x8
+NET_TYPE_TIME     = 0x9
+
 # Unpacks data by type and returns the result            
 def unpack_field(reader, field):
     """
     Reads a single field based on the schema definition.
-    Handles Integers, Floats, Bools, Strings, and (optionally) component/rangestep encoded types.
+    Handles Floats, Bools, Strings, and component/rangestep encoded types.
     """
     f_type = field.get('type')
-    f_name = field.get('name')
+    # f_name = field.get('name') # Unused but kept for reference
 
     # --- 1. Boolean ---
-    if f_type == 'Bool':
+    if f_type == NET_TYPE_BOOL:
         return reader.read_bool()
 
     # --- 2. String ---
-    if f_type == 'String':
-        max_bits = field.get('maxBits', 0)
+    if f_type == NET_TYPE_STRING:
+        # Note: Schema usually uses 'maxBits' or 'numBits' for string block size
+        max_bits = field.get('numBits', 0)
         return reader.read_string(max_bits)
 
     # Helper to read one component described by a range-step entry
+    def u32_to_f32(u: int) -> float:
+        return struct.unpack("<f", struct.pack("<I", u & 0xFFFFFFFF))[0]
+
     def read_component(step_info):
         bits = int(step_info.get('bits', 0))
+
+        min_raw  = step_info.get('min_raw', 0) or 0
+        step_val = step_info.get('stepValue', 0) or 0
+        range_raw = step_info.get('range_raw', 0) or 0
+
+        # ✅ Special-case: 32-bit component with no quantization metadata
+        # Treat as raw IEEE-754 float32 stored in the bitstream.
+        if bits == 32 and step_val == 0 and min_raw == 0 and range_raw == 0:
+            raw_u32 = reader.read_bits(32)
+            return u32_to_f32(raw_u32)
+
         raw_val = reader.read_bits(bits)
 
-        min_raw = step_info.get('min_raw', 0)
-        step_val = step_info.get('stepValue', 0)
-
-        # Decode rule you’re using everywhere:
-        #   value = (raw + min_raw) * stepValue
-        # If stepValue is 0, treat as raw (+min) integer-ish value.
+        # Existing decode rule you’re using:
+        # value = (raw + min_raw) * stepValue
         if step_val:
             return (raw_val + min_raw) * step_val
         else:
             return raw_val + min_raw
 
-    # --- 3. 3-Component Types ---
-    # (your schema uses components[0..2] for xyz)
-    if f_type in ['Vector', 'Position', 'Angles', 'DebugLine']:
+    # --- 3. 3-Component Types (Vector, Position, Angles) ---
+    if f_type in [NET_TYPE_VECTOR, NET_TYPE_POSITION, NET_TYPE_ANGLES]:
         comps = field.get('components', [])
 
         if len(comps) >= 3:
@@ -257,24 +298,23 @@ def unpack_field(reader, field):
             return {'x': x, 'y': y, 'z': z}
 
     # --- 4. Scalar Types that may use a single component (range step) ---
-    # Integer / Fixed / Time / Angle often use components[0]
+    # Integer / Fixed / Time / Angle / Float often use components[0]
     comps = field.get('components', [])
     if comps:
         val = read_component(comps[0])
-        if f_type == 'Integer':
+        if f_type == NET_TYPE_INTEGER:
             return int(val)
-        return float(val)  # Fixed/Time/Angle -> float
+        return float(val)  # Fixed/Time/Angle/Float -> float
 
     # --- 5. Uncompressed Scalars (Fallback) ---
-    max_bits = field.get('maxBits', 32)
+    max_bits = field.get('numBits', 32)
 
-    if f_type == 'Float':
-        # Your note: keep maxBits as the number of bits to read.
+    if f_type == NET_TYPE_FLOAT:
         if max_bits == 32:
             return reader.read_float()
         return reader.read_bits(max_bits)
 
-    if f_type == 'Integer':
+    if f_type == NET_TYPE_INTEGER:
         return reader.read_bits(max_bits)
 
     # Default: read bits
