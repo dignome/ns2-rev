@@ -15,7 +15,8 @@ This tool scans a **Wireshark saved `.pcapng` file** to analyze traffic between 
 
 ## ⚠️ Limitations & Future Work
 
-* **State Snapshots:** Handles the snapshot header / any performance data.  Not fully parsing the state data at this point.
+* **State Snapshots:** Handles the snapshot header / any performance data / dumps state snapshots to json.  A separate program is currentlyy acting as a
+*    proof-of-concept state snapshot parser (entity-parse.py).
 * **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
 
 ## 🛠️ Usage Notes
