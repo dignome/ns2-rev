@@ -67,3 +67,20 @@ For Types:
       memBytes(integer param) is only present for Integer
 
       Most Float data seems to be sent as Fixed type.
+
+For the state packet processing which uses similar packing/unpacking as network message it does not appear that field order is sorted by name.
+
+First 3 bytes are the Entity ID / Sync (de-sync detection) 2 bytes and the Class ID 1 byte.
+
+Sync value is just a cycle per each read entity entry that goes 0->1->2->3->0 used to detect sync issue.  Resets to 0 on each state packet.
+
+If the Class ID is FF that means that class data for indicated Entity ID should not be carried over into the new modified state (destroyed).
+
+For a baseline copy (no previous state) it should be straightforward to read the data and build a state.  
+
+If read Entity ID is not in the previous state then you want to add it to the existing state and carry it forward.
+
+Thereafter there is a diff routine that has differnet operating modes (sparse/etc) so that 
+only the changed fields in a entity class will be modified.
+
+There is also a relevancy used by the server to determine what information the client is privelleged to thus the pub/priv portion of the class.
