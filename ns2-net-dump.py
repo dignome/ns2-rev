@@ -8,6 +8,8 @@ import zlib
 import argparse
 import sys
 import json
+import copy
+import base64
 import math
 from utils import BinaryReader, BitReader, unpack_field
 
@@ -32,7 +34,25 @@ DATA_DIR = 'data'
 # Limit consistency file info
 MAX_PRINT_FILES = 10
 # Limit message dumps
-LIST_LIMIT = 50
+TABLE_LIST_LIMIT = 10
+# Precache list limit
+PRECACHE_LIST_LIMIT = 10
+
+# --- Output JSON files that get appended-to across runs ---
+CLASSTABLE_SNAPSHOT_PATH = "snapshot-classtable.json"
+SNAPSHOTS_JSON_PATH      = "snapshots.json"
+
+def reset_output_json_files():
+    """
+    Prevent cross-run accumulation by clearing JSON outputs at script start.
+    """
+    for p in (CLASSTABLE_SNAPSHOT_PATH, SNAPSHOTS_JSON_PATH):
+        try:
+            if os.path.exists(p):
+                os.remove(p)  # simplest: start fresh
+                print(f"[Init] Cleared {p}")
+        except Exception as e:
+            print(f"[Init] Could not clear {p}: {e}")
 
 # Type 7 Mode values
 CLIENT_MODES = {
@@ -89,18 +109,115 @@ class GameState:
         self.client_build = None
         
         self.server_mode = "None"
+        
+        # The root entity store for state snapshots
+        # KEY: Entity ID (int)
+        # VAL: Dict { 'className': str, 'fields': { 'health': 100, 'origin': {...} } }
+        # right now we aren't using this - see entity-parse.py which is capable of reading the snapshot data from dumped json
+        #self.entities = {}
 
 # Global Instance
 initial_game_state = GameState()
 
+# --- Global History Storage ---
+# Key: server_frame (int), Value: set(entity_ids)
+SNAPSHOT_HISTORY = {} 
+MAX_HISTORY_BUFFER = 64
+
 # --- SCHEMA STORAGE ---
+
+# --- NETCLASS SCHEMA STORAGE ---
+# 1. Static NetClass definitions loaded from JSON (Key: class name string)
+NETCLASS_SCHEMA_DEFS = {}
+
+# 2. Runtime NetClass schema mapped to current Server Class IDs (Key: Server class id int)
+NETCLASS_RUNTIME_SCHEMA = {}
+
 # 1. Static Definitions loaded from JSON (Key: Name string)
 NETMSG_SCHEMA_DEFS = {} 
 
 # 2. Runtime Schema mapped to current Server IDs (Key: Server ID int)
 NETMSG_RUNTIME_SCHEMA = {}
 
-def _netmsg_checksum_u32(chk) -> int | None:
+# SNAPSHOTS BUFFER
+# --- In-memory snapshot buffer ---
+# key: game_index (int) -> list of entries (dict)
+SNAPSHOTS_MEM = collections.defaultdict(list)
+
+def store_snapshot_in_memory(game_index: int,
+                             session_id: int,
+                             pcap_ts: float,
+                             snapshot_len: int,
+                             actual_len: int,
+                             snap_bytes: bytes) -> None:
+    """
+    Store snapshot bytes in RAM; base64 only at exit.
+    """
+    try:
+        bucket = SNAPSHOTS_MEM[game_index]
+        bucket.append({
+            "i": len(bucket),
+            "pcap_ts": float(pcap_ts) if pcap_ts is not None else -1.0,
+            "session_id": int(session_id),
+            "snapshot_len": int(snapshot_len),
+            "actual_len": int(actual_len),
+            "bytes": snap_bytes,  # raw bytes
+        })
+    except Exception:
+        pass
+
+def write_snapshots_json_at_exit(out_path: str = SNAPSHOTS_JSON_PATH) -> None:
+    """
+    Write snapshots.json once, at program exit, atomically.
+    Streams output so we don't allocate a second giant structure of base64 strings.
+    Format matches your original: { "<game_index>": [ {..}, {..} ] }
+    """
+    try:
+        tmp_path = out_path + ".tmp"
+        total = 0
+
+        with open(tmp_path, "w", encoding="utf-8", buffering=1024 * 1024) as f:
+            f.write("{\n")
+            first_key = True
+
+            for game_index in sorted(SNAPSHOTS_MEM.keys()):
+                bucket = SNAPSHOTS_MEM[game_index]
+                total += len(bucket)
+
+                if not first_key:
+                    f.write(",\n")
+                first_key = False
+
+                # key
+                f.write(f"  {json.dumps(str(game_index))}: [\n")
+
+                for j, e in enumerate(bucket):
+                    if j != 0:
+                        f.write(",\n")
+
+                    entry = {
+                        "i": e["i"],
+                        "pcap_ts": e["pcap_ts"],
+                        "session_id": e["session_id"],
+                        "snapshot_len": e["snapshot_len"],
+                        "actual_len": e["actual_len"],
+                        "bytes_b64": base64.b64encode(e["bytes"]).decode("ascii"),
+                    }
+
+                    # compact per-entry; still pretty overall
+                    f.write("    " + json.dumps(entry, separators=(",", ":"), ensure_ascii=False))
+
+                f.write("\n  ]")
+
+            f.write("\n}\n")
+
+        os.replace(tmp_path, out_path)
+        print(f"[SnapshotDump] Wrote {total} snapshots -> {out_path}")
+
+    except Exception as e:
+        print(f"[SnapshotDump] Failed to write snapshots: {e}")
+
+def _class_checksum_u32(chk) -> int | None:
     """
     Accepts:
       - int (already a checksum)
@@ -123,6 +240,42 @@ def _netmsg_checksum_u32(chk) -> int | None:
 
     return None
 
+def load_netclass_schema_definitions(json_path: str) -> None:
+    """Loads the netclass schema JSON and indexes it by class name."""
+    global NETCLASS_SCHEMA_DEFS
+    NETCLASS_SCHEMA_DEFS = {}
+
+    try:
+        with open(json_path, "r") as f:
+            raw_data = json.load(f)
+
+        # Support both:
+        #  - dict keyed by index: {"0": {...}, "1": {...}}
+        #  - list of entries: [{...}, {...}]
+        if isinstance(raw_data, dict):
+            entries = raw_data.values()
+        elif isinstance(raw_data, list):
+            entries = raw_data
+        else:
+            entries = []
+
+        loaded = 0
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            name = entry.get("name")
+            if not name:
+                continue
+
+            # parse checksum string -> u32 (optional)
+            entry["_netclass_checksum_u32"] = _class_checksum_u32(entry.get("checksum"))
+            NETCLASS_SCHEMA_DEFS[name.lower()] = entry
+            loaded += 1
+
+        print(f"[NetClassSchema] Loaded {loaded} definitions from {json_path}")
+
+    except Exception as e:
+        print(f"[NetClassSchema] Error loading JSON: {e}")
 
 def load_netmsg_schema_definitions(json_path: str) -> None:
     """Loads the netmsg schema JSON and indexes it by netmsg name."""
@@ -139,7 +292,7 @@ def load_netmsg_schema_definitions(json_path: str) -> None:
                 continue
 
             # parse checksum string -> u32 (optional)
-            entry["_netmsg_checksum_u32"] = _netmsg_checksum_u32(entry.get("checksum"))
+            entry["_netmsg_checksum_u32"] = _class_checksum_u32(entry.get("checksum"))
             NETMSG_SCHEMA_DEFS[name] = entry
 
         print(f"[NetMsgSchema] Loaded {len(NETMSG_SCHEMA_DEFS)} definitions from {json_path}")
@@ -148,8 +301,10 @@ def load_netmsg_schema_definitions(json_path: str) -> None:
         print(f"[NetMsgSchema] Error loading JSON: {e}")
 
 # Call this immediately at script start
-load_netmsg_schema_definitions("ns2_netmsg_schema_basic.json")
+load_netclass_schema_definitions("ns2_netclass_basic_min.json")
 
+# Call this immediately at script start
+load_netmsg_schema_definitions("ns2_netmsg_schema_basic_min.json")
 
 # ==================================================================================
 # PACKET HANDLERS
@@ -412,24 +567,80 @@ def parse_consistency_checker(reader, num_files):
     except Exception as e:
         print(f"  [!] Failed to decompress filenames: {e}")
 
+# ==================================================================================
+# NetClass Runtime Schema Snapshot Dump
+# ==================================================================================
+
+def _move_fields_last(obj):
+    """
+    Reorders dict keys so 'fields' (and 'fieldCount') are emitted last.
+    NOTE: Only affects output readability. JSON itself doesn't guarantee order.
+    """
+    if isinstance(obj, dict):
+        # Recurse first
+        for k in list(obj.keys()):
+            obj[k] = _move_fields_last(obj[k])
+
+        # Then move these keys to the end (in this order)
+        for k in ("fieldCount", "fields"):
+            if k in obj:
+                v = obj.pop(k)
+                obj[k] = v
+
+        return obj
+
+    if isinstance(obj, list):
+        return [_move_fields_last(x) for x in obj]
+
+    return obj
+
+def dump_netclass_runtime_schema_snapshot():
+    """
+    Dumps the dynamic NETCLASS_RUNTIME_SCHEMA to snapshot-classtable.json,
+    keyed by initial_game_state.map_load_count.
+    """
+    idx = initial_game_state.map_load_count
+
+    # Load existing snapshot file (if any)
+    out = {}
+    if os.path.exists(CLASSTABLE_SNAPSHOT_PATH):
+        try:
+            with open(CLASSTABLE_SNAPSHOT_PATH, "r", encoding="utf-8") as f:
+                out = json.load(f)
+            if not isinstance(out, dict):
+                out = {}
+        except Exception:
+            out = {}
+
+    # Snapshot content: map class_id -> schema (deep-copied to freeze state)
+    snap = {}
+
+    # Optional: stable ordering for readability
+    for class_id in sorted(NETCLASS_RUNTIME_SCHEMA.keys()):
+        schema = NETCLASS_RUNTIME_SCHEMA[class_id]
+
+        # Deep copy so future mutations won't retroactively change older snapshots
+        s = copy.deepcopy(schema)
+
+        # Make sure fields are emitted last
+        _move_fields_last(s)   # <-- use whatever you named the helper
+
+        snap[str(class_id)] = s
+
+    out[str(idx)] = snap
+    
+    # Atomic write
+    tmp_path = CLASSTABLE_SNAPSHOT_PATH + ".tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=2, sort_keys=False)
+    os.replace(tmp_path, CLASSTABLE_SNAPSHOT_PATH)
+
+    print(f"  [ClassTable] Dumped NETCLASS_RUNTIME_SCHEMA ({len(snap)} classes) -> {CLASSTABLE_SNAPSHOT_PATH} (key={idx})")
+
 def parse_class_table(reader):
     """
-    ClassTable.
-
-    Synchronizes the dictionary of Network Classes between Server and Client.
-
-    Table 1: Class Definitions (ClassID -> ParentID, Checksum)
-      stream: u16 class_count, then class_count * (u16 parent_id, u32 checksum)
-      NOTE: ClassID is IMPLIED by the entry index (0..class_count-1)
-
-    Table 2: Class Names (Name -> ClassID)
-      stream: u16 name_count, then name_count * (cstring name, u16 class_id)
-
-    After parsing both tables, we print a merged view:
-
-      Class ID | Class Name | Parent Class | Checksum
-
-    formatted similarly to the NetMsg table output style.
+    Parses Packet 0x02 ClassTable and links it to JSON definitions.
+    Includes debug prints for CRC mismatches and mapping stats.
     """
     # ==========================================================================
     # 1) Table 1: class_id (implied by index) -> parent_id + checksum
@@ -479,23 +690,89 @@ def parse_class_table(reader):
     initial_game_state.net_class_id_to_name = id_to_name
     initial_game_state.net_classes = merged
 
+    # ======================================================================
+    # 4) Map NetClass schema definitions (loaded from JSON) onto server ClassIDs
+    # ======================================================================
+    global NETCLASS_RUNTIME_SCHEMA
+    NETCLASS_RUNTIME_SCHEMA.clear()
+
+    mapped_count = 0
+    mismatch_count = 0
+    missing_checksum_count = 0
+
+    # warnings keyed by class id so they print in the table near the class row
+    warn_by_id = {}
+
+    for class_id in range(class_count):
+        class_name = id_to_name.get(class_id)
+        if not class_name:
+            continue
+
+        schema = NETCLASS_SCHEMA_DEFS.get(class_name.lower())
+        if not schema:
+            continue
+
+        mapped_count += 1
+        NETCLASS_RUNTIME_SCHEMA[class_id] = schema
+        schema["name"] = class_name
+
+        server_chk = classes_by_id[class_id]["checksum"] & 0xFFFFFFFF
+        json_chk = schema.get("_netclass_checksum_u32")
+
+        if json_chk is None:
+            missing_checksum_count += 1
+            warn_by_id.setdefault(class_id, []).append(
+                f"  [NetClassSchema WARN] '{class_name}' (ClassID {class_id}) has no/invalid JSON checksum; "
+                f"server=0x{server_chk:08X}"
+            )
+        elif (json_chk & 0xFFFFFFFF) != server_chk:
+            mismatch_count += 1
+            warn_by_id.setdefault(class_id, []).append(
+                f"  [NetClassSchema WARN] checksum mismatch for '{class_name}' (ClassID {class_id}): "
+                f"server=0x{server_chk:08X} json=0x{json_chk:08X}"
+            )
+
+            # optional markers (useful for offline diff tooling)
+            schema["_netclass_checksum_mismatch"] = True
+            schema["_netclass_server_checksum_u32"] = server_chk
+
+    initial_game_state.net_class_runtime_schema = NETCLASS_RUNTIME_SCHEMA
+    dump_netclass_runtime_schema_snapshot()
+
     # ==========================================================================
-    # 4) Pretty print merged table
+    # 5) Pretty print merged table WITH DEBUG INFO
     # ==========================================================================
     print("  --- Class Table ---")
     print("  Class ID | Class Name                     | Parent Class                 | Checksum")
     print("  -------- | ------------------------------ | ---------------------------- | --------")
 
-    limit = min(LIST_LIMIT, len(merged))
+    limit = min(TABLE_LIST_LIMIT, len(merged))
     for row in merged[:limit]:
         cid = f"[{row['class_id']}]"
         print(f"  {cid:<8} | "
               f"{row['class_name']:<30} | "
               f"{row['parent_class']:<28} | "
               f"{row['checksum']:08X}")
+        
+        # --- NEW: Print Warnings Inline ---
+        if row['class_id'] in warn_by_id:
+            for w in warn_by_id[row['class_id']]:
+                print(w)
 
-    if len(merged) > LIST_LIMIT:
-        print(f"  ... ({len(merged) - LIST_LIMIT} entries hidden)")
+    if len(merged) > TABLE_LIST_LIMIT:
+        print(f"  ... ({len(merged) - TABLE_LIST_LIMIT} entries hidden)")
+
+    # --- NEW: Final Summary Stats ---
+    print("-" * 80)
+    print(f"  [NetClassSchema] Stats: Mapped {mapped_count}/{class_count} classes.")
+    
+    if mismatch_count > 0:
+        print(f"  [NetClassSchema] WARNING: {mismatch_count} classes had CRC mismatches!")
+    else:
+        print("  [NetClassSchema] SUCCESS: No CRC mismatches found.")
+        
+    if missing_checksum_count > 0:
+        print(f"  [NetClassSchema] NOTE: {missing_checksum_count} classes missing JSON checksums.")
 
 def parse_netmsg_table(reader: BinaryReader) -> None:
     """
@@ -591,8 +868,8 @@ def parse_netmsg_table(reader: BinaryReader) -> None:
                 wid = int(line[j:k])
                 warn_by_id.setdefault(wid, []).append(line)
 
-    # Print the first LIST_LIMIT rows, like your other tables.
-    limit = min(LIST_LIMIT, len(rows))
+    # Print the first TABLE_LIST_LIMIT rows, like your other tables.
+    limit = min(TABLE_LIST_LIMIT, len(rows))
     for (msg_id, msg_name, server_chk) in rows[:limit]:
         for w in warn_by_id.get(msg_id, []):
             print(w)
@@ -601,8 +878,8 @@ def parse_netmsg_table(reader: BinaryReader) -> None:
         shown_name = msg_name if len(msg_name) <= name_w else (msg_name[:name_w-3] + "...")
         print(f"    [{msg_id:>{id_w}}] | {shown_name:<{name_w}} | {server_chk:08X}")
 
-    if msg_count > LIST_LIMIT:
-        print(f"    ... ({msg_count - LIST_LIMIT} entries hidden)")
+    if msg_count > TABLE_LIST_LIMIT:
+        print(f"    ... ({msg_count - TABLE_LIST_LIMIT} entries hidden)")
 
     unmapped_count = msg_count - mapped_count
     print(f"  [NetMsgSchema] Mapped {mapped_count}/{msg_count} IDs to JSON definitions ({unmapped_count} unmapped).")
@@ -644,11 +921,11 @@ def parse_generic_string_table(reader, target_list, label):
             'val': res_val
         })
         
-        if i < LIST_LIMIT:
+        if i < PRECACHE_LIST_LIMIT:
             print(f"    [{i}] {res_val}")
             
-    if count > LIST_LIMIT:
-        print(f"    ... ({count - LIST_LIMIT} entries hidden)")
+    if count > PRECACHE_LIST_LIMIT:
+        print(f"    ... ({count - PRECACHE_LIST_LIMIT} entries hidden)")
 
 def handle_authentication_packet(data):
     """
@@ -897,7 +1174,6 @@ def decode_move36(reader: BinaryReader):
         "snapshotsUsed": len(snaps),
     }
 
-
 def parse_client_moves(move_bytes: bytes):
     # ProcessMovePacket reads 3 moves.
     reader = BinaryReader(move_bytes)
@@ -1021,38 +1297,6 @@ def parse_client_voice_and_moves(data):
     except Exception:
         # don't crash the main decode loop
         return
-    
-def inspect_first_entity(body_bytes):
-    if len(body_bytes) < 3:
-        return
-
-    reader = BinaryReader(body_bytes)
-
-    # --- 1) Read Header (3 bytes) ---
-    packed_id = reader.read_uint16()
-    class_idx = reader.read_uint8()
-
-    # --- 2) Decode Fields ---
-    entity_id = packed_id & 0x3FFF
-    # Increment: It only increments (0 -> 1 -> 2 -> 3 -> 0) after successfully reading
-    # an entity header. Starts at 0 every state snapshot.
-    sync_val = packed_id >> 14
-
-    # --- 3) Lookup Name ---
-    # If class_idx comes back as 0xFF (255), this means the entity id will not be carried over (destroy/no class).
-    if class_idx == 0xFF:
-        class_name = "<destroy/none>"
-    else:
-        id_to_name = getattr(initial_game_state, "net_class_id_to_name", None)
-        if not isinstance(id_to_name, dict) or not id_to_name:
-            class_name = f"NO_MAPPING ({class_idx})"
-        else:
-            class_name = id_to_name.get(class_idx, f"UNKNOWN_CLASS_{class_idx}")
-
-    print(
-        f"    [Entity Check] Offset:0x00 | ID:{entity_id:<5} | Sync:{sync_val} | "
-        f"Class:{class_idx} -> '{class_name}'"
-    )
 
 def _parse_server_perf(reader: BinaryReader) -> dict:
     """
@@ -1183,7 +1427,58 @@ def _parse_snapshot_header_at(snapshot_bytes: bytes, start_off: int) -> tuple[di
 
     return hdr, r.tell()
 
-def parse_voice_and_state(data, session_id):
+def _dump_snapshot_json(game_index: int,
+                        session_id: int,
+                        pcap_ts: float,
+                        snapshot_len: int,
+                        actual_len: int,
+                        snap_bytes: bytes,
+                        out_path: str = "SNAPSHOTS_JSON_PATH"):
+    """
+    JSON format:
+      {
+        "<game_index>": [
+          { "i": 0, "pcap_ts": 123.456, ... },
+          { "i": 1, "pcap_ts": 124.001, ... }
+        ]
+      }
+    """
+    try:
+        root = {}
+        if os.path.exists(out_path):
+            try:
+                with open(out_path, "r", encoding="utf-8") as f:
+                    root = json.load(f) or {}
+            except Exception:
+                root = {}
+
+        key = str(game_index)
+        bucket = root.get(key)
+        if not isinstance(bucket, list):
+            bucket = []
+
+        entry = {
+            "i": len(bucket),
+            "pcap_ts": pcap_ts,              # <-- timestamp from assembler (dpkt ts)
+            "session_id": session_id,
+            "snapshot_len": int(snapshot_len),
+            "actual_len": int(actual_len),
+            "bytes_b64": base64.b64encode(snap_bytes).decode("ascii"),
+        }
+
+        bucket.append(entry)
+        root[key] = bucket
+
+        tmp_path = out_path + ".tmp"
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(root, f, indent=2, sort_keys=False)
+        os.replace(tmp_path, out_path)
+
+    except Exception:
+        # don't ever crash decode loop
+        pass
+
+def parse_voice_and_state(data, session_id, timestamp):
     """
     Parses Type 5 Packet: Voice Data + Optional State Snapshot.
     
@@ -1283,62 +1578,84 @@ def parse_voice_and_state(data, session_id):
             # (reader offset is already advanced by read_bytes/skip)
 
         # 3. State Snapshot
-        # After voice loop, next 4 bytes are ALWAYS Snapshot Length
         if reader.remaining() >= 4:
+            snap_len_off = reader.tell()          # where the u32 length lives
             snapshot_len = reader.read_uint32()
+            payload_off = reader.tell()           # start of snapshot payload
+
             actual_len = min(snapshot_len, reader.remaining())
 
+            # Warn if mismatch
+            if snapshot_len != actual_len:
+                print(f"[Snapshot WARN] snapshot_len={snapshot_len} != actual_len={actual_len} (remaining={reader.remaining()})")
+
             if actual_len > 0:
-                snap_bytes = reader.read_bytes(actual_len)
-                
-                try:
-                    # Parse header at offset 0 of the isolated snapshot bytes
-                    hdr, hdr_end_off = _parse_snapshot_header_at(snap_bytes, 0)
+                # PEEK bytes (do not advance offset)
+                snap_bytes = reader.data[snap_len_off:payload_off + actual_len]
+
+                # dump to JSON (list-per-map_index)
+                game_index = initial_game_state.map_load_count - 1
+                if game_index < 0:
+                    game_index = 0
+
+                pcap_ts = float(timestamp) if timestamp is not None else -1.0
+                store_snapshot_in_memory(
+                    game_index=game_index,
+                    session_id=session_id,
+                    pcap_ts=pcap_ts,
+                    snapshot_len=snapshot_len,
+                    actual_len=actual_len,
+                    snap_bytes=snap_bytes,
+                )
+                return
+                #maybe later
+                #try:
+                #    # Parse header at offset 0 of the isolated snapshot bytes
+                #    hdr, hdr_end_off = _parse_snapshot_header_at(snap_bytes, 0)
                     
-                    print(f"[Snapshot] Len: {snapshot_len} | Serial: {hdr.get('serial')} | Time: {hdr.get('time', 0.0):.3f}")
+                    # Extract frames
+                #    srv_frame = hdr.get('serverFrame', 0)
+                #    old_frame = hdr.get('oldServerFrame', 0)
                     
-                    print(
-                        f"    moveSerial={hdr.get('moveSerial')} "
-                        f"playerId={hdr.get('playerId')} controlling={hdr.get('controlling')} "
-                        f"lastUpd={hdr.get('lastUpdateTime', 0.0):.3f} "
-                        f"frameRate={hdr.get('frameRate', 0.0):.3f}"
-                    )
+                #    print(f"[Snapshot] Len: {snapshot_len} | Serial: {hdr.get('serial')} | Time: {hdr.get('time', 0.0):.3f}")
                     
-                    print(
-                        f"    ownedCount={hdr.get('ownedByCount')} "
-                        f"perf={hdr.get('serverPerfPresent')} scriptError={hdr.get('serverHadScriptError')} "
-                        f"choked={hdr.get('choked')} "
-                        f"serverFrame={hdr.get('serverFrame')} oldFrame={hdr.get('oldServerFrame')}"
-                    )
+                #    print(
+                #        f"    moveSerial={hdr.get('moveSerial')} "
+                #        f"playerId={hdr.get('playerId')} controlling={hdr.get('controlling')} "
+                #        f"lastUpd={hdr.get('lastUpdateTime', 0.0):.3f} "
+                #        f"frameRate={hdr.get('frameRate', 0.0):.3f}"
+                #    )
+                    
+                #   print(
+                #        f"    ownedCount={hdr.get('ownedByCount')} "
+                #        f"perf={hdr.get('serverPerfPresent')} scriptError={hdr.get('serverHadScriptError')} "
+                #        f"choked={hdr.get('choked')} "
+                #        f"serverFrame={hdr.get('serverFrame')} oldFrame={hdr.get('oldServerFrame')}"
+                #    )
 
                     # Print Perf if present
-                    if hdr.get("serverPerfPresent") and "serverPerf" in hdr:
-                        p = hdr["serverPerf"]
-                        print(
-                            f"    [Perf] Score:{p.get('score')} Tick:{p.get('tickrate')} "
-                            f"Send:{p.get('sendrate')} Players:{p.get('numPlayers')}/{p.get('maxPlayers')} "
-                            f"Qual:{p.get('quality')} EntsUpd:{p.get('numEntitiesUpdated')}"
-                        )
+                    #if hdr.get("serverPerfPresent") and "serverPerf" in hdr:
+                    #    p = hdr["serverPerf"]
+                    #    print(
+                    #        f"    [Perf] Score:{p.get('score')} Tick:{p.get('tickrate')} "
+                    #        f"Send:{p.get('sendrate')} Players:{p.get('numPlayers')}/{p.get('maxPlayers')} "
+                    #        f"Qual:{p.get('quality')} EntsUpd:{p.get('numEntitiesUpdated')}"
+                    #    )
                     
                     # Dump Body Hex
-                    body_bytes = snap_bytes[hdr_end_off:]
-                    body_hex = body_bytes.hex().upper()
-                    print(f"    [Body Hex] {body_hex[:64]}..." if len(body_hex) > 64 else f"    [Body Hex] {body_hex}")
+                    #body_bytes = snap_bytes[hdr_end_off:]
+                    #body_hex = body_bytes.hex().upper()
+                    #print(f"    [Body Hex] {body_hex[:250]}..." if len(body_hex) > 250 else f"    [Body Hex] {body_hex}")
                     
-                    # [INSERTION] Parse First Entity Header
-                    # We pass the raw list from GameState; the helper function now handles the iteration.
-                    inspect_first_entity(body_bytes)
+                    # Attempt to process state snapshot data - use the dumped snapshot json with entity-parse.py for now
+                    #inspect_entities_with_sync(body_bytes, srv_frame, old_frame, max_entities=128)
 
-                except Exception as e:
-                    print(f"[Snapshot] Error parsing header: {e}")
-
-                except Exception as e:
-                    print(f"[Snapshot] Error parsing header: {e}")
+                #except Exception as e:
+                #    print(f"[Snapshot] Error parsing header: {e}")
 
     except Exception:
         # match old behavior: don't crash main decode loop
         pass
-
 
 def handle_network_message(data):
     """
@@ -1457,7 +1774,7 @@ def parse_disconnect_packet(data):
 # ==================================================================================
 # USER PROCESSING HOOK (Main Dispatcher)
 # ==================================================================================
-def on_message_reassembled(data, direction, stream, session_id, seq, is_system=False):
+def on_message_reassembled(data, direction, stream, session_id, seq, is_system, timestamp):
     msg_len = len(data)
     if msg_len == 0: return
 
@@ -1499,7 +1816,7 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
         
         # Voice / State Packet
         elif op_code == 0x05:
-            parse_voice_and_state(data, session_id)
+            parse_voice_and_state(data, session_id, timestamp=timestamp)
     
     # (Client->Server) --- CLIENT RELIABLE PACKETS ---
     if direction == "CLIENT" and stream == "RELIABLE":
@@ -1527,9 +1844,9 @@ def on_message_reassembled(data, direction, stream, session_id, seq, is_system=F
 # NS2 Fragment Assembler
 # ==================================================================================
 
-MAX_RELIABLE_AHEAD = 10    
-RELIABLE_SEQ_MOD = 256     
-WINDOW_SIZE = 128          
+MAX_RELIABLE_AHEAD = 10
+RELIABLE_SEQ_MOD = 256
+WINDOW_SIZE = 128
 
 class MessageAssembler:
     def __init__(self, name):
@@ -1540,6 +1857,9 @@ class MessageAssembler:
         self.start_seq = -1
         self.is_system = False
 
+        # Track completion time for the current message being assembled
+        self.ts_last = None
+
     def reset(self):
         self.buffer = bytearray()
         self.total_len = 0
@@ -1547,7 +1867,10 @@ class MessageAssembler:
         self.start_seq = -1
         self.is_system = False
 
-    def ingest_chunk(self, is_start, is_system, total_msg_len, payload, packet_seq):
+        # Clear completion time
+        self.ts_last = None
+
+    def ingest_chunk(self, is_start, is_system, total_msg_len, payload, packet_seq, pcap_ts=None):
         if is_start:
             if self.active: self.reset()
             self.buffer = bytearray(payload)
@@ -1555,29 +1878,38 @@ class MessageAssembler:
             self.active = True
             self.start_seq = packet_seq
             self.is_system = is_system
+
+            # Start chunk also gives us an initial timestamp
+            self.ts_last = pcap_ts
         else:
-            if not self.active: return None
+            if not self.active: return None, False, None
             self.buffer.extend(payload)
+
+            # Update completion timestamp as additional fragments arrive
+            self.ts_last = pcap_ts
 
         if self.active and len(self.buffer) >= self.total_len:
             final_data = bytes(self.buffer[:self.total_len])
             was_system = self.is_system
+            done_ts = self.ts_last  # completion time = timestamp of final contributing packet
             self.reset()
-            return final_data, was_system
-        return None, False
+            return final_data, was_system, done_ts
+
+        return None, False, None
+
 
 class ReliableStream:
     def __init__(self):
         self.next_seq = None
-        self.packet_buffer = {} 
+        self.packet_buffer = {}
         self.assembler = MessageAssembler("Reliable")
 
-    def process_packet(self, seq, data, session_id, source_tag):
+    def process_packet(self, seq, data, session_id, source_tag, pcap_ts=None):
         if self.next_seq is None: self.next_seq = seq
         diff = (seq - self.next_seq) % RELIABLE_SEQ_MOD
 
         if diff == 0:
-            self._process_payload(seq, data, session_id, source_tag)
+            self._process_payload(seq, data, session_id, source_tag, pcap_ts)
             self.next_seq = (self.next_seq + 1) % RELIABLE_SEQ_MOD
             self._check_buffer(session_id, source_tag)
             return
@@ -1585,82 +1917,89 @@ class ReliableStream:
         if diff > WINDOW_SIZE: return
 
         if diff <= MAX_RELIABLE_AHEAD:
-            self.packet_buffer[seq] = data
+            # Store (data, ts) so we don't lose timing when packets arrive out-of-order
+            self.packet_buffer[seq] = (data, pcap_ts)
         else:
             self.assembler.reset()
             self.packet_buffer.clear()
             self.next_seq = seq
-            self._process_payload(seq, data, session_id, source_tag)
+            self._process_payload(seq, data, session_id, source_tag, pcap_ts)
             self.next_seq = (self.next_seq + 1) % RELIABLE_SEQ_MOD
 
     def _check_buffer(self, session_id, source_tag):
         while self.next_seq in self.packet_buffer:
-            data = self.packet_buffer.pop(self.next_seq)
-            self._process_payload(self.next_seq, data, session_id, source_tag)
+            data, ts = self.packet_buffer.pop(self.next_seq)
+            self._process_payload(self.next_seq, data, session_id, source_tag, ts)
             self.next_seq = (self.next_seq + 1) % RELIABLE_SEQ_MOD
 
-    def _process_payload(self, packet_seq, data, session_id, source_tag):
-        parse_chunks_in_payload(data, packet_seq, self.assembler, "RELIABLE", session_id, source_tag)
+    def _process_payload(self, packet_seq, data, session_id, source_tag, pcap_ts):
+        parse_chunks_in_payload(data, packet_seq, self.assembler, "RELIABLE", session_id, source_tag, pcap_ts)
+
 
 class UnreliableStream:
     def __init__(self):
         self.last_seq = None
         self.assembler = MessageAssembler("Unreliable")
 
-    def process_packet(self, seq, data, session_id, source_tag):
+    def process_packet(self, seq, data, session_id, source_tag, pcap_ts=None):
         if self.last_seq is not None:
             if seq != self.last_seq + 1:
                 if self.assembler.active: self.assembler.reset()
         self.last_seq = seq
-        parse_chunks_in_payload(data, seq, self.assembler, "UNRELIABLE", session_id, source_tag)
+        parse_chunks_in_payload(data, seq, self.assembler, "UNRELIABLE", session_id, source_tag, pcap_ts)
 
-def parse_chunks_in_payload(data, packet_seq, assembler, type_label, session_id, source_tag):
+
+def parse_chunks_in_payload(data, packet_seq, assembler, type_label, session_id, source_tag, pcap_ts=None):
     cursor = 0
     while cursor < len(data):
         try:
             flag = data[cursor]
             cursor += 1
-            
+
             is_start = False
             is_system = False
             total_len = 0
             frag_len = 0
-            
+
             if flag == 0xFF:
                 frag_len = struct.unpack_from('<H', data, cursor)[0]
                 cursor += 2
             else:
                 if cursor + 5 > len(data): break
-                
+
                 # Check System Bit (Bit 0)
                 is_system = (flag & 0x01) != 0
-                
+
                 b1, b2, b3 = data[cursor], data[cursor+1], data[cursor+2]
                 cursor += 3
                 total_len = b1 | (b2 << 8) | (b3 << 16)
                 frag_len = struct.unpack_from('<H', data, cursor)[0]
                 cursor += 2
                 is_start = True
-            
+
             if cursor + frag_len > len(data): break
 
             payload = data[cursor : cursor + frag_len]
             cursor += frag_len
 
-            completed_msg, was_system = assembler.ingest_chunk(is_start, is_system, total_len, payload, packet_seq)
-            
+            completed_msg, was_system, done_ts = assembler.ingest_chunk(
+                is_start, is_system, total_len, payload, packet_seq, pcap_ts
+            )
+
             if completed_msg:
                 on_message_reassembled(
-                    data=completed_msg, 
-                    direction=source_tag, 
-                    stream=type_label, 
-                    session_id=session_id, 
+                    data=completed_msg,
+                    direction=source_tag,
+                    stream=type_label,
+                    session_id=session_id,
                     seq=packet_seq,
-                    is_system=was_system
+                    is_system=was_system,
+                    timestamp=done_ts,          # completion timestamp from pcapng
                 )
 
         except struct.error:
             break
+
 
 # --- Global Session State ---
 sessions = {}
@@ -1674,17 +2013,17 @@ def get_streams(session_id, source_tag):
         }
     return sessions[key]
 
-def parse_udp_payload(data, source_tag):
+def parse_udp_payload(data, source_tag, pcap_ts=None):
     cursor = 0
     if len(data) < 7: return
-    
+
     magic = struct.unpack_from('<I', data, cursor)[0]
-    if magic != 0xBA1BA24F: return 
-    
+    if magic != 0xBA1BA24F: return
+
     session_id = struct.unpack_from('<H', data, 4)[0]
     packet_type = data[6] & 0x03
     cursor = 11
-    
+
     streams = get_streams(session_id, source_tag)
 
     if packet_type == 0: # Reliable
@@ -1693,25 +2032,28 @@ def parse_udp_payload(data, source_tag):
         rel_seq = data[cursor]
         cursor += 1
         payload = data[cursor:]
-        streams['rel'].process_packet(rel_seq, payload, session_id, source_tag)
+        streams['rel'].process_packet(rel_seq, payload, session_id, source_tag, pcap_ts=pcap_ts)
 
     elif packet_type == 1: # Unreliable
         if cursor + 4 > len(data): return
         unrel_seq = struct.unpack_from('<I', data, cursor)[0]
         cursor += 4
         payload = data[cursor:]
-        streams['unrel'].process_packet(unrel_seq, payload, session_id, source_tag)
+        streams['unrel'].process_packet(unrel_seq, payload, session_id, source_tag, pcap_ts=pcap_ts)
+
 
 def main():
     global DUMP_VOICE
-    
+
     # --- ARGUMENT PARSING ---
     parser = argparse.ArgumentParser(description="Natural Selection 2 Network Packet Dumper")
     parser.add_argument("filename", help="Path to the .pcapng file")
     parser.add_argument("--dump-voice", action="store_true", help="Enable voice data decoding and saving to WAV")
-    
+
     args = parser.parse_args()
     
+    reset_output_json_files()
+
     pcap_file = args.filename
     DUMP_VOICE = args.dump_voice
 
@@ -1724,7 +2066,7 @@ def main():
     try:
         f = open(pcap_file, 'rb')
         pcap = dpkt.pcapng.Reader(f)
-        
+
         for ts, buf in pcap:
             try:
                 eth = dpkt.ethernet.Ethernet(buf)
@@ -1732,27 +2074,31 @@ def main():
                 ip = eth.data
                 if not isinstance(ip.data, dpkt.udp.UDP): continue
                 udp = ip.data
-                
+
                 # Tagging based on Port 27000-27080
                 if 27000 <= udp.sport <= 27080: source_tag = "SERVER"
                 else: source_tag = "CLIENT"
 
-                parse_udp_payload(udp.data, source_tag)
-            except Exception: continue
+                parse_udp_payload(udp.data, source_tag, pcap_ts=ts)
+            except Exception:
+                continue
     except FileNotFoundError:
         print(f"Error: File '{pcap_file}' not found.")
     except Exception as e:
         print(f"Error: {e}")
-        
-    # ---- FINAL FLUSH ON PROGRAM EXIT ----
-    if DUMP_VOICE:
-        try:
-            flush_map(initial_game_state.map_load_count, DATA_DIR)
-        except Exception as e:
-            print(f"[WAV Flush Error] {e}")
+    finally:
+        # Write buffered snapshots once
+        write_snapshots_json_at_exit()
 
-        # ---- CLEAN UP SPEEX DECODERS ----
-        cleanup()
+        # ---- FINAL FLUSH ON PROGRAM EXIT ----
+        if DUMP_VOICE:
+            try:
+                flush_map(initial_game_state.map_load_count, DATA_DIR)
+            except Exception as e:
+                print(f"[WAV Flush Error] {e}")
+
+            # ---- CLEAN UP SPEEX DECODERS ----
+            cleanup()
 
 if __name__ == '__main__':
     main()
