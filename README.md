@@ -15,13 +15,28 @@ This tool scans a **Wireshark saved `.pcapng` file** to analyze traffic between 
 
 ## ⚠️ Limitations & Future Work
 
-* **State Snapshots:** Handles the snapshot header / any performance data.  Not fully parsing the state data at this point.
+* **State Snapshots:** Handles the snapshot header / any performance data / dumps state snapshots to json.  A separate program is currentlyy acting as a
+    proof-of-concept state snapshot parser (entity-parse.py).
 * **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
+* **There will be misunderstandings and bugs in this code as it is again devised from RE/AI.**
 
 ## 🛠️ Usage Notes
 python ns2_net_dump.py spark-capture.pcapng &> output.txt
 
 If using --dump-voice data is saved to data folder.
+
+* **State snapshot data:**
+
+Run ns2_net_dump.py which will produce the snapshots.json and the class table.
+
+python entity-parse.py &> snapshot-output.txt
+
+Add --trace_frames to see specific actions occuring in listed frames.  Can specify a single frame or a range like 0-25.
+
+Currently just dumps the entity table at a specified frame in the code for demonstration purposes.
+
+Unlike net message schema if you are missing even 1 schema definition for netclass or have incorrect schema then the data can not be trusted
+and thus it aborts reading the bitstream.
 
 ### Schema Definitions
 There is currently no automated way to create the schema definition file (that I'm willing to share), as it is defined on the Lua side of the game engine.
