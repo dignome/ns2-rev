@@ -87,17 +87,18 @@ def checksum_structure(fields: Iterable[Field]) -> int:
 if __name__ == "__main__":
     print("PlaySoundMessage: ", end="")
     demo1 = [
-        Field(b"parent\0", 4, 0x00000000),
-        Field(b"resource\0", 4, 0x00000000),
-        Field(b"modifier\0", 3, 0x00000000),
-        Field(b"origin\0", 5, 0x00000000)
+        Field(b"parent\0", 4, 0),
+        Field(b"resource\0", 4, 0),
+        Field(b"modifier\0", 3, 0),
+        Field(b"origin\0", 5, 0)
     ]
     print(hex(checksum_structure(demo1))[2:].upper())
     
     print("RTGraph: ", end="")
     demo2 = [
-        Field(b"destroyed\0", 2, 0x00000000),
-        Field(b"gameMinute\0", 3, 0x00000000),
-        Field(b"teamNumber\0", 4, 0x00000000)
+        Field(b"destroyed\0", 2, 0),
+        Field(b"gameMinute\0", 3, 0),
+        Field(b"teamNumber\0", 4, 0)
     ]
     print(hex(checksum_structure(demo2))[2:].upper())
+    
