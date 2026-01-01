@@ -31,7 +31,7 @@ Run ns2_net_dump.py which will produce the snapshots.json and the class table.
 
 python entity-parse.py &> snapshot-output.txt
 
-Add --trace_frames to see specific actions occuring in listed frames.  Can specify a single frame or a range like 0-25.
+Add --trace_frames to see specific actions occurring in listed frames.  Can specify a single frame or a range like 0-25.
 
 Currently just dumps the entity table at a specified frame in the code for demonstration purposes.
 
