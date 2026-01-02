@@ -6,6 +6,12 @@ import struct
 import copy
 import sys
 
+# avoid string decode errors
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="backslashreplace")
+
 # ==============================================================================
 # CONSTANTS
 # ==============================================================================
@@ -707,6 +713,7 @@ def main():
     world_hist = {}
     MAX_HIST = 16
     baseline_found = False
+    current_session_id = None  # from snapshots.json; change => new world
 
     print(f"Processing {len(snaps)} snapshots...")
 
@@ -714,6 +721,17 @@ def main():
     # Process snapshots in time order
     # --------------------------------------------------------------------------
     for snap in snaps:
+        # Session handling:
+        # If session_id changes, treat it as a brand-new world and flush history.
+        sess = snap.get("session_id", None)
+        if current_session_id is None:
+            current_session_id = sess
+        elif sess is not None and current_session_id is not None and sess != current_session_id:
+            print(f"\n[SESSION] session_id changed {current_session_id} -> {sess}; flushing world state/history\n")
+            current_session_id = sess
+            world_hist.clear()
+            baseline_found = False
+        
         # decode snapshot payload (base64)
         try:
             payload = base64.b64decode(snap["bytes_b64"])
