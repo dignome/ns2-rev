@@ -149,7 +149,8 @@ def store_snapshot_in_memory(game_index: int,
                              pcap_ts: float,
                              snapshot_len: int,
                              actual_len: int,
-                             snap_bytes: bytes) -> None:
+                             snap_bytes: bytes,
+                             counter: int) -> None:
     """
     Store snapshot bytes in RAM; base64 only at exit.
     """
@@ -162,6 +163,7 @@ def store_snapshot_in_memory(game_index: int,
             "snapshot_len": int(snapshot_len),
             "actual_len": int(actual_len),
             "bytes": snap_bytes,  # raw bytes
+            "counter": counter,
         })
     except Exception:
         pass
@@ -201,6 +203,7 @@ def write_snapshots_json_at_exit(out_path: str = SNAPSHOTS_JSON_PATH) -> None:
                         "session_id": e["session_id"],
                         "snapshot_len": e["snapshot_len"],
                         "actual_len": e["actual_len"],
+                        "counter": e["counter"],
                         "bytes_b64": base64.b64encode(e["bytes"]).decode("ascii"),
                     }
 
@@ -1606,6 +1609,7 @@ def parse_voice_and_state(data, session_id, timestamp):
                     snapshot_len=snapshot_len,
                     actual_len=actual_len,
                     snap_bytes=snap_bytes,
+                    counter=initial_game_state.map_load_count
                 )
                 return
                 #maybe later
