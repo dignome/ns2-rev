@@ -651,6 +651,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--class_table", default="snapshot-classtable.json")
     ap.add_argument("--snapshots", default="snapshots.json")
+    ap.add_argument("--game", type=int, default=None, help="only parse snapshots data matching this counter value")
     ap.add_argument("--trace_frames", default="", help="comma-separated frame numbers to trace (e.g. 21,22)")
     args = ap.parse_args()
 
@@ -692,6 +693,12 @@ def main():
         elif isinstance(snaps_raw, list):
             snaps = snaps_raw
 
+        # Filter by game counter if specified
+        if args.game is not None:
+            snaps = [s for s in snaps if s.get("counter") == args.game]
+            print(f"[*] Filtered for Game (counter): {args.game}. Found {len(snaps)} snapshots.")
+        # ---------------------------
+
         snaps.sort(key=lambda x: x.get("pcap_ts", 0))
     except Exception as e:
         print(f"Error loading snapshots: {e}")
@@ -711,7 +718,7 @@ def main():
         trace_set = (0)
 
     world_hist = {}
-    MAX_HIST = 16
+    MAX_HIST = 64
     baseline_found = False
     current_session_id = None  # from snapshots.json; change => new world
 
@@ -748,6 +755,16 @@ def main():
 
         frame = int(header.get("serverFrame", 0))
         old_frame = int(header.get("oldServerFrame", 0))
+        
+        # ------------------------------------------------------------------
+        # RECONNECT / BASELINE RESTART:
+        # If we suddenly see a new baseline sequence starting at (sf=1, old=0)
+        # while we already have history, flush the world.
+        # ------------------------------------------------------------------
+        if frame == 1 and old_frame == 0 and world_hist:
+            print(f"\n[RESET] baseline restart detected (sf=1 old=0); flushing world state/history\n")
+            world_hist.clear()
+            baseline_found = False
 
         # Wait for a baseline snapshot (oldServerFrame == 0)
         if not baseline_found:
