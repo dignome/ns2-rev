@@ -463,8 +463,11 @@ def read_field_diff(reader, field, base_val, verbose=False):
             return 0
         bit_start = reader.tell()
         raw = reader.read_bits(bits)
-        max_val = (1 << bits) - 1
-        centered = raw - (max_val >> 1)
+
+        # Center around 2^(bits-1), giving symmetric signed range:
+        # e.g. 5 bits: 0..31 -> -16..+15
+        centered = int(raw) - (1 << (bits - 1))
+
         if verbose:
             print(f"                   Read {bits} bits @ {bit_start}: raw={raw} -> centered={centered}")
         return centered
