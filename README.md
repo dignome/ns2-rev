@@ -15,19 +15,19 @@ This tool scans a **Wireshark saved `.pcapng` file** to analyze traffic between 
 
 ## ⚠️ Limitations & Future Work
 
-* **State Snapshots:** Handles the snapshot header / any performance data / dumps state snapshots to json.  A separate program is currentlyy acting as a
+* **State Snapshots:** Handles the snapshot header / any performance data / dumps state snapshots to json.  A separate program is currently acting as a
     proof-of-concept state snapshot parser (entity-parse.py).
 * **Authentication:** This tool does not act as a client; it cannot authenticate or join an NS2 server effectively.
 * **There will be misunderstandings and bugs in this code as it is again devised from RE/AI.**
 
 ## 🛠️ Usage Notes
-python ns2_net_dump.py spark-capture.pcapng &> output.txt
+python ns2-net-dump.py spark-capture.pcapng &> output.txt
 
 If using --dump-voice data is saved to data folder.
 
 * **State snapshot data:**
 
-Run ns2_net_dump.py which will produce the snapshots.json and the class table.
+Run ns2-net-dump.py which will produce the snapshots.json and the class table.
 
 python entity-parse.py &> snapshot-output.txt
 
