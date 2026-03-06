@@ -1,4 +1,4 @@
-# NS2 Netcode Dumper
+# Natural Selection 2 Spark Network Protocol Decoder
 
 This is a Proof of Concept (PoC) "vibe-coded" tool for analyzing *Natural Selection 2* network traffic.  Much of the code and even my understanding of how this works was derrived from the use of AI and RE tools.
 
