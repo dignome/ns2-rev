@@ -264,10 +264,10 @@ def main():
                 udp = ip.data
                 
                 # Determine Source (Server vs Client)
-                # Server Port Range: 27000 - 27080
+                # Server Port Range: 27000 - 30099
                 src_port = udp.sport
                 
-                if 27000 <= src_port <= 27080:
+                if 27000 <= src_port <= 30099:
                     source_tag = "SERVER"
                 else:
                     source_tag = "CLIENT"
