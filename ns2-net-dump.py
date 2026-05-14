@@ -2079,8 +2079,8 @@ def main():
                 if not isinstance(ip.data, dpkt.udp.UDP): continue
                 udp = ip.data
 
-                # Tagging based on Port 27000-27080
-                if 27000 <= udp.sport <= 27080: source_tag = "SERVER"
+                # Tagging based on Port 27000-30099
+                if 27000 <= udp.sport <= 30099: source_tag = "SERVER"
                 else: source_tag = "CLIENT"
 
                 parse_udp_payload(udp.data, source_tag, pcap_ts=ts)
