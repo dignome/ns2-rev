@@ -1051,7 +1051,7 @@ def handle_connecting_packet(data):
                 mod_name = reader.read_string_null()
             
             initial_game_state.mods.append({'id': mod_id, 'crc': mod_crc, 'name': mod_name})
-            print(f"    ID: {mod_id} | CRC: {mod_crc:08X} | Name: {mod_name}")
+            print(f"    ID: {mod_id} | Timestamp: {mod_crc:08X} | Name: {mod_name}")
 
         # Consistency Checker
         parse_consistency_checker(reader, 0) 
